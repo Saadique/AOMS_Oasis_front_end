@@ -1,0 +1,104 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-3">
+
+            </div>
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <label>Select User Role</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <nb-select formControlName="course_type" placeholder="Choose User Role">
+                            <nb-option value="ordinary_level">Admin</nb-option>
+                            <nb-option value="ordinary_level">Teacher</nb-option>
+                            <nb-option value="ordinary_level">Student</nb-option>
+                            <nb-option value="ordinary_level">Front Office Staff</nb-option>
+                            <nb-option value="ordinary_level">Manager</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="row justify-content-md-center">
+            <table class="rwd-table">
+                <tr>
+                    <th>View Name</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">Create New Course</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-success">Linked &nbsp;&nbsp;</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton hero shape="semi-round" size="tiny" status="danger">Unlink</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">View All Courses</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-danger">Unlinked</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton shape="semi-round" size="tiny" status="success">Link &nbsp; &nbsp;
+                            &nbsp;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">Create New Subjects</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-success">Linked &nbsp;&nbsp;&nbsp;</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton hero shape="semi-round" size="tiny" status="danger">Unlink</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">Create New Lectures</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-success">Linked &nbsp;&nbsp;&nbsp;</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton hero shape="semi-round" size="tiny" status="danger">Unlink</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">View Daily Schedules</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-success">Linked &nbsp;&nbsp;&nbsp;</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton hero shape="semi-round" size="tiny" status="danger">Unlink</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">Register Student</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-danger">Unlinked</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton shape="semi-round" size="tiny" status="success">Link &nbsp; &nbsp;
+                            &nbsp;</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td data-th="Movie Title">Payment Schemes</td>
+                    <td data-th="Genre">
+                        <span class="badge badge-success">Linked &nbsp;&nbsp;&nbsp;</span>
+                    </td>
+                    <td data-th="Year">
+                        <button nbButton shape="semi-round" size="tiny" status="danger">Unlink</button>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </nb-card-body>
+</nb-card>

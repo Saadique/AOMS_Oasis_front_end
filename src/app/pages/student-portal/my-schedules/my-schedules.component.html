@@ -1,0 +1,306 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table,
+    td,
+    thead,
+    th {
+        border: 2px solid blue;
+    }
+</style>
+
+
+<nb-card accent="info">
+    <nb-card-header align="center">View Daily Schedules</nb-card-header>
+    <nb-card-body>
+        <form class="form-horizontal" [formGroup]="dateSelectionForm">
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <label for="date" class="label col-sm-3 form-control-label" style="font-size: 15px;">Select
+                        Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" (change)="getSchedules()" class="form-control" formControlName="date">
+                    </div>
+                    <!-- <a (click)="onScroll(scheduleForm)">
+                        TEST
+                    </a> -->
+                </div>
+            </div>
+        </form>
+    </nb-card-body>
+</nb-card>
+<br>
+
+<div class="animated fadeIn">
+    <div class="alert alert-danger" role="alert" *ngIf="deleteAlertMessage.status=='Error'">
+        {{ deleteAlertMessage.message }}
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="deleteAlertMessage.status=='warning'">
+        {{ deleteAlertMessage.message }}
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="deleteAlertMessage.status=='success'">
+        {{ deleteAlertMessage.message }}
+    </div>
+</div>
+
+<nb-card status="basic" size="flexible">
+    <nb-card-header align="center">View All Schedules On Date - 22nd Of October Wednesday</nb-card-header>
+    <nb-card-body>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Time </th>
+                    <th scope="col">Room 1</th>
+                    <th scope="col">Room 2</th>
+                    <th scope="col">Room 3</th>
+                    <th scope="col">Room 4</th>
+                    <th scope="col">Room 5</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <th scope="row">01.00 to 03.00</th>
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==2">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">03.00 to 05.00</th>
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <div
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==2">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">05.00 to 07.00</th>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==2">
+                                asas
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="requestChange(schedule)">Edit</button>&nbsp;
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </nb-card-body>
+</nb-card>

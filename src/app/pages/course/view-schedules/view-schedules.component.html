@@ -1,0 +1,492 @@
+<style>
+    table {
+        border-collapse: collapse;
+    }
+
+    table,
+    td,
+    thead,
+    th {
+        border: 2px solid blue;
+    }
+</style>
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Delete Confimation</nb-card-header>
+        <nb-card-body>{{ data }}</nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="onDeleteConfirmation(ref, data)">Yes</button>&nbsp;
+            <button nbButton (click)="ref.close()">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<nb-card accent="info">
+    <nb-card-header align="center">View Daily Schedules</nb-card-header>
+    <nb-card-body>
+        <form class="form-horizontal" [formGroup]="dateSelectionForm">
+            <div class="form-group row">
+                <div class="col-sm-8">
+                    <label for="date" class="label col-sm-3 form-control-label" style="font-size: 15px;">Select
+                        Date</label>
+                    <div class="col-sm-9">
+                        <input type="date" (change)="getSchedules()" class="form-control" formControlName="date">
+                    </div>
+                    <!-- <a (click)="onScroll(scheduleForm)">
+                        TEST
+                    </a> -->
+                </div>
+                <div class="col-sm-4">
+                    <div>
+                        <br>
+                        <button *ngIf="!isDateSelected; else enabledButton" nbButton disabled fullWidth shape="round"
+                            status="info">Create Schedule In this
+                            Date</button>
+                        <ng-template #enabledButton>
+                            <button nbButton fullWidth shape="round" status="info" (click)="onCreateClick()">Create
+                                Schedule In this
+                                Date</button>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </nb-card-body>
+</nb-card>
+<br>
+
+<div class="animated fadeIn">
+    <div class="alert alert-danger" role="alert" *ngIf="deleteAlertMessage.status=='Error'">
+        {{ deleteAlertMessage.message }}
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="deleteAlertMessage.status=='warning'">
+        {{ deleteAlertMessage.message }}
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="deleteAlertMessage.status=='success'">
+        {{ deleteAlertMessage.message }}
+    </div>
+</div>
+
+<nb-card status="basic" size="flexible">
+    <nb-card-header align="center">View All Schedules On Date - 22nd Of October Wednesday</nb-card-header>
+    <nb-card-body>
+
+        <table class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">Time </th>
+                    <th scope="col">Room 1</th>
+                    <th scope="col">Room 2</th>
+                    <th scope="col">Room 3</th>
+                    <th scope="col">Room 4</th>
+                    <th scope="col">Room 5</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                <tr>
+                    <th scope="row">01.00 to 03.00</th>
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==2">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=13 && getHour(schedule.end_time)<=15 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule, dialog)">Edit</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">03.00 to 05.00</th>
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <div
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==2">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=15 && getHour(schedule.end_time)<=17 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <th scope="row">05.00 to 07.00</th>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==1">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==2">
+                                asas
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                Date: {{schedule.date}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==3">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==4">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+
+                    <td>
+                        <div *ngFor="let schedule of schedules">
+                            <ng-container
+                                *ngIf="getHour(schedule.start_time)>=17 && getHour(schedule.end_time)<=19 && schedule.room_id==5">
+                                {{ schedule.lecture.name }} <br>
+                                From : {{schedule.start_time}} <br>
+                                To : {{schedule.end_time}}
+                                <div>
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onEditClick(schedule)">Edit</button>&nbsp;
+                                    <button nbButton shape="semi-round" size="tiny" status="info"
+                                        (click)="onDeleteClick(schedule, dialog)">Delete</button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <div class="row">
+            <div class="col-md-9 offset-md-2">
+                <div class="animated fadeIn">
+                    <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
+                        {{ viewScheduleAlert.message }}
+                    </div>
+                    <div class="alert alert-warning" role="alert" *ngIf="viewScheduleAlert.status=='warning'">
+                        {{ viewScheduleAlert.message }}
+                    </div>
+                    <div class="alert alert-success" role="alert" *ngIf="viewScheduleAlert.status=='success'">
+                        {{ viewScheduleAlert.message }}
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row" *ngIf="displayScheduleForm" id="scheduleForm">
+            <div class="col-md-9 offset-md-2">
+                <nb-card>
+                    <nb-card-header>
+                        <div *ngIf="isEditForm">Edit Schedule of {{schedule.lecture.name}}</div>
+                        <div *ngIf="isCreateForm"> Create Schedule</div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <form class="form-horizontal" [formGroup]="scheduleForm">
+                            <div class="form-group row" *ngIf="isCreateForm">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <div class="form-group row">
+                                                <label for="courseMedium" class="label col-sm-6 form-control-label"
+                                                    style="font-size: 12.75px;">Select Course </label>
+
+                                                <div class="col-sm-6">
+                                                    <select id="course" class="form-control" formControlName="course_id"
+                                                        placeholder="Select Super Course"
+                                                        (change)="courseSelection($event.target.value)">
+                                                        <option *ngFor="let course of courses" [selected]="course.id"
+                                                            value={{course.id}}>
+                                                            {{course.name}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="lectureName" class="label col-sm-6 form-control-label"
+                                                    style="font-size: 12.75px;">Select Lecture </label>
+
+                                                <div class="col-sm-6">
+                                                    <select id="lectureName" class="form-control"
+                                                        formControlName="lecture_id" placeholder="Select Lecture">
+                                                        <option *ngFor="let lecture of lectures" [selected]="lecture.id"
+                                                            value={{lecture.id}}>
+                                                            {{lecture.name}}
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Select Date</label>
+                                            <br>
+                                            <input type="date" class="form-control" formControlName="date">
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                                <br>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule Start Time</label>
+                                            <br>
+                                            <input class="form-control" type="time" step="2"
+                                                formControlName="start_time">
+                                            <br>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule End Time</label>
+                                            <br>
+                                            <input class="form-control" formControlName="end_time" type="time" step="2">
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Select Room Number</label>
+                                            <br>
+                                            <select id="course" class="form-control" formControlName="room_id"
+                                                placeholder="Select Room Id">
+                                                <option value="1">Room 1</option>
+                                                <option value="2">Room 2</option>
+                                                <option value="3">Room 3</option>
+                                                <option value="4">Room 4</option>
+                                                <option value="5">Room 5</option>
+                                            </select>
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                                <br><br>
+                            </div>
+                            <div class="form-group row">
+                                <div class="offset-sm-3 col-sm-9">
+                                    <button type="submit" *ngIf="isEditForm" nbButton status="success"
+                                        (click)="updateSchedule()">Update
+                                        Lecture</button>
+                                    <button type="submit" *ngIf="isCreateForm" nbButton status="success"
+                                        (click)="createNewOneTimeSchedule()">Create
+                                        Lecture</button>
+                                    &nbsp;&nbsp;
+                                    <button type="submit" nbButton status="info"
+                                        (click)="hideCreateCourse()">Cancel</button>
+                                </div>
+                            </div>
+                        </form>
+                    </nb-card-body>
+                </nb-card>
+
+            </div>
+        </div>
+
+    </nb-card-body>
+</nb-card>

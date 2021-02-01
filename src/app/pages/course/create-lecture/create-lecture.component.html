@@ -1,0 +1,271 @@
+<div class="steppers-container row">
+    <div class="col-md-10 col-lg-10 col-xxxl-7 offset-md-1">
+        <!-- alert message -->
+        <div class="animated fadeIn">
+            <div class="alert alert-danger" role="alert" *ngIf="createLectureAlert.status=='Error'">
+                {{ createLectureAlert.message }}
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="createLectureAlert.status=='warning'">
+                {{ createLectureAlert.message }}
+            </div>
+            <div class="alert alert-success" role="alert" *ngIf="createLectureAlert.status=='success'">
+                {{ createLectureAlert.message }}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-10 col-lg-10 col-xxxl-7 offset-md-1">
+        <nb-card>
+            <nb-card-body>
+                <nb-stepper #stepper>
+
+                    <!-- Create Lecture -->
+                    <nb-step [stepControl]="lectureForm" label="Lecture Details">
+                        <form [formGroup]="lectureForm" (ngSubmit)="onFirstSubmit()" class="step-container">
+                            <h1><small>Fill Up Lecture Details</small></h1>
+                            <br>
+
+                            <!-- select super course, course and subject -->
+                            <div class="row">
+
+                                <!-- super course -->
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="course" class="label col-sm-6 form-control-label"
+                                            style="font-size: 12.75px;">Select Course Level</label>
+
+                                        <div class="col-sm-6">
+                                            <nb-select select-min-width formControlName="class_type"
+                                                placeholder="Select Course Level"
+                                                (selectedChange)="courseTypeSelection($event)">
+                                                <nb-option value="advance_level">Advance Level</nb-option>
+                                                <nb-option value="ordinary_level">Ordinary Level</nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- super course -->
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="course" class="label col-sm-6 form-control-label"
+                                            style="font-size: 12.75px;">Select Super Course</label>
+
+                                        <div class="col-sm-6">
+                                            <nb-select select-min-width placeholder="Select Super Course"
+                                                formControlName="course_id"
+                                                (selectedChange)="superCourseSelection($event)">
+                                                <nb-option *ngFor="let course of courses" value={{course.id}}>
+                                                    {{course.name}}</nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <!-- select course -->
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="courseMedium" class="label col-sm-6 form-control-label"
+                                            style="font-size: 12.75px;">Select Course </label>
+
+                                        <div class="col-sm-6">
+                                            <nb-select select-min-width placeholder="Select Course Medium"
+                                                formControlName="course_medium_id"
+                                                (selectedChange)="courseSelection($event)">
+                                                <nb-option *ngFor="let courseMedium of courseMediums"
+                                                    value={{courseMedium.id}}>
+                                                    {{courseMedium.name}}</nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- select subject -->
+                                <div class="col-sm-6">
+                                    <div class="form-group row">
+                                        <label for="subjectName" class="label col-sm-6 form-control-label"
+                                            style="font-size: 12.75px;">Select Subject </label>
+
+                                        <div class="col-sm-6">
+                                            <nb-select select-min-width placeholder="Select Lecture Subject"
+                                                formControlName="subject_id">
+                                                <nb-option *ngFor="let subject of subjects" value={{subject.id}}>
+                                                    {{subject.name}}</nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br><br><br><br>
+
+                            <!-- lecture type -->
+                            <div class="form-group row">
+                                <label for="subjectName" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;">Select Lecture Type</label>
+
+                                <div class="col-sm-9">
+                                    <select formControlName="type" placeholder="Select Lecture Type"
+                                        class="form-control"
+                                        [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="revision">Revision Class</option>
+                                        <option value="paper">Paper Class</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- lecture name -->
+                            <div class="form-group row">
+                                <label for="lectureName" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;">Lecture
+                                    Name</label>
+                                <div class="col-sm-9">
+                                    <input type="text" formControlName="name" nbInput fullWidth id="lectureName"
+                                        style="font-size: 12.75px;" placeholder="Lecture Name"
+                                        [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                </div>
+                            </div>
+
+                            <!-- teacher -->
+                            <div class="form-group row">
+                                <label for="subjectName" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;"
+                                    [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                    Select Teacher</label>
+
+                                <div class="col-sm-9">
+                                    <select formControlName="teacher_id" placeholder="Select Lecture Type"
+                                        class="form-control"
+                                        [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                        <option value="1" selected>Muzain Mubarak</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <button nbButton nbStepperNext>next</button>
+                        </form>
+                    </nb-step>
+
+                    <!-- Create Payment -->
+                    <nb-step [stepControl]="paymentForm" label="Lecture Payment Details">
+                        <form [formGroup]="paymentForm" (ngSubmit)="onSecondSubmit()" class="step-container">
+                            <h1><small>Fill Up Lecture Payment Details</small></h1>
+                            <br>
+
+                            <div class="form-group row">
+                                <label for="student_fee" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Enter Student Fee Amount</label>
+                                <div class="col-sm-8">
+                                    <input type="text" formControlName="student_fee" nbInput fullWidth id="student_fee"
+                                        style="font-size: 12.75px;" placeholder="Eg: 1700"
+                                        [ngClass]="{'form-control-danger': paymentForm.invalid && (paymentForm.dirty || paymentForm.touched)}">
+                                </div>
+                            </div> <br>
+                            <div class="form-group row">
+                                <label for="fixed_institute_amount" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Enter Fixed Institute Amount</label>
+                                <div class="col-sm-8">
+                                    <input type="text" formControlName="fixed_institute_amount" nbInput fullWidth
+                                        id="fixed_institute_amount" style="font-size: 12.75px;" placeholder="Eg: 300"
+                                        [ngClass]="{'form-control-danger': paymentForm.invalid && (paymentForm.dirty || paymentForm.touched)}">
+                                </div>
+                            </div><br>
+                            <div class="form-group row">
+                                <label for="teacher_percentage" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Enter Teacher Percentage</label>
+                                <div class="col-sm-8">
+                                    <input type="text" formControlName="teacher_percentage" nbInput fullWidth
+                                        id="teacher_percentage" style="font-size: 12.75px;" placeholder="Eg: 70"
+                                        [ngClass]="{'form-control-danger': paymentForm.invalid && (paymentForm.dirty || paymentForm.touched)}">
+                                </div>
+                            </div>
+                            <button nbButton nbStepperPrevious type="button">prev</button>
+                            <button nbButton nbStepperNext type="submit" (click)="moveIn()">next</button>
+                        </form>
+                    </nb-step>
+
+                    <!-- Create Schedule -->
+                    <nb-step [stepControl]="scheduleForm" label="Schedule Details">
+                        <form [formGroup]="scheduleForm" (ngSubmit)="onThirdSubmit()" class="step-container">
+                            <h1><small>Fill up Lecture Schedule details</small></h1>
+                            <br>
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule Start Date</label>
+                                            <br>
+                                            <input type="date" class="form-control"
+                                                formControlName="schedule_start_date" min="2020-09-10">
+                                            <br>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule End Date</label>
+                                            <br>
+                                            <input type="date" class="form-control" formControlName="schedule_end_date"
+                                                min="2020-09-10">
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule Start Time</label>
+                                            <br>
+                                            <input class="form-control" type="time" step="2"
+                                                formControlName="start_time">
+                                            <br>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Enter Schedule End Time</label>
+                                            <br>
+                                            <input class="form-control" formControlName="end_time" type="time" step="2">
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-12">
+                                    <nb-card accent="info">
+                                        <nb-card-body>
+                                            <label class="form-control-label" style="font-size: 14px;">Enter
+                                                Select Room Number</label>
+                                            <br>
+                                            <select id="course" class="form-control" formControlName="room_id"
+                                                placeholder="Select Room Id">
+                                                <option value="1">Room 1</option>
+                                                <option value="2">Room 2</option>
+                                                <option value="3">Room 3</option>
+                                                <option value="4">Room 4</option>
+                                                <option value="5">Room 5</option>
+                                            </select>
+                                        </nb-card-body>
+                                    </nb-card>
+                                </div>
+                                <br><br>
+                            </div>
+
+                            <button nbButton nbStepperPrevious type="button" (click)="moveOut()">prev</button>
+                            <button nbButton nbStepperNext type="button" (click)="onThirdSubmit()">Confirm</button>
+                        </form>
+                    </nb-step>
+
+                    <nb-step [stepControl]="scheduleForm" [hidden]="true" label="Third step">
+                        <div class="step-container">
+                            <h3>Wizard completed!</h3>
+                            <button nbButton (click)="stepper.reset()" type="button">Try again</button>
+                        </div>
+                    </nb-step>
+                </nb-stepper>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>

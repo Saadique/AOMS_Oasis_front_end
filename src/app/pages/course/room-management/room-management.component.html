@@ -1,0 +1,193 @@
+<div class="col-12">
+    <nb-card size="flexible">
+        <nb-tabset fullWidth>
+            <nb-tab tabTitle="Create Room" tabIcon="person-outline">
+                <div class="row">
+                    <div class="col-md-9 offset-md-1">
+                        <nb-card>
+                            <nb-card-header>Create Room</nb-card-header>
+                            <nb-card-body>
+                                <form class="form-horizontal" [formGroup]="roomCreationForm"
+                                    (ngSubmit)="createNewRoom()">
+
+                                    <div class="form-group row">
+                                        <label for="name" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Enter
+                                            Room Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" formControlName="name" nbInput id="name"
+                                                style="font-size: 12.75px;" placeholder="Room Name">
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="no_of_seats" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Enter Number Of Seats</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" formControlName="no_of_seats" nbInput id="no_of_seats"
+                                                style="font-size: 12.75px;" placeholder="Eg: 55">
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="is_ac_available" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Is Air Condition Availbale</label>
+                                        <div class="col-sm-8">
+                                            <nb-radio-group formControlName="is_ac_available">
+                                                <nb-radio [value]="'Yes'">Yes</nb-radio>
+                                                <nb-radio [value]="'No'">No</nb-radio>
+                                            </nb-radio-group>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="description" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Description</label>
+                                        <div class="col-sm-8">
+                                            <textarea rows="5" formControlName="description" nbInput
+                                                placeholder="Course Description"></textarea>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="status" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Status
+                                            of Room</label>
+                                        <div class="col-sm-8">
+                                            <nb-radio-group formControlName="status">
+                                                <nb-radio [value]="'available'">Available</nb-radio>
+                                                <nb-radio [value]="'not_available'">Not Available</nb-radio>
+                                            </nb-radio-group>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <div class="offset-sm-3 col-sm-8">
+                                            <button type="submit" nbButton status="primary">Create New Room</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </div>
+            </nb-tab>
+
+            <nb-tab tabTitle="Edit and Delete">
+                <br><br>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Room Name</th>
+                            <th>Number of seats </th>
+                            <th>Description</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let room of rooms">
+                            <td>{{room.name}}</td>
+                            <td>{{room.no_of_seats}}</td>
+                            <td>{{room.description}}</td>
+                            <td>{{room.status}}</td>
+                            <td><button class="btn btn-primary" (click)="editClick(room)">Edit</button></td>
+                            <td><button class="btn btn-warning"> Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+
+                <div class="row" *ngIf="editFormDisplay">
+                    <div class="col-md-9 offset-md-1">
+
+                        <!-- alert message -->
+                        <!-- <div class="animated fadeIn">
+                            <div class="alert alert-danger" role="alert" *ngIf="alertSub.status=='Error'">
+                                {{ alertSub.message }}
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="alertSub.status=='warning'">
+                                {{ alertSub.message }}
+                            </div>
+                        </div> -->
+
+                        <nb-card>
+                            <nb-card-header>Edit Room</nb-card-header>
+                            <nb-card-body>
+                                <form class="form-horizontal" [formGroup]="roomUpdationForm" (ngSubmit)="updateRoom()">
+                                    <div class="form-group row">
+                                        <label for="name" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Enter
+                                            Room Name</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" formControlName="name" nbInput id="name"
+                                                style="font-size: 12.75px;" placeholder="Room Name">
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="no_of_seats" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Enter Number Of Seats</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" formControlName="no_of_seats" nbInput id="no_of_seats"
+                                                style="font-size: 12.75px;" placeholder="Eg: 55">
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="is_ac_available" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Is Air Condition Availbale</label>
+                                        <div class="col-sm-8">
+                                            <nb-radio-group formControlName="is_ac_available">
+                                                <nb-radio [value]="'Yes'">Yes</nb-radio>
+                                                <nb-radio [value]="'No'">No</nb-radio>
+                                            </nb-radio-group>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="description" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Description</label>
+                                        <div class="col-sm-8">
+                                            <textarea rows="5" formControlName="description" nbInput
+                                                placeholder="Course Description"></textarea>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <label for="status" class="label col-sm-4 form-control-label"
+                                            style="font-size: 12.75px;">Status
+                                            of Room</label>
+                                        <div class="col-sm-8">
+                                            <nb-radio-group formControlName="status">
+                                                <nb-radio [value]="'available'">Available</nb-radio>
+                                                <nb-radio [value]="'not_available'">Not Available</nb-radio>
+                                            </nb-radio-group>
+                                        </div>
+                                    </div><br>
+
+                                    <div class="form-group row">
+                                        <div class="offset-sm-3 col-sm-8">
+                                            <button type="submit" nbButton status="success">Update Room Info</button>
+                                            &nbsp;&nbsp;
+                                            <button nbButton status="info" (click)="cancelEditForm()">Cancel</button>
+                                        </div>
+                                    </div>
+
+                                </form>
+                            </nb-card-body>
+                        </nb-card>
+                    </div>
+                </div>
+
+            </nb-tab>
+
+            <nb-tab tabTitle="Schedules">
+
+            </nb-tab>
+
+        </nb-tabset>
+    </nb-card>
+</div>

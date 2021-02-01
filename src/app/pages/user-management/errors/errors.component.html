@@ -1,0 +1,16 @@
+<br><br><br>
+
+<div class="animated fadeIn row">
+    <div class="alert alert-danger col-sm-5" role="alert" *ngIf="errorAlert.status=='error'">
+        {{ errorAlert.message }}
+    </div>
+    <div class="alert alert-warning col-sm-5" role="alert" *ngIf="errorAlert.status=='warning'">
+        {{ errorAlert.message }}
+    </div>
+    <div class="alert alert-success col-sm-5" role="alert" *ngIf="errorAlert.status=='success'">
+        {{ errorAlert.message }}
+    </div>
+    <div class="alert alert-dark col-sm-5" role="alert" *ngIf="errorAlert.status=='info'">
+        {{ errorAlert.message }}
+    </div>
+</div>

@@ -1,0 +1,167 @@
+<div class="col-12">
+    <nb-card size="flexible">
+        <nb-tabset fullWidth>
+            <nb-tab tabTitle="Course Details" tabIcon="person-outline">
+                <br>
+                <table class="table table-user-information">
+                    <tbody>
+                        <tr>
+                            <td><strong>Name</strong> </td>
+                            <td>{{course.name}}</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Course</strong></td>
+                            <td>{{course.course.name}}</td>
+                        </tr>
+
+                        <tr>
+                            <td><strong>Medium</strong></td>
+                            <td>{{course.medium.name}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </nb-tab>
+
+            <nb-tab tabTitle="Subjects">
+                <br><br>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Subject Name</th>
+                            <th>Subject Type</th>
+                            <th>Description</th>
+                            <th>Edit Subject</th>
+                            <th>Delete Subject</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let subject of subjects">
+                            <td>{{subject.name}}</td>
+                            <td>{{subject.type}}</td>
+                            <td>{{subject.description}}</td>
+                            <td><button class="btn btn-primary" (click)="editClick()">Edit</button></td>
+                            <td><button class="btn btn-warning">Delete</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <br>
+
+                <div class="row" *ngIf="editFormDisplay">
+                    <div class="col-md-9 offset-md-1">
+
+                        <!-- alert message -->
+                        <!-- <div class="animated fadeIn">
+                            <div class="alert alert-danger" role="alert" *ngIf="alertSub.status=='Error'">
+                                {{ alertSub.message }}
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="alertSub.status=='warning'">
+                                {{ alertSub.message }}
+                            </div>
+                        </div> -->
+
+                        <nb-card>
+                            <nb-card-header>Edit Subject</nb-card-header>
+                            <nb-card-body>
+                                <form class="form-horizontal">
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group row">
+                                                <label for="subjectName" class="label col-sm-6 form-control-label"
+                                                    style="font-size: 12.75px;">Super Course</label>
+
+                                                <div class="col-sm-6">
+                                                    <nb-select formControlName="type" placeholder="Select Subject Type">
+                                                        <nb-option value="compulsory">Compulsory</nb-option>
+                                                    </nb-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div class="form-group row">
+                                                <label for="subjectName" class="label col-sm-6 form-control-label"
+                                                    style="font-size: 12.75px;">Select Course </label>
+
+                                                <div class="col-sm-6">
+                                                    <nb-select formControlName="type" placeholder="Select Subject Type">
+                                                        <nb-option value="compulsory">Compulsory</nb-option>
+                                                    </nb-select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br><br><br>
+                                    <div class="form-group row">
+                                        <label for="subjectName" class="label col-sm-3 form-control-label"
+                                            style="font-size: 12.75px;">Enter Subject
+                                            Name</label>
+                                        <div class="col-sm-9">
+                                            <input type="text" formControlName="name" nbInput fullWidth id="subjectName"
+                                                style="font-size: 12.75px;" placeholder="Subject Name">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="subjectName" class="label col-sm-3 form-control-label"
+                                            style="font-size: 12.75px;">Select Course Type</label>
+
+                                        <div class="col-sm-9">
+                                            <nb-select formControlName="type" placeholder="Select Subject Type">
+                                                <nb-option value="compulsory">Compulsory</nb-option>
+                                                <nb-option value="optional">Optional</nb-option>
+                                                <nb-option value="bucket">Bucket</nb-option>
+                                            </nb-select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="courseCordinator" class="label col-sm-3 form-control-label"
+                                            style="font-size: 12.75px;">Enter Subject Description</label>
+                                        <div class="col-sm-9">
+                                            <textarea rows="5" formControlName="description" nbInput fullWidth
+                                                placeholder="Course Description"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="offset-sm-3 col-sm-9">
+                                            <button type="submit" nbButton status="success">Update Subject</button>
+                                            &nbsp;&nbsp;
+                                            <button type="submit" nbButton status="info"
+                                                (click)="cancelEditForm()">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </nb-card-body>
+                        </nb-card>
+
+                    </div>
+                </div>
+            </nb-tab>
+
+            <nb-tab tabTitle="Lectures">
+                <br><br>
+                <table class="table table-bordered table-hover">
+                    <thead>
+                        <tr>
+                            <th>Lecture Name</th>
+                            <th>Lecture Type</th>
+                            <th>Teacher Name</th>
+                            <th>Subject</th>
+                            <th>Fee Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let subject of subjects">
+                            <td>{{subject.name}}</td>
+                            <td>{{subject.type}}</td>
+                            <td>{{subject.description}}</td>
+                            <td><button class="btn btn-primary">More</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </nb-tab>
+
+            <nb-tab tabTitle="Student Details">
+                <span>Content #4</span>
+            </nb-tab>
+
+        </nb-tabset>
+    </nb-card>
+</div>

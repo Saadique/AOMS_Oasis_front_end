@@ -1,0 +1,124 @@
+<!-- <div class="accordions-container row">
+    <div class="accordion-container col-sm-3">
+        <nb-accordion>
+            <nb-accordion-item *ngFor="let course of courses">
+                <nb-accordion-item-header>
+                    {{course.course.name}}
+                </nb-accordion-item-header>
+                <nb-accordion-item-body>
+                    <div class="btn-group-vertical" role="group">
+                        <button type="button" class="btn btn-outline-primary"
+                            *ngFor="let course_medium of course.course_mediums">
+                            {{course_medium.name}}
+                        </button>
+                    </div>
+                </nb-accordion-item-body>
+            </nb-accordion-item>
+        </nb-accordion>
+    </div>
+</div> -->
+
+<div class="row">
+    <div class="col-md-9 offset-md-1">
+
+        <!-- alert message -->
+        <div class="animated fadeIn">
+            <div class="alert alert-danger" role="alert" *ngIf="alertSub.status=='error'">
+                {{ alertSub.message }}
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="alertSub.status=='warning'">
+                {{ alertSub.message }}
+            </div>
+            <div class="alert alert-success" role="alert" *ngIf="alertSub.status=='success'">
+                {{ alertSub.message }}
+            </div>
+        </div>
+
+        <nb-card>
+            <nb-card-header>Create New Subjects for Courses</nb-card-header>
+            <nb-card-body>
+                <form class="form-horizontal" [formGroup]="createForm" (ngSubmit)="addSubject()">
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="subjectName" class="label col-sm-6 form-control-label"
+                                    style="font-size: 12.75px;">Select Super Course</label>
+
+                                <div class="col-sm-6">
+                                    <select id="inputState" class="form-control" formControlName="course_id"
+                                        placeholder="Select Super Course"
+                                        (change)="superCourseSelection($event.target.value)">
+                                        <option *ngFor="let course of courses" value={{course.id}}>
+                                            {{course.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group row">
+                                <label for="subjectName" class="label col-sm-6 form-control-label"
+                                    style="font-size: 12.75px;">Select Course </label>
+
+                                <div class="col-sm-6">
+                                    <select id="inputState" class="form-control" formControlName="course_medium_id"
+                                        placeholder="Select Super Course">
+                                        <option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
+                                            {{courseMedium.name}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br><br><br>
+                    <div class="form-group row">
+                        <label for="subjectName" class="label col-sm-3 form-control-label"
+                            style="font-size: 12.75px;">Enter Subject
+                            Name</label>
+                        <div class="col-sm-9">
+                            <input type="text" formControlName="name" nbInput fullWidth id="subjectName"
+                                style="font-size: 12.75px;" placeholder="Subject Name">
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="subjectName" class="label col-sm-3 form-control-label"
+                            style="font-size: 12.75px;">Select Subject Type</label>
+
+                        <div class="col-sm-9">
+                            <nb-select formControlName="type" placeholder="Select Subject Type">
+                                <nb-option value="compulsory">Compulsory</nb-option>
+                                <nb-option value="optional">Optional</nb-option>
+                                <nb-option value="bucket">Bucket</nb-option>
+                            </nb-select>
+                        </div>
+                    </div>
+                    <!-- <div class="form-group row">
+                        <label for="subjectName" class="label col-sm-3 form-control-label"
+                            style="font-size: 12.75px;">Select Subject Course Type</label>
+
+                        <div class="col-sm-9">
+                            <nb-select formControlName="subject_type" placeholder="Select Course Type">
+                                <nb-option value="advance_level">Advance Level</nb-option>
+                                <nb-option value="ordinary_level">Ordinary Level</nb-option>
+                            </nb-select>
+                        </div>
+                    </div> -->
+                    <div class="form-group row">
+                        <label for="courseCordinator" class="label col-sm-3 form-control-label"
+                            style="font-size: 12.75px;">Enter Subject Description</label>
+                        <div class="col-sm-9">
+                            <textarea rows="5" formControlName="description" nbInput fullWidth
+                                placeholder="Subject Description"></textarea>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="offset-sm-3 col-sm-9">
+                            <button type="submit" nbButton status="primary">Create New Subject</button>
+                        </div>
+                    </div>
+                </form>
+            </nb-card-body>
+        </nb-card>
+    </div>
+</div>
