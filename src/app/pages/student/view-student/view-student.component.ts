@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LectureService } from '../../../services/lecture.service';
@@ -6,6 +6,7 @@ import { StudentService } from '../../../services/student.service';
 import { CourseService } from '../../../services/course.service';
 import { pluck } from 'rxjs/operators';
 import { SubjectService } from '../../../services/subject.service';
+import { NbDialogService } from '@nebular/theme';
 
 @Component({
   selector: 'ngx-view-student',
@@ -21,11 +22,11 @@ export class ViewStudentComponent implements OnInit {
     private studentService: StudentService,
     private fb: FormBuilder,
     private courseService: CourseService,
-    private subjectService: SubjectService) { }
+    private subjectService: SubjectService,
+    private dialogBoxService: NbDialogService) { }
 
   lecturesOfStudent: any[] = [];
   student;
-  displayAddNewForm: boolean = false;
   addNewLecForm: FormGroup;
   courseMediums;
   subjects: any;
@@ -34,6 +35,14 @@ export class ViewStudentComponent implements OnInit {
   ngOnInit(): void {
     this.getStudent();
     this.initAddNewLecForm();
+  }
+
+  open(dialog: TemplateRef<any>) {
+    this.dialogBoxService.open(dialog, { context: 'Are you sure you want to delete this schedule?' });
+  }
+
+  onAddClick(dialog: TemplateRef<any>) {
+    this.open(dialog);
   }
 
   getStudent() {
@@ -97,9 +106,6 @@ export class ViewStudentComponent implements OnInit {
   }
 
 
-  addNewLecture() {
-    this.displayAddNewForm = true;
-  }
 
   addLecture() {
     if (this.addNewLecForm.valid) {
