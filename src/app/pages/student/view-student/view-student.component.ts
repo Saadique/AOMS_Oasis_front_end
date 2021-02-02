@@ -105,10 +105,24 @@ export class ViewStudentComponent implements OnInit {
     })
   }
 
-
+  checkLectureExistence(lectureId) {
+    let found = false;
+    for (let i = 0; i < this.lecturesOfStudent.length; i++) {
+      if (lectureId == this.lecturesOfStudent[i].id) {
+        found = true;
+        break;
+      }
+    }
+    return found;
+  }
 
   addLecture() {
     if (this.addNewLecForm.valid) {
+      let lectureId = this.addNewLecForm.value.lecture_id;
+      if (!this.checkLectureExistence(lectureId)) {
+
+      }
+    } else {
 
     }
   }
