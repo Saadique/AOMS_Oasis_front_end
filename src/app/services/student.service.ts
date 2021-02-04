@@ -20,4 +20,8 @@ export class StudentService {
     return this.http.get<any>(`http://localhost:8000/api/students/${studentId}`)
   }
 
+  addLecture(data) {
+    return this.http.post<any>(`http://localhost:8000/api/students/lecture/add`, data)
+  }
+
 }

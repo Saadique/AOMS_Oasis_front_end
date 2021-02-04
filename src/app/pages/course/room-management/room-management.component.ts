@@ -14,10 +14,10 @@ export class RoomManagementComponent implements OnInit {
   roomUpdationForm: FormGroup;
 
   constructor(
-    private roomService: RoomService,
-    public createCourseAlert: Alert
+    private roomService: RoomService
   ) { }
 
+  createCourseAlert = new Alert();
   editFormDisplay: boolean = false;
   rooms;
 

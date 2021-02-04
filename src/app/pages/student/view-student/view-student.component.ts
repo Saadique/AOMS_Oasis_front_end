@@ -7,6 +7,7 @@ import { CourseService } from '../../../services/course.service';
 import { pluck } from 'rxjs/operators';
 import { SubjectService } from '../../../services/subject.service';
 import { NbDialogService } from '@nebular/theme';
+import { Alert } from '../../course/create-course/create-course.component';
 
 @Component({
   selector: 'ngx-view-student',
@@ -26,6 +27,9 @@ export class ViewStudentComponent implements OnInit {
     private dialogBoxService: NbDialogService) { }
 
   lecturesOfStudent: any[] = [];
+  addLecAlert = new Alert();
+  lecAlert = new Alert();
+
   student;
   addNewLecForm: FormGroup;
   courseMediums;
@@ -38,7 +42,20 @@ export class ViewStudentComponent implements OnInit {
   }
 
   open(dialog: TemplateRef<any>) {
-    this.dialogBoxService.open(dialog, { context: 'Are you sure you want to delete this schedule?' });
+    this.dialogBoxService.open(dialog, { context: 'Add New Lecture' });
+  }
+
+  //alert set
+  setAlertModal(alertStatus, alertMessage): void {
+    this.addLecAlert.status = alertStatus;
+    this.addLecAlert.message = alertMessage;
+    setTimeout(() => { this.addLecAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+  setAlert(alertStatus, alertMessage): void {
+    this.lecAlert.status = alertStatus;
+    this.lecAlert.message = alertMessage;
+    setTimeout(() => { this.lecAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
   onAddClick(dialog: TemplateRef<any>) {
@@ -116,19 +133,37 @@ export class ViewStudentComponent implements OnInit {
     return found;
   }
 
-  addLecture() {
+  addLecture(ref) {
     if (this.addNewLecForm.valid) {
       let lectureId = this.addNewLecForm.value.lecture_id;
       if (!this.checkLectureExistence(lectureId)) {
+        let data = {
+          "student_id": this.student.id,
+          "lecture_id": lectureId
+        }
 
+        this.studentService.addLecture(data).subscribe(
+          {
+            next: (response) => {
+              ref.close();
+              this.lectureService.getAllLectureByStudent(this.student.id).subscribe((response) => {
+                console.log(response);
+                this.setAlert('success', 'Lecture was added successfully');
+                this.lecturesOfStudent = response;
+              })
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          }
+        )
+      } else {
+        this.setAlertModal('error', 'This student is already enrolled to this lecture.')
       }
     } else {
 
     }
   }
-
-
-
 
 
 }

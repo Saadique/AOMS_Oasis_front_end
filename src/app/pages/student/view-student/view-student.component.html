@@ -3,6 +3,18 @@
         <nb-card-header>Add Lectures</nb-card-header>
         <nb-card-body>
             <br>
+            <!-- alert message -->
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
+                    {{ addLecAlert.message }}
+                </div>
+            </div> <br>
             <form class="form-horizontal" [formGroup]="addNewLecForm" (ngSubmit)="addLecture()">
                 <div class="form-group row">
                     <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
@@ -49,7 +61,7 @@
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="submitButton" (click)="addLecture()">Add Lecture</button>&nbsp;
+            <button nbButton id="submitButton" (click)="addLecture(ref)">Add Lecture</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>
@@ -108,6 +120,17 @@
             </nb-tab>
 
             <nb-tab tabTitle="Lecture Details">
+                <div class="animated fadeIn">
+                    <div class="alert alert-danger" role="alert" *ngIf="lecAlert.status=='error'">
+                        {{ lecAlert.message }}
+                    </div>
+                    <div class="alert alert-warning" role="alert" *ngIf="lecAlert.status=='warning'">
+                        {{ lecAlert.message }}
+                    </div>
+                    <div class="alert alert-success" role="alert" *ngIf="lecAlert.status=='success'">
+                        {{ lecAlert.message }}
+                    </div>
+                </div> <br>
                 <nb-card>
                     <nb-card-header>
                         <div class="row">
