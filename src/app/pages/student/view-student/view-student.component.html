@@ -61,10 +61,62 @@
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="submitButton" (click)="addLecture(ref)">Add Lecture</button>&nbsp;
+            <button nbButton id="addLecture" (click)="addLecture(ref)">Add Lecture</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>
+
+<ng-template #payFeeDialog let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Add Lectures</nb-card-header>
+        <nb-card-body>
+            <br>
+            <!-- alert message -->
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
+                    {{ addLecAlert.message }}
+                </div>
+            </div> <br>
+            <form class="form-horizontal" [formGroup]="monthlyPaymentForm" (ngSubmit)="payMonthlyFee()">
+                <div class="form-group row">
+                    <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Select Month</label>
+
+                    <div class="col-sm-7">
+                        <nb-select formControlName="month" placeholder="Month">
+                            <nb-option *ngFor="let month of monthlyPayments" value={{month.id}}>
+                                {{month.month}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div><br><br><br>
+                <div class="form-group row">
+                    <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Amount</label>
+
+                    <div class="col-sm-7">
+                        <input type="text" formControlName="schoolName" nbInput id="schoolName"
+                            style="font-size: 12.75px;" placeholder="{{selectedPayment.payment_amount}}" disabled>
+                    </div>
+                </div><br><br>
+            </form>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton id="addLecBtn" (click)="addLecture(ref)">Pay Fee</button>&nbsp;
+            <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
+                Payment</button>&nbsp;&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
 
 <div class="col-12">
     <nb-card size="flexible">
@@ -86,22 +138,22 @@
                             <table class="table table-bordered table-striped">
                                 <thead>
                                     <tr>
-                                        <th> Payment Name
-                                        </th>
-                                        <th> Payment Amount
-                                        </th>
-                                        <th> Status
-                                        </th>
-                                        <th> Pay Fee
-                                        </th>
+                                        <th>Payment Name</th>
+                                        <th>Payment Type</th>
+                                        <th>Status</th>
+                                        <th>Payment Amount</th>
+                                        <th>Pay Fee</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>GRD-12-E-ECONOMICS Payment</td>
-                                        <td>Rs. 1700</td>
+                                    <tr *ngFor="let payment of studentPayments">
+                                        <td></td>
+                                        <td>{{payment.payment_type}}</td>
                                         <td>Payable</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
+                                        <td>{{payment.payment_type}}</td>
+                                        <td><button nbButton status="success"
+                                                (click)="payFee(payFeeDialog, payment)">Pay
+                                                Fee</button></td>
                                     </tr>
                                 </tbody>
                             </table>

@@ -294,6 +294,7 @@ export class RegisterStudentComponent implements OnInit {
           "payment_start_date": this.normalPaymentDateForm.value.normalPaymentStartDate,
           "payment_end_date": payment.payment_end_date,
         }
+        console.log(data2)
         this.studentPaymentsService.storeStudentPayments(data2).subscribe(
           {
             next: (response) => {

@@ -12,5 +12,12 @@ export class StudentPaymentsService {
     return this.http.post<any>(`http://localhost:8000/api/student-payments`, data);
   }
 
+  getStudentPayments(studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/student-payment/student/${studentId}`);
+  }
+
+  getMonthlyPayments(studentPaymentId) {
+    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/${studentPaymentId}`);
+  }
 
 }

@@ -8,6 +8,7 @@ import { pluck } from 'rxjs/operators';
 import { SubjectService } from '../../../services/subject.service';
 import { NbDialogService } from '@nebular/theme';
 import { Alert } from '../../course/create-course/create-course.component';
+import { StudentPaymentsService } from '../../../services/student-payments.service';
 
 @Component({
   selector: 'ngx-view-student',
@@ -16,11 +17,11 @@ import { Alert } from '../../course/create-course/create-course.component';
 })
 export class ViewStudentComponent implements OnInit {
 
-
   constructor(
     private route: ActivatedRoute,
     private lectureService: LectureService,
     private studentService: StudentService,
+    private studentPaymentsService: StudentPaymentsService,
     private fb: FormBuilder,
     private courseService: CourseService,
     private subjectService: SubjectService,
@@ -32,13 +33,31 @@ export class ViewStudentComponent implements OnInit {
 
   student;
   addNewLecForm: FormGroup;
+  monthlyPaymentForm: FormGroup;
   courseMediums;
   subjects: any;
   lectures: any;
+  studentPayments;
+  monthlyPayments;
+  selectedPayment;
 
   ngOnInit(): void {
     this.getStudent();
     this.initAddNewLecForm();
+  }
+
+  initAddNewLecForm() {
+    this.addNewLecForm = this.fb.group({
+      'course_medium_id': ['', null],
+      'subject_id': ['', null],
+      'lecture_id': ['', null]
+    })
+  }
+
+  initMonthlyPaymentForm() {
+    this.monthlyPaymentForm = this.fb.group({
+      'month': ['', null]
+    })
   }
 
   open(dialog: TemplateRef<any>) {
@@ -67,7 +86,15 @@ export class ViewStudentComponent implements OnInit {
     this.studentService.getStudentById(studentId).subscribe((response) => {
       console.log(response);
       this.student = response;
+      this.getPaymentsOfStudent(studentId);
       this.getLecturesOfStudent(studentId);
+    })
+  }
+
+  getPaymentsOfStudent($studentId) {
+    this.studentPaymentsService.getStudentPayments($studentId).subscribe((response) => {
+      console.log(response);
+      this.studentPayments = response;
     })
   }
 
@@ -114,13 +141,6 @@ export class ViewStudentComponent implements OnInit {
 
   }
 
-  initAddNewLecForm() {
-    this.addNewLecForm = this.fb.group({
-      'course_medium_id': ['', null],
-      'subject_id': ['', null],
-      'lecture_id': ['', null]
-    })
-  }
 
   checkLectureExistence(lectureId) {
     let found = false;
@@ -163,6 +183,27 @@ export class ViewStudentComponent implements OnInit {
     } else {
 
     }
+  }
+
+  getMonthlyPayments(studentPayment) {
+    this.selectedPayment = studentPayment;
+    this.studentPaymentsService.getMonthlyPayments(studentPayment.id).subscribe((response) => {
+      console.log(response);
+      this.monthlyPayments = response;
+    })
+  }
+
+  payFee(dialog: TemplateRef<any>, studentPaymentId) {
+    this.getMonthlyPayments(studentPaymentId);
+    this.open(dialog);
+  }
+
+  payMonthlyFee() {
+
+  }
+
+  skipMonthPayment() {
+
   }
 
 
