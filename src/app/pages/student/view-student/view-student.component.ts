@@ -194,12 +194,26 @@ export class ViewStudentComponent implements OnInit {
   }
 
   payFee(dialog: TemplateRef<any>, studentPaymentId) {
+    this.initMonthlyPaymentForm();
     this.getMonthlyPayments(studentPaymentId);
     this.open(dialog);
   }
 
-  payMonthlyFee() {
-
+  payMonthlyFee(ref) {
+    if (this.monthlyPaymentForm.valid) {
+      let today = new Date();
+      let date = today.getFullYear() + '-' + ('0' + (today.getMonth() + 1)).slice(-2) + '-' + ('0' + today.getDate()).slice(-2);
+      console.log(date);
+      let data = {
+        "monthlyPaymentId": this.monthlyPaymentForm.value.month,
+        "status": "payed",
+        "payment_date": today
+      }
+      this.studentPaymentsService.payFee(data.monthlyPaymentId, data).subscribe((response) => {
+        ref.close();
+        console.log(response);
+      })
+    }
   }
 
   skipMonthPayment() {

@@ -68,7 +68,7 @@
 
 <ng-template #payFeeDialog let-data let-ref="dialogRef">
     <nb-card id="addNewForm">
-        <nb-card-header>Add Lectures</nb-card-header>
+        <nb-card-header>Pay Monthly Fee</nb-card-header>
         <nb-card-body>
             <br>
             <!-- alert message -->
@@ -83,7 +83,7 @@
                     {{ addLecAlert.message }}
                 </div>
             </div> <br>
-            <form class="form-horizontal" [formGroup]="monthlyPaymentForm" (ngSubmit)="payMonthlyFee()">
+            <form class="form-horizontal" [formGroup]="monthlyPaymentForm">
                 <div class="form-group row">
                     <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
                         style="font-size: 12.75px;">Select Month</label>
@@ -97,12 +97,12 @@
                     </div>
                 </div><br><br><br>
                 <div class="form-group row">
-                    <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                    <label class="label col-sm-5 form-control-label" style="font-size: 15px;"
                         style="font-size: 12.75px;">Amount</label>
 
                     <div class="col-sm-7">
-                        <input type="text" formControlName="schoolName" nbInput id="schoolName"
-                            style="font-size: 12.75px;" placeholder="{{selectedPayment.payment_amount}}" disabled>
+                        <input type="text" nbInput style="font-size: 12.75px;"
+                            placeholder="{{selectedPayment.payment_amount}}" disabled>
                     </div>
                 </div><br><br>
             </form>
@@ -110,7 +110,7 @@
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="addLecBtn" (click)="addLecture(ref)">Pay Fee</button>&nbsp;
+            <button nbButton type="submit" id="addLecBtn" (click)="payMonthlyFee(ref)">Pay Fee</button>&nbsp;
             <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
                 Payment</button>&nbsp;&nbsp;
         </nb-card-footer>

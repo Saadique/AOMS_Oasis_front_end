@@ -20,4 +20,8 @@ export class StudentPaymentsService {
     return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/${studentPaymentId}`);
   }
 
+  payFee(monthlyPaymentId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/monthly-payments/${monthlyPaymentId}`, data);
+  }
+
 }
