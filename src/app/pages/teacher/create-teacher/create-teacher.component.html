@@ -25,38 +25,46 @@
                             <br>
                             <!-- lecture name -->
                             <div class="form-group row">
-                                <label for="lectureName" class="label col-sm-3 form-control-label"
+                                <label for="name" class="label col-sm-3 form-control-label"
                                     style="font-size: 12.75px;">Enter Teacher Name</label>
                                 <div class="col-sm-9">
-                                    <input type="text" formControlName="name" nbInput fullWidth id="lectureName"
-                                        style="font-size: 12.75px;" placeholder="Lecture Name">
+                                    <input type="text" formControlName="name" nbInput fullWidth id="name"
+                                        style="font-size: 12.75px;" placeholder="Name">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="nic" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;">Enter Teacher NIC</label>
+                                <div class="col-sm-9">
+                                    <input type="text" formControlName="nic" nbInput fullWidth id="nic"
+                                        style="font-size: 12.75px;" placeholder="981592298v">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="lectureName" class="label col-sm-3 form-control-label"
+                                <label for="email" class="label col-sm-3 form-control-label"
                                     style="font-size: 12.75px;">Enter Teacher Email</label>
                                 <div class="col-sm-9">
-                                    <input type="text" formControlName="email" nbInput fullWidth id="lectureName"
-                                        style="font-size: 12.75px;" placeholder="Lecture Name">
+                                    <input type="text" formControlName="email" nbInput fullWidth id="email"
+                                        style="font-size: 12.75px;" placeholder="Email">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="lectureName" class="label col-sm-3 form-control-label"
-                                    style="font-size: 12.75px;">Phone Number</label>
+                                <label for="mobile_no" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;">Enter Teacher Contact Number</label>
                                 <div class="col-sm-9">
-                                    <input type="text" formControlName="mobile_no" nbInput fullWidth id="lectureName"
-                                        style="font-size: 12.75px;" placeholder="Lecture Name">
+                                    <input type="text" formControlName="mobile_no" nbInput fullWidth id="mobile_no"
+                                        style="font-size: 12.75px;" placeholder="Contact Number">
                                 </div>
                             </div>
 
                             <div class="form-group row">
-                                <label for="lectureName" class="label col-sm-3 form-control-label"
-                                    style="font-size: 12.75px;">Home Address</label>
+                                <label for="address" class="label col-sm-3 form-control-label"
+                                    style="font-size: 12.75px;">Enter Teacher Home Address</label>
                                 <div class="col-sm-9">
-                                    <input type="text" formControlName="address" nbInput fullWidth id="lectureName"
-                                        style="font-size: 12.75px;" placeholder="Lecture Name">
+                                    <input type="text" formControlName="address" nbInput fullWidth id="address"
+                                        style="font-size: 12.75px;" placeholder="Home Address">
                                 </div>
                             </div>
                             <button nbButton nbStepperNext>next</button>
@@ -86,11 +94,11 @@
                     <!-- Create Schedule -->
                     <nb-step [stepControl]="teacherSubjectsForm" label="Schedule Details">
                         <form [formGroup]="teacherSubjectsForm" (ngSubmit)="onThirdSubmit()" class="step-container">
-                            <h1><small>Fill up Lecture Schedule details</small></h1>
+                            <h1><small>Teacher Portal Account</small></h1>
                             <br>
                             <div class="form-group row">
                                 <label for="student_fee" class="label col-sm-4 form-control-label"
-                                    style="font-size: 12.75px;">Enter Teaching Subject</label>
+                                    style="font-size: 12.75px;">Enter Username</label>
                                 <div class="col-sm-8">
                                     <input type="text" formControlName="subjects" nbInput fullWidth id="student_fee"
                                         style="font-size: 12.75px;" placeholder="Student Fee Amount">
@@ -108,6 +116,7 @@
                             <button nbButton (click)="stepper.reset()" type="button">Try again</button>
                         </div>
                     </nb-step>
+
                 </nb-stepper>
             </nb-card-body>
         </nb-card>

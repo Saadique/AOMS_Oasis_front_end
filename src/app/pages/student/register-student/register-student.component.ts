@@ -277,7 +277,7 @@ export class RegisterStudentComponent implements OnInit {
         {
           next: (response) => {
             console.log(response);
-            this.storeStudentSchemeLecture(studentId, this.paymentScheme.id);
+            this.storeStudentSchemeLecture(studentId, this.paymentScheme.id, response.id);
           }
         }
       )
@@ -293,6 +293,7 @@ export class RegisterStudentComponent implements OnInit {
           "payment_amount": payment.student_fee,
           "payment_start_date": this.normalPaymentDateForm.value.normalPaymentStartDate,
           "payment_end_date": payment.payment_end_date,
+          "lecture_ids": this.selectedLectureIds
         }
         console.log(data2)
         this.studentPaymentsService.storeStudentPayments(data2).subscribe(
@@ -308,11 +309,12 @@ export class RegisterStudentComponent implements OnInit {
 
 
 
-  storeStudentSchemeLecture(studentId, schemeId) {
+  storeStudentSchemeLecture(studentId, schemeId, studentPaymentId) {
     let data = {
       "student_id": studentId,
       "payment_scheme_id": schemeId,
-      "lectureIds": this.selectedLectureIds
+      "lectureIds": this.selectedLectureIds,
+      "student_payment_id": studentPaymentId
     }
     this.paymentSchemeService.storeStudentSchemeLecture(data).subscribe(
       {

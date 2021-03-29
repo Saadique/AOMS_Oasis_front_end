@@ -39,6 +39,7 @@ export class CreateTeacherComponent implements OnInit {
     this.teacherDetailsForm = this.fb.group({
       name: ['', null],
       email: ['', null],
+      nic: ['', null],
       mobile_no: ['', null],
       address: ['', null]
     });
@@ -60,6 +61,7 @@ export class CreateTeacherComponent implements OnInit {
     if (this.teacherDetailsForm.valid) {
       let data = {
         'name': this.teacherDetailsForm.value.name,
+        'nic': this.teacherDetailsForm.value.nic,
         'email': this.teacherDetailsForm.value.email,
         'mobile_no': this.teacherDetailsForm.value.mobile_no,
         'address': this.teacherDetailsForm.value.address
@@ -77,6 +79,10 @@ export class CreateTeacherComponent implements OnInit {
         }
       )
     }
+  }
+
+  addTeacher() {
+
   }
 
   onFirstSubmit() {

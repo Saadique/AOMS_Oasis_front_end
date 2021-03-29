@@ -6,6 +6,7 @@ import { StudentDashboardComponent } from './student-dashboard/student-dashboard
 import { RoutesAuthenticationService } from 'app/authentication/services/authentication/routes-authentication.service';
 import { MySchedulesComponent } from './my-schedules/my-schedules.component';
 import { MyClassComponent } from './my-class/my-class.component';
+import { MyPaymentsComponent } from './my-payments/my-payments.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       { path: 'dashboard', component: StudentDashboardComponent, canActivate: [RoutesAuthenticationService] },
       { path: 'my_schedules', component: MySchedulesComponent, canActivate: [RoutesAuthenticationService] },
-      { path: 'my_class/:lectureId', component: MyClassComponent, canActivate: [RoutesAuthenticationService] }
+      { path: 'my_class/:lectureId', component: MyClassComponent, canActivate: [RoutesAuthenticationService] },
+      { path: 'my_payments', component: MyPaymentsComponent }
     ]
   },
 ];

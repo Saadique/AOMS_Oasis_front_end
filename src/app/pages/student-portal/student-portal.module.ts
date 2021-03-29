@@ -31,9 +31,10 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { StudentDashboardComponent } from './student-dashboard/student-dashboard.component';
 import { MySchedulesComponent } from './my-schedules/my-schedules.component';
 import { MyClassComponent } from './my-class/my-class.component';
+import { MyPaymentsComponent } from './my-payments/my-payments.component';
 
 @NgModule({
-  declarations: [StudentPortalComponent, StudentDashboardComponent, MySchedulesComponent, MyClassComponent],
+  declarations: [StudentPortalComponent, StudentDashboardComponent, MySchedulesComponent, MyClassComponent, MyPaymentsComponent],
   imports: [
     CommonModule,
     StudentPortalRoutingModule,

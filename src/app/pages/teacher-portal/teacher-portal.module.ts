@@ -29,9 +29,10 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard.component';
 import { MyClassesComponent } from './my-classes/my-classes.component';
 import { MyClassComponent } from './my-class/my-class.component';
+import { MyRenumerationsComponent } from './my-renumerations/my-renumerations.component';
 
 @NgModule({
-  declarations: [TeacherPortalComponent, TeacherDashboardComponent, MyClassesComponent, MyClassComponent],
+  declarations: [TeacherPortalComponent, TeacherDashboardComponent, MyClassesComponent, MyClassComponent, MyRenumerationsComponent],
   imports: [
     CommonModule,
     TeacherPortalRoutingModule,
