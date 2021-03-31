@@ -52,10 +52,11 @@
                 </div>
             </nb-card-header>
             <nb-card-header>
+                <br><br>
                 <div class="row">
                     <div class="col-sm-5"></div>
                     <div class="col-sm-2">
-                        <button nbButton (click)="seeMyRemuns()">See My Remunerations</button>
+                        <button nbButton (click)="seeMyRemuns()">See My Student Fee Status</button>
                     </div>
                     <div class="col-sm-5"></div>
                 </div>
@@ -64,30 +65,57 @@
                 <div class="col-12">
                     <nb-card size="flexible">
                         <nb-tabset fullWidth>
-                            <nb-tab tabTitle="Payables">
-                                <!-- <div class="table-responsive">
+                            <nb-tab tabTitle="All Student Fee Status">
+                                <div class="table-responsive">
                                     <br>
                                     <table class="table table-bordered table-striped">
                                         <thead>
                                             <tr>
-                                                <th>Payment Month</th>
-                                                <th>Payment Amount</th>
-                                                <th>Due Date</th>
+                                                <th>Student Name</th>
+                                                <th>Registration No.</th>
+                                                <th>Payment Type</th>
+                                                <th>Month</th>
+                                                <th>Status</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr *ngFor="let payable of activePayables">
-                                                <td>{{payable.year}} {{payable.month}}</td>
-                                                <td>{{payable.amount}}</td>
-                                                <td>{{payable.due_date}}</td>
+                                            <tr *ngFor="let remun of allMonthlyRemunerations">
+                                                <td>{{remun.name}}</td>
+                                                <td>{{remun.registration_no}}</td>
+                                                <td>{{remun.payment_type}}</td>
+                                                <td>{{remun.year}} {{remun.month}}</td>
+                                                <td>{{remun.status}}</td>
                                             </tr>
                                         </tbody>
                                     </table>
-                                </div> -->
+                                </div>
                             </nb-tab>
 
-                            <nb-tab tabTitle="Due Payments">
-
+                            <nb-tab tabTitle="Paid Students">
+                                <table class="table table-bordered table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th>Student Name</th>
+                                            <th>Registration No.</th>
+                                            <th>Payment Type</th>
+                                            <th>Month</th>
+                                            <th>Status</th>
+                                            <th>Paid Date</th>
+                                            <th>Amount Received</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let remun of paidMonthlyRemunerations">
+                                            <td>{{remun.name}}</td>
+                                            <td>{{remun.registration_no}}</td>
+                                            <td>{{remun.payment_type}}</td>
+                                            <td>{{remun.year}} {{remun.month}}</td>
+                                            <td>{{remun.status}}</td>
+                                            <td>{{remun.payment_date}}</td>
+                                            <td>Rs.{{remun.teacher_amount}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </nb-tab>
 
                             <nb-tab tabTitle="Payment History">

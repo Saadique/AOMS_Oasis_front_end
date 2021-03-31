@@ -167,8 +167,128 @@
             </nb-tab>
 
             <nb-tab tabTitle="Attendence">
-                <br><br>
-                aasasa
+                <br>
+                <nb-card>
+                    <nb-card-header>
+                        <div class="row">
+                            <div class="col-sm-1"></div>
+                            <div class="col-sm-5">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        Lecture
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <nb-select placeholder="Select Lecture Of Student"
+                                            (selectedChange)="selectLecture($event)">
+                                            <nb-option *ngFor="let lecture of lecturesOfStudent" value={{lecture.id}}>
+                                                {{lecture.name}}
+                                            </nb-option>
+                                        </nb-select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-5">
+                                <div class="row">
+                                    <div class="col-sm-4">
+                                        Date
+                                    </div>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control"
+                                            (change)="selectDate($event.target.value)" min="2020-09-10">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1"></div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-header *ngIf="schedule!=null">
+                        <h5>General Schedule Of this Lecture</h5><br>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Day</th>
+                                    <th>Room Number</th>
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>{{scheduleDay}}</td>
+                                    <td>{{schedule.room_id}}</td>
+                                    <td>{{schedule.schedule_start_date}}</td>
+                                    <td>{{schedule.schedule_end_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </nb-card-header>
+                    <nb-card-header *ngIf="dailySchedulesByLec!=null && dailySchedulesByLec!='default'">
+                        <!-- <div class="row">
+                            <div class="col-sm-4">
+                                <nb-radio-group [(ngModel)]="attendanceStatus">
+                                    <nb-radio value="present">
+                                        Present
+                                    </nb-radio>
+                                    <nb-radio value="absent">
+                                        Absent
+                                    </nb-radio>
+                                </nb-radio-group>
+                            </div>
+                            <div class="col-sm-5"></div>
+                            <div class="col-sm-3">
+                                <button nbButton>Mark Attendance</button>
+                            </div>
+                        </div> -->
+                        <h5>Schedules On this Date For this Lecture</h5><br>
+                        <!-- alert message -->
+                        <div class="animated fadeIn">
+                            <div class="alert alert-danger" role="alert" *ngIf="lecAlert.status=='error'">
+                                {{ lecAlert.message }}
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="lecAlert.status=='warning'">
+                                {{ lecAlert.message }}
+                            </div>
+                            <div class="alert alert-success" role="alert" *ngIf="lecAlert.status=='success'">
+                                {{ lecAlert.message }}
+                            </div>
+                        </div> <br>
+                        <table class="table table-bordered table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Start Time</th>
+                                    <th>End Time</th>
+                                    <th>Room Number</th>
+                                    <th>Mark Status</th>
+                                    <th>Mark Attendance</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let schedule of dailySchedulesByLec">
+                                    <td>{{schedule.date}}</td>
+                                    <td>{{schedule.start_time}}</td>
+                                    <td>{{schedule.end_time}}</td>
+                                    <td>{{schedule.room.name}}</td>
+                                    <td>
+                                        <nb-radio-group [(ngModel)]="schedule.attendance">
+                                            <nb-radio value="present">
+                                                Present
+                                            </nb-radio>
+                                            <nb-radio value="absent">
+                                                Absent
+                                            </nb-radio>
+                                        </nb-radio-group>
+                                    </td>
+                                    <td><button nbButton status="info" (click)="markAttendance(schedule)">Mark
+                                            Attendance</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </nb-card-header>
+                    <nb-card-header *ngIf="dailySchedulesByLec==null">
+                        <h5>There are no lecture schedules on this date for this lecture</h5>
+                    </nb-card-header>
+                </nb-card>
             </nb-tab>
 
             <nb-tab tabTitle="Lecture Details">

@@ -39,4 +39,11 @@ export class ScheduleService {
     return this.http.delete<any>(`http://localhost:8000/api/daily-schedules/${id}`);
   }
 
+  getSchedulesByLecture(lectureId) {
+    return this.http.get<any>(`http://localhost:8000/api/schedules/lecture/${lectureId}`);
+  }
+
+  getScheduleByDateAndLecture(date, lectureId, studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/daily-schedules/date/lecture/${date}/${lectureId}/${studentId}`);
+  }
 }

@@ -9,6 +9,8 @@ import { SubjectService } from '../../../services/subject.service';
 import { NbDialogService } from '@nebular/theme';
 import { Alert } from '../../course/create-course/create-course.component';
 import { StudentPaymentsService } from '../../../services/student-payments.service';
+import { ScheduleService } from '../../../services/schedule.service';
+import { AttendanceService } from '../../../services/attendance.service';
 
 @Component({
   selector: 'ngx-view-student',
@@ -25,12 +27,15 @@ export class ViewStudentComponent implements OnInit {
     private fb: FormBuilder,
     private courseService: CourseService,
     private subjectService: SubjectService,
+    private scheduleService: ScheduleService,
+    private attendanceService: AttendanceService,
     private dialogBoxService: NbDialogService) { }
 
   lecturesOfStudent: any[] = [];
   addLecAlert = new Alert();
   lecAlert = new Alert();
 
+  studentId;
   student;
   addNewLecForm: FormGroup;
   monthlyPaymentForm: FormGroup;
@@ -40,6 +45,12 @@ export class ViewStudentComponent implements OnInit {
   studentPayments;
   monthlyPayments;
   selectedPayment;
+  selectedLecture; //Attendence
+  selectedDate;    //Attendence
+  schedule;
+  scheduleDay;
+  attendanceStatus;
+  dailySchedulesByLec = "default";
 
   ngOnInit(): void {
     this.getStudent();
@@ -82,12 +93,12 @@ export class ViewStudentComponent implements OnInit {
   }
 
   getStudent() {
-    let studentId = this.route.snapshot.paramMap.get('id');
-    this.studentService.getStudentById(studentId).subscribe((response) => {
+    this.studentId = this.route.snapshot.paramMap.get('id');
+    this.studentService.getStudentById(this.studentId).subscribe((response) => {
       console.log(response);
       this.student = response;
-      this.getPaymentsOfStudent(studentId);
-      this.getLecturesOfStudent(studentId);
+      this.getPaymentsOfStudent(this.studentId);
+      this.getLecturesOfStudent(this.studentId);
     })
   }
 
@@ -220,5 +231,76 @@ export class ViewStudentComponent implements OnInit {
 
   }
 
+
+  //--Attendances--
+
+  getSchedulesOfLecture(lectureId) {
+    this.scheduleService.getSchedulesByLecture(lectureId).subscribe(
+      {
+        next: (response) => {
+          console.log(response);
+          this.schedule = response;
+          let date = new Date(this.schedule.schedule_start_date);
+          this.scheduleDay = this.daysOfWeek[date.getDay()];
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+  getDailySchedulesByDate(date, lecture, studentId) {
+    this.scheduleService.getScheduleByDateAndLecture(date, lecture, studentId).subscribe(
+      {
+        next: (response) => {
+          if (response.length != 0) {
+            this.dailySchedulesByLec = response;
+          } else {
+            this.dailySchedulesByLec = null;
+          }
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      }
+    )
+  }
+
+  daysOfWeek = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday",
+    "Saturday"
+  ];
+
+  selectLecture(lectureId) {
+    this.dailySchedulesByLec = "default";
+    console.log(lectureId);
+    this.selectedLecture = lectureId;
+    this.getSchedulesOfLecture(lectureId);
+  }
+
+
+  selectDate(date) {
+    console.log(this.studentId)
+    this.getDailySchedulesByDate(date, this.selectedLecture, this.studentId);
+  }
+
+  markAttendance(schedule) {
+    let data = {
+      student_id: this.studentId,
+      daily_schedule_id: schedule.id,
+      attendance_status: schedule.attendance
+    }
+    this.attendanceService.markAttendance(data).subscribe(
+      {
+        next: (response) => {
+          console.log(response);
+          this.setAlert('success', 'Attendance was marked!')
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      }
+    )
+  }
 
 }

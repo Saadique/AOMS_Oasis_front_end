@@ -7,9 +7,13 @@ import { Component, OnInit } from '@angular/core';
 })
 export class AdminDashboardComponent implements OnInit {
 
+  studentOpLink;
+  userMgtLink;
   constructor() { }
 
   ngOnInit(): void {
+    this.studentOpLink = "/pages/student/view";
+    this.userMgtLink = "/pages/user-management/user-roles";
   }
 
 }

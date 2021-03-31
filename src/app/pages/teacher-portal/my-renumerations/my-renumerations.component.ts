@@ -18,6 +18,10 @@ export class MyRenumerationsComponent implements OnInit {
   selectedLecture;
   selectedYear;
   selectedMonth;
+  allMonthlyRemunerations;
+  paidMonthlyRemunerations;
+
+
   alertRemun = new Alert();
   constructor(private teacherService: TeacherService) { }
 
@@ -80,13 +84,35 @@ export class MyRenumerationsComponent implements OnInit {
 
   seeMyRemuns() {
     if (this.selectedLecture != null && this.selectedYear != null && this.selectedMonth != null) {
-      console.log(this.selectedLecture);
-      console.log(this.selectedYear);
-      console.log(this.selectedMonth);
+      this.teacherService.getAllMonthlyRemunerations(this.selectedLecture, this.selectedYear, this.selectedMonth).subscribe(
+        {
+          next: (response) => {
+            this.allMonthlyRemunerations = response;
+            console.log(this.allMonthlyRemunerations);
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        }
+      )
+
+      this.teacherService.getPaidMonthlyRemunerations(this.teacher.id, this.selectedLecture, this.selectedYear, this.selectedMonth).subscribe(
+        {
+          next: (response) => {
+            this.paidMonthlyRemunerations = response;
+            console.log(this.paidMonthlyRemunerations);
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        }
+      )
     } else {
       this.setAlert('Error', 'Please select all required parameters');
     }
   }
+
+
 
   //alert set
   setAlert(alertStatus, alertMessage): void {
