@@ -5,6 +5,8 @@ import { getDeepFromObject, NbAuthService, NbAuthSocialLink, NB_AUTH_OPTIONS } f
 import { LoginService } from '../../services/login.service';
 import { LoginServiceService } from '../services/login/login-service.service';
 import { LocalStorageService } from '../services/local-storage/local-storage.service';
+import { ADMIN_MENU_ITEMS, STUDENT_MENU_ITEMS, TEACHER_MENU_ITEMS } from '../../pages/pages-menu';
+import { LectureService } from 'app/services/lecture.service';
 
 @Component({
   selector: 'ngx-login',
@@ -26,13 +28,22 @@ export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
 
+  studentLectures;
+  classChildrenMenu = null;
+
+
+
+  lecturesOfTeacher;
+  classChildrenTeacherMenu = null;
+
   constructor(protected service: NbAuthService,
     @Inject(NB_AUTH_OPTIONS) protected options = {},
     protected cd: ChangeDetectorRef,
     protected router: Router,
     private fb: FormBuilder,
     private loginService: LoginServiceService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private lectureService: LectureService
   ) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
@@ -43,7 +54,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.clearLogin();
+  }
 
+  clearLogin() {
+    this.localStorageService.clearLogin();
   }
 
   initLoginForm() {
@@ -64,15 +79,37 @@ export class LoginComponent implements OnInit {
         next: (response: any) => {
           console.log(response);
           this.localStorageService.setToken(response.token);
-          this.localStorageService.setData(response);
-          console.log(window.localStorage.getItem('user-data'));
           switch (response.userRoleId) {
             case 1:
-              return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
+              // response.userViews = TEACHER_MENU_ITEMS;
+              // this.localStorageService.setData(response);
+
+              let tempTeacherViews = TEACHER_MENU_ITEMS;
+              this.makeLectureMenuOfTeacher(response.teacher.id);
+              setTimeout(() => {
+                this.getAllTeacherViews(tempTeacherViews);
+                response.userViews = tempTeacherViews;
+                this.localStorageService.setData(response);
+                return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
+              }, 1000);
+              break;
             case 2:
-              return this.router.navigateByUrl('/pages/student-portal/dashboard');
+              let tempUserViews = STUDENT_MENU_ITEMS;
+              this.makeLectureMenuOfStudents(response.student.id);
+              setTimeout(() => {
+                this.getAllStudentViews(tempUserViews);
+                response.userViews = tempUserViews;
+                this.localStorageService.setData(response);
+                return this.router.navigateByUrl('/pages/student-portal/dashboard');
+              }, 1000);
+              break;
+            // response.userViews = STUDENT_MENU_ITEMS;
+            // this.localStorageService.setData(response);
+
             case 3:
-              return this.router.navigateByUrl('/pages/course/create');
+              response.userViews = ADMIN_MENU_ITEMS;
+              this.localStorageService.setData(response);
+              return this.router.navigateByUrl('/pages/admin/dashboard');
           }
         },
         error: (err) => {
@@ -83,7 +120,7 @@ export class LoginComponent implements OnInit {
           // }
           // this.errors = err.error.message;
           // alert(err.error.message);
-          console.log(err.error)
+          console.log(err.error);
         }
       })
 
@@ -109,6 +146,93 @@ export class LoginComponent implements OnInit {
   getConfigValue(key: string): any {
     return getDeepFromObject(this.options, key, null);
   }
+
+
+  makeLectureMenuOfStudents(studentId) {
+    this.lectureService.getAllLectureByStudent(studentId).subscribe(
+      {
+        next: (response) => {
+          // console.log(response);
+          this.studentLectures = response;
+          this.classChildrenMenu = this.makeMenu(this.studentLectures);
+          // console.log(this.classChildrenMenu);
+          // this.getAllViews(tempUserViews);
+        },
+        error: (err) => {
+          console.log(err)
+        }
+      }
+    )
+  }
+
+  makeLectureMenuOfTeacher(teacherId) {
+    this.lectureService.getAllLecturesByTeacher(teacherId).subscribe({
+      next: (response) => {
+        this.lecturesOfTeacher = response;
+        this.classChildrenTeacherMenu = this.makeMenuListForTeacher(this.lecturesOfTeacher);
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  makeMenu(studentLectures) {
+    let children: any[] = [];
+    for (let i = 0; i < studentLectures.length; i++) {
+      let child = {
+        title: studentLectures[i].name,
+        link: `/pages/student-portal/my_class/${studentLectures[i].id}`
+      }
+      children.push(child);
+    }
+    return children;
+  }
+
+  makeMenuListForTeacher(teacherLectures) {
+    let children: any[] = [];
+    for (let i = 0; i < teacherLectures.length; i++) {
+      let child = {
+        title: teacherLectures[i].name,
+        link: `/pages/teacher-portal/my_class/${teacherLectures[i].id}`
+      }
+      children.push(child);
+    }
+    return children;
+  }
+
+  getAllStudentViews(tempUserViews) {
+    for (let i = 0; i < tempUserViews.length; i++) {
+      if (tempUserViews[i].title == 'My Classes') {
+        tempUserViews[i]["children"] = this.classChildrenMenu;
+        break;
+      }
+    }
+    console.log(tempUserViews);
+    return tempUserViews;
+  }
+
+  getAllTeacherViews(tempTeacherViews) {
+    for (let i = 0; i < tempTeacherViews.length; i++) {
+      if (tempTeacherViews[i].title == 'My Classes') {
+        tempTeacherViews[i]["children"] = this.classChildrenTeacherMenu;
+        break;
+      }
+    }
+    return tempTeacherViews;
+  }
+
+  // getLecturesOfTeacher(teacherId) {
+  //   this.lectureService.getAllLecturesByTeacher(teacherId).subscribe({
+  //     next: (response) => {
+  //       this.lectures = response;
+  //     },
+  //     error: (err) => {
+  //       console.log(err);
+  //     }
+  //   })
+  // }
+
 
 }
 

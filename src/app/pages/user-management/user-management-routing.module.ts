@@ -5,6 +5,7 @@ import { UserManagementComponent } from './user-management.component';
 import { UserRolesComponent } from './user-roles/user-roles.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { NavigationPrivilegesComponent } from './navigation-privileges/navigation-privileges.component';
+import { RoutesAuthenticationService } from '../../authentication/services/authentication/routes-authentication.service';
 
 const routes: Routes = [
   {

@@ -1,0 +1,120 @@
+<div class="container">
+    <div class="table-responsive" *ngIf="teacherSchedules!=null">
+        <table class="table table-bordered text-center">
+            <thead>
+                <tr class="bg-light-gray">
+                    <!-- <th class="text-uppercase">Time
+                    </th> -->
+                    <th class="text-uppercase">Monday</th>
+                    <th class="text-uppercase">Tuesday</th>
+                    <th class="text-uppercase">Wednesday</th>
+                    <th class="text-uppercase">Thursday</th>
+                    <th class="text-uppercase">Friday</th>
+                    <th class="text-uppercase">Saturday</th>
+                    <th class="text-uppercase">Sunday</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr *ngFor="let schedule of teacherSchedules">
+                    <!-- <td class="align-middle">09:00am</td> -->
+                    <td *ngIf="schedule.day=='Monday';else empty1">
+                        <span
+                            class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}} </div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+                    </td>
+                    <ng-template #empty1>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Tuesday';else empty2">
+                        <span
+                            class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+
+                    </td>
+                    <ng-template #empty2>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Wednesday';else empty3">
+                        <span
+                            class="bg-yellow padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+
+                    </td>
+                    <ng-template #empty3>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Thursday';else empty4">
+                        <span
+                            class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+
+                    </td>
+                    <ng-template #empty4>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Friday';else empty5">
+                        <span
+                            class="bg-purple padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+
+                    </td>
+                    <ng-template #empty5>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Saturday';else empty6">
+                        <span
+                            class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+
+                    </td>
+                    <ng-template #empty6>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+
+                    <td *ngIf="schedule.day=='Sunday';else empty7">
+                        <span
+                            class="bg-pink padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">{{schedule.lecture_name}}</span>
+                        <div class="margin-10px-top font-size14">{{schedule.start_time}} to
+                            {{schedule.end_time}}</div>
+                        <div class="font-size13 text-light-gray">{{schedule.room_name}}</div>
+                    </td>
+                    <ng-template #empty7>
+                        <td class="bg-light-gray">
+
+                        </td>
+                    </ng-template>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

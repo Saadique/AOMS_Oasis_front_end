@@ -21,8 +21,10 @@ export class RoutesAuthenticationService implements CanActivate, CanActivateChil
         let viewList: any[] = this.localStorageService.getData().userViews;
         console.log(viewList);
         for (let i = 0; i < viewList.length; i++) {
-          if (state.url === viewList[i].link) {
-            return true;
+          if ('link' in viewList[i]) {
+            if (state.url === viewList[i].link) {
+              return true;
+            }
           }
           if (this.checkChildNodeAuthorization(viewList[i], state.url) === true) {
             return true;
@@ -47,8 +49,10 @@ export class RoutesAuthenticationService implements CanActivate, CanActivateChil
         let viewList: any[] = this.localStorageService.getData().userViews;
         console.log(viewList);
         for (let i = 0; i < viewList.length; i++) {
-          if (state.url === viewList[i].link) {
-            return true;
+          if ('link' in viewList[i]) {
+            if (state.url === viewList[i].link) {
+              return true;
+            }
           }
           if (this.checkChildNodeAuthorization(viewList[i], state.url) === true) {
             return true;
@@ -64,13 +68,19 @@ export class RoutesAuthenticationService implements CanActivate, CanActivateChil
 
   foundChild = false;
   checkChildNodeAuthorization(parent, url) {
+    console.log("in");
     // let found = false;
     if ('children' in parent) {
       let children: any[] = parent.children;
       for (let i = 0; i < children.length; i++) {
-        if (url === children[i].link) {
-          this.foundChild = true;
-          break;
+        if ('link' in children[i]) {
+          if (url === children[i].link) {
+            console.log(children[i]);
+            this.foundChild = true;
+            break;
+          } else {
+            this.checkChildNodeAuthorization(children[i], url);
+          }
         } else {
           this.checkChildNodeAuthorization(children[i], url);
         }

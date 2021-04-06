@@ -1,1 +1,194 @@
-<p>my-class works!</p>
+<nb-card>
+    <nb-card-header>
+
+    </nb-card-header>
+    <nb-card-body>
+        <nb-card size="flexible">
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="View Lessons">
+                </nb-tab>
+                <nb-tab tabTitle="Create New Lessons">
+                    <br>
+                    <nb-card>
+                        <nb-card-header>
+                            <button id="add-new" outline nbButton shape="semi-round" status="info"
+                                (click)="onAddLessonClick(lessonFormModal)">Add new
+                                Lesson</button>
+                        </nb-card-header>
+                        <nb-card-body>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Lesson Name</th>
+                                        <th>Lesson Description</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let lesson of lessons">
+                                        <td>{{lesson.name}}</td>
+                                        <td>{{lesson.description}}</td>
+                                        <td><button nbButton status="success">Edit</button></td>
+                                        <td><button nbButton ststus="warning">Delete</button></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </nb-card-body>
+                    </nb-card>
+
+                </nb-tab>
+                <nb-tab tabTitle="Lesson Materials">
+                    <nb-card>
+                        <nb-card-header>
+                            <label for="name" class="label col-sm-3 form-control-label"
+                                style="font-size: 12.75px;">Select
+                                Lesson</label>
+                            <nb-select (selectedChange)="selectLesson($event)" placeholder="Please Select Lesson">
+                                <nb-option *ngFor="let lesson of lessons" value={{lesson.id}}>{{lesson.name}}
+                                </nb-option>
+                            </nb-select>
+                            <button id="add-new" outline nbButton shape="semi-round" status="info"
+                                (click)="onAddMaterialClick(materialFormModal)">Add new
+                                Material</button>
+                        </nb-card-header>
+                        <nb-card-body>
+                            <table class="table table-bordered table-striped" *ngIf="lessonMaterials.length>0">
+                                <thead>
+                                    <tr>
+                                        <th>Lecture Material Name</th>
+                                        <th>File Type</th>
+                                        <th>Created Date</th>
+                                        <th>Last Modified Date</th>
+                                        <th>Edit</th>
+                                        <th>Delete</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let material of lessonMaterials">
+                                        <td>{{material.file_name}}</td>
+                                        <td>{{material .file_extension}}</td>
+                                        <td></td>
+                                        <td></td>
+                                        <td><button nbButton status="success"
+                                                (click)="editClick(material, materialsEdit)">Edit</button></td>
+                                        <td><button nbButton ststus="warning">Delete</button></td>
+                                    </tr>
+                                </tbody>
+                                <div *ngIf="lessonMaterials.length==0">
+                                    No Materials yet For This Lesson
+                                </div>
+                            </table>
+                        </nb-card-body>
+                    </nb-card>
+                </nb-tab>
+            </nb-tabset>
+        </nb-card>
+    </nb-card-body>
+</nb-card>
+
+<ng-template #lessonFormModal let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Create New Lesson for {{lecture.name}}</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form class="form-horizontal" (ngSubmit)="createLesson(ref)" [formGroup]="createForm">
+                <div class="form-group row">
+                    <label for="name" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Lesson
+                        Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="name" nbInput fullWidth id="name"
+                            style="font-size: 12.75px;" placeholder="Lesson Name">
+                    </div>
+                </div><br>
+                <div class="form-group row">
+                    <label for="description" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Lesson Description</label>
+                    <div class="col-sm-9">
+                        <textarea rows="5" formControlName="description" nbInput fullWidth
+                            placeholder="Lesson Description"></textarea>
+                    </div>
+                </div>
+                <br><br>
+                <button nbButton id="submitButton" type="submit">Submit</button>&nbsp;
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <!-- <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp; -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #materialFormModal let-data let-refM="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Add Lecture Materials</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form class="form-horizontal" (ngSubmit)="createMaterial(refM)" [formGroup]="materialForm">
+                <div class="form-group row">
+                    <label for="file_name" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        File Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="file_name" nbInput fullWidth id="file_name"
+                            style="font-size: 12.75px;" placeholder="File Name">
+                    </div>
+                </div><br>
+                <div class="form-group row">
+                    <label for="description" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Upload File</label>
+                    <div class="col-sm-9">
+                        <input type="file" nbInput id="file" (change)="onFileSelected($event)" placeholder="File Name">
+                    </div>
+                </div>
+                <br><br>
+                <button nbButton id="submitButton" type="submit">Submit</button>&nbsp;
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refM.close()">Back</button>
+            <!-- <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp; -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #materialsEdit let-data let-refMEdit="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Add Lecture Materials</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form class="form-horizontal" (ngSubmit)="EditMaterials(refMEdit)" [formGroup]="editForm">
+                <div class="form-group row">
+                    <label for="file_name" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        File Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="file_name" nbInput fullWidth id="file_name"
+                            style="font-size: 12.75px;" placeholder="File Name">
+                    </div>
+                </div><br>
+                <div class="form-group row">
+                    <label for="description" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">View
+                        Material</label>
+                    <div class="col-sm-9">
+                        <button nbButton type="button" (click)="downloadFile()">Click To Open File</button>&nbsp;
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="description" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Upload File</label>
+                    <div class="col-sm-9">
+                        <input type="file" nbInput id="file" (change)="onEditFileSelect($event)"
+                            placeholder="File Name">
+                    </div>
+                </div>
+                <br><br>
+                <button nbButton id="submitButton" type="submit">Submit</button>&nbsp;
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refMEdit.close()">Back</button>
+            <!-- <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp; -->
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

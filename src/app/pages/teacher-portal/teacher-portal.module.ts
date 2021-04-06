@@ -17,7 +17,8 @@ import {
   NbMenuModule,
   NbTabsetModule,
   NbDialogModule,
-  NbLayoutModule
+  NbLayoutModule,
+  NbListModule
 } from '@nebular/theme';
 
 import { Ng2SmartTableModule } from 'ng2-smart-table';
@@ -30,9 +31,12 @@ import { TeacherDashboardComponent } from './teacher-dashboard/teacher-dashboard
 import { MyClassesComponent } from './my-classes/my-classes.component';
 import { MyClassComponent } from './my-class/my-class.component';
 import { MyRenumerationsComponent } from './my-renumerations/my-renumerations.component';
+import { MyTimetableComponent } from './my-timetable/my-timetable.component';
+import { TotalIncomeComponent } from './total-income/total-income.component';
+import { MyStudentAttendancesComponent } from './my-student-attendances/my-student-attendances.component';
 
 @NgModule({
-  declarations: [TeacherPortalComponent, TeacherDashboardComponent, MyClassesComponent, MyClassComponent, MyRenumerationsComponent],
+  declarations: [TeacherPortalComponent, TeacherDashboardComponent, MyClassesComponent, MyClassComponent, MyRenumerationsComponent, MyTimetableComponent, TotalIncomeComponent, MyStudentAttendancesComponent],
   imports: [
     CommonModule,
     TeacherPortalRoutingModule,
@@ -58,7 +62,8 @@ import { MyRenumerationsComponent } from './my-renumerations/my-renumerations.co
     NbTabsetModule,
     NbLayoutModule,
     NbDialogModule,
-    Ng2SmartTableModule
+    Ng2SmartTableModule,
+    NbListModule
   ]
 })
 export class TeacherPortalModule { }

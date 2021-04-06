@@ -1,0 +1,53 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-5">
+                Total Income From All Classes
+            </div>
+            <div class="col-sm-7">
+                <!-- <nb-select placeholder="Select Lecture" (selectedChange)="selectRemuneration($event)">
+                    <nb-option *ngFor="let lecture of lecturesOfTeacher" value={{lecture.student_payment.id}}>
+                        {{lecture.name}}
+                    </nb-option>
+                </nb-select> -->
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="col-12">
+            <nb-card size="flexible">
+                <nb-tabset fullWidth>
+                    <nb-tab tabTitle="Payables">
+                        <!-- <div class="table-responsive">
+                            <br>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Payment Month</th>
+                                        <th>Payment Amount</th>
+                                        <th>Due Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let payable of activePayables">
+                                        <td>{{payable.year}} {{payable.month}}</td>
+                                        <td>{{payable.amount}}</td>
+                                        <td>{{payable.due_date}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div> -->
+                    </nb-tab>
+
+                    <nb-tab tabTitle="Due Payments">
+
+                    </nb-tab>
+
+                    <nb-tab tabTitle="Payment History">
+
+                    </nb-tab>
+                </nb-tabset>
+            </nb-card>
+        </div>
+    </nb-card-body>
+</nb-card>

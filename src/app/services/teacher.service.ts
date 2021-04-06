@@ -32,5 +32,17 @@ export class TeacherService {
     return this.http.get<any>(`http://localhost:8000/api/teacher/lecture/month/remuneration/${teacherId}/${lectureId}/${year}/${month}/paid`);
   }
 
+  getSchedulesOfTeacher(teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/teacher/timetables/${teacherId}`);
+  }
+
+  getTeacherUptoDateNotifications(teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/schedules/notifications/teacher/${teacherId}`);
+  }
+
+  getStudentAttendancesByLecture(lectureId, date) {
+    return this.http.get<any>(`http://localhost:8000/api/attendances/lecture/date/${lectureId}/${date}`);
+  }
+
 
 }

@@ -87,7 +87,7 @@ import { NbMenuItem } from '@nebular/theme';
 //   }
 // ];
 
-
+//latest
 export const MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
@@ -130,10 +130,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create New Subjects',
         link: '/pages/course/subject/create'
-      },
-      {
-        title: 'View all',
-        link: '/pages/course/create'
       }
     ]
   },
@@ -144,10 +140,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create Lecture',
         link: '/pages/course/lecture/create'
-      },
-      {
-        title: 'Create New Lecture',
-        link: '/pages/course/create'
       }
     ]
   },
@@ -158,10 +150,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'View Daily Schedules',
         link: '/pages/course/schedule/view'
-      },
-      {
-        title: 'Create New Lecture',
-        link: '/pages/course/create'
       }
     ]
   },
@@ -195,10 +183,6 @@ export const MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Fee Management',
         children: [
-          {
-            title: 'Pay Student Fee',
-            link: '/pages/student/view'
-          },
           {
             title: 'Payment Scheme',
             children: [
@@ -525,6 +509,298 @@ export const MENU_ITEMS: NbMenuItem[] = [
         link: '/auth/reset-password',
       },
     ],
+  },
+];
+
+
+
+export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
+  {
+    title: 'Dashboard',
+    icon: 'shopping-cart-outline',
+    link: '/pages/admin/dashboard',
+  },
+  {
+    title: 'Course Management',
+    group: true,
+  },
+  {
+    title: 'Courses',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create New Course',
+        link: '/pages/course/create'
+      },
+      {
+        title: 'View All Course',
+        link: '/pages/course/view'
+      }
+    ]
+  },
+  {
+    title: 'Subects',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create New Subjects',
+        link: '/pages/course/subject/create'
+      }
+    ]
+  },
+  {
+    title: 'Lectures',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create Lecture',
+        link: '/pages/course/lecture/create'
+      }
+    ]
+  },
+  {
+    title: 'Schedules',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'View Daily Schedules',
+        link: '/pages/course/schedule/view'
+      }
+    ]
+  },
+  {
+    title: 'Room Management',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'All Operations',
+        link: '/pages/course/rooms'
+      }
+    ]
+  },
+  {
+    title: 'Student Management',
+    group: true,
+  },
+  {
+    title: 'Student',
+    icon: 'people-outline',
+    children: [
+      {
+        title: 'Admit Student',
+        link: '/pages/student/register'
+      },
+      {
+        title: 'All Student Operations',
+        link: '/pages/student/view'
+      }
+    ]
+  },
+  {
+    title: 'Fee Management',
+    group: true,
+  },
+  {
+    title: 'Payment Scheme Operations',
+    link: '/pages/student/payment-scheme/create'
+  },
+  {
+    title: 'Teacher Management',
+    group: true,
+  },
+  {
+    title: 'Register Teacher',
+    link: '/pages/teachers/create'
+  },
+  {
+    title: 'All Teacher Operations',
+    link: '/pages/teachers/view'
+  },
+  {
+    title: 'Report Generation',
+    group: true,
+  },
+  {
+    title: 'Student Fee Reports',
+    link: '/pages/reports/fee'
+  },
+  {
+    title: 'Teacher Reports',
+    link: '/pages/reports/teacher'
+  }
+];
+
+
+export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
+  {
+    title: 'Dashboard',
+    icon: 'shopping-cart-outline',
+    link: '/pages/admin/dashboard',
+  },
+  {
+    title: 'Course Management',
+    group: true,
+  },
+  {
+    title: 'Courses',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create New Course',
+        link: '/pages/course/create'
+      },
+      {
+        title: 'View All Course',
+        link: '/pages/course/view'
+      }
+    ]
+  },
+  {
+    title: 'Subects',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create New Subjects',
+        link: '/pages/course/subject/create'
+      }
+    ]
+  },
+  {
+    title: 'Lectures',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create Lecture',
+        link: '/pages/course/lecture/create'
+      }
+    ]
+  },
+  {
+    title: 'Schedules',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'View Daily Schedules',
+        link: '/pages/course/schedule/view'
+      }
+    ]
+  },
+  {
+    title: 'Room Management',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'All Operations',
+        link: '/pages/course/rooms'
+      }
+    ]
+  },
+  {
+    title: 'Student Management',
+    group: true,
+  },
+  {
+    title: 'Student',
+    icon: 'people-outline',
+    children: [
+      {
+        title: 'Admit Student',
+        link: '/pages/student/register'
+      },
+      {
+        title: 'All Student Operations',
+        link: '/pages/student/view'
+      }
+    ]
+  },
+  {
+    title: 'Fee Management',
+    group: true,
+  },
+  {
+    title: 'Payment Scheme Operations',
+    link: '/pages/student/payment-scheme/create'
+  },
+  {
+    title: 'Teacher Management',
+    group: true,
+  },
+  {
+    title: 'Register Teacher',
+    link: '/pages/teachers/create'
+  },
+  {
+    title: 'All Teacher Operations',
+    link: '/pages/teachers/view'
+  },
+  {
+    title: 'Report Generation',
+    group: true,
+  },
+  {
+    title: 'Student Fee Reports',
+    link: '/pages/reports/fee'
+  },
+  {
+    title: 'Teacher Reports',
+    link: '/pages/reports/teacher'
+  }
+];
+
+export const STUDENT_MENU_ITEMS: NbMenuItem[] = [
+  {
+    title: 'Student Portal',
+    group: true,
+  },
+  {
+    title: 'My Dashboard',
+    link: '/pages/student-portal/dashboard',
+  },
+  {
+    title: 'My Classes',
+  },
+  {
+    title: 'My schedules',
+    link: '/pages/student-portal/my_schedules',
+  },
+  {
+    title: 'My Payments',
+    link: '/pages/student-portal/my_payments',
+  },
+  {
+    title: 'Payment History',
+    link: '/pages/student-portal/payment_history',
+  }
+];
+
+export const TEACHER_MENU_ITEMS: NbMenuItem[] = [
+  {
+    title: 'Teacher Portal',
+    group: true,
+  },
+  {
+    title: 'My Dashboard',
+    link: '/pages/teacher-portal/dashboard',
+  },
+  {
+    title: 'My Classes',
+    // link: '/pages/teacher-portal/my_classes',
+  },
+  {
+    title: 'My Timetable',
+    link: '/pages/teacher-portal/my_timetable'
+  },
+  {
+    title: 'My Monthly Remunerations',
+    link: '/pages/teacher-portal/my_remunerations'
+  },
+  {
+    title: 'Total Income',
+    link: '/pages/teacher-portal/total_income'
+  },
+  {
+    title: "My Students' Attendances",
+    link: '/pages/teacher-portal/my_student_attendances'
   },
 ];
 

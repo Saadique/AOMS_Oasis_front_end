@@ -35,4 +35,30 @@ export class LectureService {
     return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`);
   }
 
+  createLesson(data) {
+    return this.http.post<any>(`http://localhost:8000/api/lessons`, data);
+  }
+
+  getLessonsByLecture(lectureId) {
+    return this.http.get<any>(`http://localhost:8000/api/lessons/lecture/${lectureId}`);
+  }
+
+  storeLessonMaterial(formData) {
+    return this.http.post<any>(`http://localhost:8000/api/lessons_materials`, formData);
+  }
+
+  updateLessonMaterial(materialId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/lessons_materials/${materialId}`, data);
+  }
+
+  getMaterialsByLesson(lessonId) {
+    return this.http.get<any>(`http://localhost:8000/api/lessons_materials/lesson/${lessonId}`);
+  }
+
+  downloadFile(data) {
+    return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data, { observe: 'response', responseType: 'blob' })
+  }
+
+
+
 }

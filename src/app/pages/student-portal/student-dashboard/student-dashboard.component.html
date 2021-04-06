@@ -1,1 +1,32 @@
-<p>student-dashboard works!</p>
+<div class="container-fluid">
+    <div class="row" *ngIf="notifications!=null">
+        <div class="col-sm-8">
+
+        </div>
+        <div class="col-sm-4">
+            <nb-card size="large">
+                <nb-card-header>
+                    Notices
+                </nb-card-header>
+                <nb-list>
+                    <nb-list-item *ngFor="let notification of notifications">
+                        <ng-container *ngIf="notification.message=='create'">
+                            A New lecture for {{notification.lecture_name}} has been created at <br>
+                            Room - {{notification.room_name}} on <br>
+                            Date - {{notification.date}} <br>
+                            From - {{notification.start_time}} <br>
+                            To - {{notification.end_time}}
+                        </ng-container>
+                        <ng-container *ngIf="notification.message=='update'">
+                            A New lecture for {{notification.lecture_name}} has been created at <br>
+                            Room - {{notification.room_name}} on <br>
+                            Date - {{notification.date}} <br>
+                            From - {{notification.start_time}} <br>
+                            To - {{notification.end_time}}
+                        </ng-container>
+                    </nb-list-item>
+                </nb-list>
+            </nb-card>
+        </div>
+    </div>
+</div>

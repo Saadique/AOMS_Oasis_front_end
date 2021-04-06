@@ -24,4 +24,8 @@ export class StudentService {
     return this.http.post<any>(`http://localhost:8000/api/students/lecture/add`, data)
   }
 
+  getStudentUptoDateNotifications(studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/schedules/notifications/student/${studentId}`);
+  }
+
 }

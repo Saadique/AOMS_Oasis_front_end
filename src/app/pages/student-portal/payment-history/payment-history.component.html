@@ -1,0 +1,45 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-5">
+                Payment Of Lectures
+            </div>
+            <div class="col-sm-7">
+                <nb-select placeholder="Select Payment Of Lectures" (selectedChange)="selectPayment($event)">
+                    <nb-option *ngFor="let lecture of studentLectures" value={{lecture.student_payment.id}}>
+                        {{lecture.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <div class="col-12">
+            <nb-card size="flexible">
+                <nb-tabset fullWidth>
+                    <nb-tab tabTitle="Payment History">
+                        <div class="table-responsive">
+                            <br>
+                            <table class="table table-bordered table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Payment Month</th>
+                                        <th>Payment Amount</th>
+                                        <th>Paid Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let paid of payedPayments">
+                                        <td>{{paid.month}}</td>
+                                        <td>{{paid.amount}}</td>
+                                        <td>{{paid.payment_date}}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </nb-tab>
+                </nb-tabset>
+            </nb-card>
+        </div>
+    </nb-card-body>
+</nb-card>

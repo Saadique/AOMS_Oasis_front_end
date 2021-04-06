@@ -1,0 +1,56 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-4">
+                <div class="row">
+                    <label class="col-sm-3" for="subjectName" style="font-size: 14px;">Select Lecture </label>
+                    <br>
+                    <div class="col-sm-7">
+                        <nb-select (selectedChange)="selectLecture($event)" placeholder="Please Select Lecture">
+                            <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>{{lecture.name}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-5">
+                <div class="row">
+                    <label class="col-sm-4" for="subjectName" style="font-size: 14px;">Select Date</label>
+                    <div class="col-sm-6">
+                        <input type="date" nbInput (change)="selectDate($event.target.value)">
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+                <button nbButton status="info" (click)="seeStudentsAttendances()">See Students' Attendances</button>
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <table class="table table-bordered table-hover" *ngIf="studentAttendances.length!=0">
+            <thead>
+                <tr>
+                    <th>Student Name</th>
+                    <th>Student Reg No.</th>
+                    <th>Lecture Date</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let attendance of studentAttendances">
+                    <td>{{attendance.name}}</td>
+                    <td>{{attendance.registration_no}}</td>
+                    <td>{{attendance.date}}</td>
+                    <td>{{attendance.attendance_status}}</td>
+            </tbody>
+        </table>
+
+        <div *ngIf="studentAttendances.length==0">
+            No Attendances
+        </div>
+
+        <div *ngIf="studentAttendances==null">
+            Please Select A Lecture And A Date
+        </div>
+    </nb-card-body>
+</nb-card>

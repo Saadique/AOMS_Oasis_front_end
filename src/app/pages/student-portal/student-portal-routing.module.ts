@@ -7,6 +7,7 @@ import { RoutesAuthenticationService } from 'app/authentication/services/authent
 import { MySchedulesComponent } from './my-schedules/my-schedules.component';
 import { MyClassComponent } from './my-class/my-class.component';
 import { MyPaymentsComponent } from './my-payments/my-payments.component';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 const routes: Routes = [
   {
@@ -15,7 +16,8 @@ const routes: Routes = [
       { path: 'dashboard', component: StudentDashboardComponent, canActivate: [RoutesAuthenticationService] },
       { path: 'my_schedules', component: MySchedulesComponent, canActivate: [RoutesAuthenticationService] },
       { path: 'my_class/:lectureId', component: MyClassComponent, canActivate: [RoutesAuthenticationService] },
-      { path: 'my_payments', component: MyPaymentsComponent }
+      { path: 'my_payments', component: MyPaymentsComponent },
+      { path: 'payment_history', component: PaymentHistoryComponent }
     ]
   },
 ];

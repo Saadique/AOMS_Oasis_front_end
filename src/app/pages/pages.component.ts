@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewsService } from 'app/services/views.service';
-import { MENU_ITEMS } from './pages-menu';
+import { MENU_ITEMS, ADMIN_MENU_ITEMS, STUDENT_MENU_ITEMS } from './pages-menu';
 import { LectureService } from '../services/lecture.service';
 
 @Component({
@@ -19,9 +19,9 @@ export class PagesComponent {
   menu;
 
   constructor(private viewsService: ViewsService, private lectureService: LectureService) {
-    this.menu = MENU_ITEMS;
+    // this.menu = ADMIN_MENU_ITEMS;
     this.initUser();
-    this.makeLectureMenuOfStudents();
+    // this.makeLectureMenuOfStudents();
   }
 
   // menu;
@@ -32,23 +32,35 @@ export class PagesComponent {
   initUser() {
     let data: any = window.localStorage.getItem('user-data');
     this.userData = JSON.parse(data);
-    // this.menu = this.userData.userViews;
+    this.menu = this.userData.userViews;
+    // console.log(this.userData.userViews);
   }
+
+  // getAllViews() {
+  //   if (this.userData.userRoleId == 2) {
+  //     for (let i = 0; i < this.menu.length; i++) {
+  //       if (this.menu[i].title == 'Student Portal') {
+  //         let studPortal = this.menu[i];
+  //         for (let j = 0; j < studPortal.children.length; j++) {
+  //           if (studPortal.children[j].title == 'My Classes') {
+  //             // console.log(this.menu[i].children[j]);
+  //             console.log(this.classChildrenMenu);
+  //             this.menu[i].children[j]["children"] = this.classChildrenMenu;
+  //             // console.log(this.menu[i].children[j]);
+  //             break;
+  //           }
+  //         }
+  //       }
+  //     }
+  //   }
+  // }
 
   getAllViews() {
     if (this.userData.userRoleId == 2) {
       for (let i = 0; i < this.menu.length; i++) {
-        if (this.menu[i].title == 'Student-Portal') {
-          let studPortal = this.menu[i];
-          for (let j = 0; j < studPortal.children.length; j++) {
-            if (studPortal.children[j].title == 'My Classes') {
-              // console.log(this.menu[i].children[j]);
-              console.log(this.classChildrenMenu);
-              this.menu[i].children[j]["children"] = this.classChildrenMenu;
-              // console.log(this.menu[i].children[j]);
-              break;
-            }
-          }
+        if (this.menu[i].title == 'My Classes') {
+          this.menu[i]["children"] = this.classChildrenMenu;
+          break;
         }
       }
     }

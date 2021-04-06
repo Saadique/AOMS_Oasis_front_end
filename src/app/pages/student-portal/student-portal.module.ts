@@ -32,9 +32,10 @@ import { StudentDashboardComponent } from './student-dashboard/student-dashboard
 import { MySchedulesComponent } from './my-schedules/my-schedules.component';
 import { MyClassComponent } from './my-class/my-class.component';
 import { MyPaymentsComponent } from './my-payments/my-payments.component';
+import { PaymentHistoryComponent } from './payment-history/payment-history.component';
 
 @NgModule({
-  declarations: [StudentPortalComponent, StudentDashboardComponent, MySchedulesComponent, MyClassComponent, MyPaymentsComponent],
+  declarations: [StudentPortalComponent, StudentDashboardComponent, MySchedulesComponent, MyClassComponent, MyPaymentsComponent, PaymentHistoryComponent],
   imports: [
     CommonModule,
     StudentPortalRoutingModule,
