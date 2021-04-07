@@ -56,7 +56,7 @@ export class LectureService {
   }
 
   downloadFile(data) {
-    return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data, { observe: 'response', responseType: 'blob' })
+    return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data, { observe: 'response', responseType: 'arraybuffer' })
   }
 
   getAllLessonsWithMaterials(lecture_id) {

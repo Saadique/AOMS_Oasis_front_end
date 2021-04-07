@@ -50,16 +50,10 @@ export class MyClassComponent implements OnInit {
     let data = {
       "file_path": material.path
     }
-    // this.lectureService.downloadFile(data).subscribe(
-    //   response => { console.log(response.headers.get('Content-Type')); this.viewFileInBrowser(response) },
-    //   error => console.log(error))
-
-
     this.lectureService.downloadFile(data).subscribe({
       next: (response) => {
-        let type = response.headers.get('Content-Type');
-        console.log(type);
-        this.viewFileInBrowser(response, type)
+        console.log(response.body);
+        this.viewFileInBrowser(response.body, response.headers.get('Content-Type'))
       },
       error: (err) => {
         console.log(err)
@@ -67,14 +61,10 @@ export class MyClassComponent implements OnInit {
     })
   }
 
-  viewFileInBrowser(data, type) {
-    const blob = new Blob([data], { type: type });
-    // const url = window.URL.createObjectURL(blob);
-    // window.open(url);
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'any';
-    link.click();
+  viewFileInBrowser(file, type) {
+    let blob = new Blob([file], { type: type });
+    let url = window.URL.createObjectURL(blob);
+    let pwa = window.open(url);
   }
 
 }

@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { LectureService } from '../../../services/lecture.service';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'ngx-my-class',
@@ -44,6 +45,7 @@ export class MyClassComponent implements OnInit {
       (response) => {
         this.lecture = response.data;
         this.getLessonsByLecture();
+
       }
     )
   }
@@ -182,9 +184,8 @@ export class MyClassComponent implements OnInit {
 
     this.lectureService.downloadFile(data).subscribe({
       next: (response) => {
-        let type = response.headers.get('Content-Type');
-        console.log(type);
-        this.viewFileInBrowser(response, type)
+        console.log(response.body);
+        this.viewFileInBrowser(response.body, response.headers.get('Content-Type'))
       },
       error: (err) => {
         console.log(err)
@@ -192,14 +193,17 @@ export class MyClassComponent implements OnInit {
     })
   }
 
-  viewFileInBrowser(data, type) {
-    const blob = new Blob([data], { type: type });
+  viewFileInBrowser(file, type) {
+    let blob = new Blob([file], { type: type });
+    let url = window.URL.createObjectURL(blob);
+    let pwa = window.open(url);
     // const url = window.URL.createObjectURL(blob);
     // window.open(url);
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = 'any';
-    link.click();
+    // saveAs(blob, 'h.pdf');
+    // const link = document.createElement('a');
+    // link.href = URL.createObjectURL(blob);
+    // link.download = 'any';
+    // link.click();
   }
 
   // not complete
