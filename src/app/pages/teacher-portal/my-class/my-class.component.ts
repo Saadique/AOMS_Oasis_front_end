@@ -136,6 +136,7 @@ export class MyClassComponent implements OnInit {
       this.lectureService.storeLessonMaterial(formData).subscribe({
         next: (response) => {
           console.log(response);
+          this.getMaterialsByLesson();
           this.materialForm.reset();
           refM.close();
         },
@@ -201,12 +202,14 @@ export class MyClassComponent implements OnInit {
     link.click();
   }
 
+  // not complete
   EditMaterials(ref) {
     if (this.newFile != null && this.editForm.valid) {
       console.log("came");
       const formData = new FormData();
       formData.append('file_name', this.materialForm.value.file_name);
       formData.append('file', this.newFile, this.newFile.name);
+      formData.append('hasFile', 'true');
 
       this.lectureService.updateLessonMaterial(this.selectedEditMaterial.id, formData).subscribe({
         next: (response) => {
@@ -224,6 +227,7 @@ export class MyClassComponent implements OnInit {
     if (this.newFile == null && this.editForm.valid) {
       const formData = new FormData();
       formData.append('file_name', this.materialForm.value.file_name);
+      formData.append('hasFile', 'false');
 
       this.lectureService.updateLessonMaterial(this.selectedEditMaterial.id, formData).subscribe({
         next: (response) => {

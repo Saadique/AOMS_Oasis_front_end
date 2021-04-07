@@ -1,1 +1,14 @@
-<p>my-class works!</p>
+<nb-card>
+    <nb-card-header>
+        Lecture Materials
+    </nb-card-header>
+    <nb-card-header *ngFor="let lesson of lessons">
+        {{lesson.name}}
+        <br>
+        <ul>
+            <li *ngFor="let material of lesson.materials">
+                <a [routerLink]="" (click)="downloadFile(material)">{{material.file_name}}</a>
+            </li>
+        </ul>
+    </nb-card-header>
+</nb-card>

@@ -59,6 +59,10 @@ export class LectureService {
     return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data, { observe: 'response', responseType: 'blob' })
   }
 
+  getAllLessonsWithMaterials(lecture_id) {
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+  }
+
 
 
 }
