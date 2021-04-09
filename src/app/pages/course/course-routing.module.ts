@@ -10,6 +10,8 @@ import { ViewCoursesComponent } from './view-courses/view-courses.component';
 import { ViewCourseComponent } from './view-course/view-course.component';
 import { RoutesAuthenticationService } from 'app/authentication/services/authentication/routes-authentication.service';
 import { RoomManagementComponent } from './room-management/room-management.component';
+import { EditCoursesComponent } from './edit-courses/edit-courses.component';
+import { CreateMediumComponent } from './create-medium/create-medium.component';
 
 const routes: Routes = [{
   path: '', component: CourseComponent,
@@ -31,6 +33,8 @@ const routes: Routes = [{
     { path: 'view', component: ViewCoursesComponent },
     { path: 'view/:id', component: ViewCourseComponent },
     { path: 'rooms', component: RoomManagementComponent },
+    { path: 'edit', component: EditCoursesComponent },
+    { path: 'medium/create', component: CreateMediumComponent }
   ]
 }];
 

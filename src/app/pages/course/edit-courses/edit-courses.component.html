@@ -1,0 +1,141 @@
+<nb-card size="flexible">
+    <nb-card-header>
+    </nb-card-header>
+    <nb-card-body>
+        <nb-tabset fullWidth>
+            <nb-tab tabTitle="Edit Super Course">
+                <div class="row">
+                    <table class="table table-bordered" *ngIf="allCourses.length>0">
+                        <thead>
+                            <tr>
+                                <th>Course Name</th>
+                                <!-- <th>Number Of Students</th> -->
+                                <th>Course Mediums</th>
+                                <th>Edit</th>
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let course of allCourses">
+                                <td>{{course.course.name}}</td>
+                                <!-- <td>{{course.course.no_of_students}}</td> -->
+                                <td>
+                                    <ul *ngFor="let courseM of course.course_mediums">
+                                        <li>{{courseM.name}}</li>
+                                    </ul>
+                                </td>
+                                <td><button nbButton status="success" (click)="editClickCourse(course)">Edit</button>
+                                </td>
+                                <td><button nbButton status="warning">Delete</button></td>
+                            </tr>
+                        </tbody>
+                        <div *ngIf="allCourses.length==0">
+                            No courses with mediums
+                        </div>
+                    </table>
+                </div>
+            </nb-tab>
+            <nb-tab tabTitle="Edit Course (with medium)">
+                <div class="row">
+                    <label class="col-sm-3" for="name" class="label col-sm-3 form-control-label"
+                        style="font-size: 12.75px;">Select
+                        Course</label>
+                    <nb-select class="col-sm-4" (selectedChange)="superCourseSelection($event)"
+                        placeholder="Please Select Lesson">
+                        <nb-option *ngFor="let course of allCourses" value={{course.course.id}}>{{course.course.name}}
+                        </nb-option>
+                    </nb-select>
+                    <br>
+                </div> <br>
+                <div class="row">
+                    <table class="table table-bordered" *ngIf="courseMediums.length>0">
+                        <thead>
+                            <tr>
+                                <th>Course Name</th>
+                                <!-- <th>Number Of Students</th> -->
+                                <th>Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let courseM of courseMediums">
+                                <td>{{courseM.name}}</td>
+                                <!-- <td>{{courseM.no_of_students}}</td> -->
+                                <td><button nbButton status="warning"
+                                        (click)="deleteClickCourseMedium(courseM)">Delete</button></td>
+                            </tr>
+                        </tbody>
+                        <div *ngIf="courseMediums.length==0">
+                            No courses with mediums
+                        </div>
+                    </table>
+                </div>
+
+            </nb-tab>
+        </nb-tabset>
+    </nb-card-body>
+</nb-card>
+
+<!-- <ng-template #super_course_edit let-data let-refEdit="dialogRef">
+    <nb-card id="modal">
+        <nb-card-header>Edit Course</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form class="form-horizontal" (ngSubmit)="editCourse(refEdit)" [formGroup]="createForm">
+                <div class="form-group row">
+                  <label for="courseName" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter Course
+                    Name</label>
+                  <div class="col-sm-9">
+                    <input type="text" formControlName="name" nbInput fullWidth id="courseName" style="font-size: 12.75px;"
+                      placeholder="Course Name">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                    Course Cordinator</label>
+                  <div class="col-sm-9">
+                    <input type="text" formControlName="coordinator" nbInput fullWidth id="courseCordinator"
+                      placeholder="Course Cordinator">
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                    Course Description</label>
+                  <div class="col-sm-9">
+                    <textarea rows="5" formControlName="description" nbInput fullWidth
+                      placeholder="Course Description"></textarea>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <label for="course_type" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Course
+                    Type</label>
+                  <div class="col-sm-9">
+                    <nb-select formControlName="course_type" placeholder="Select Course Type">
+                      <nb-option value="advance_level">Advance Level</nb-option>
+                      <nb-option value="ordinary_level">Ordinary Level</nb-option>
+                    </nb-select>
+                  </div>
+                </div>
+                <br><br>
+                <div class="form-group row">
+                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Select
+                    mediums for course</label>
+                  <div class="col-sm-9">
+                    <div class="checkbox" *ngFor="let medium of availableMediums">
+                      <nb-checkbox (change)="addMedium(medium.id, $event.target.checked)">
+                        {{medium.name}}</nb-checkbox>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-group row">
+                  <div class="offset-sm-3 col-sm-9">
+                    <button type="submit" nbButton status="primary" (click)="testL()">Create New Course</button>
+                  </div>
+                </div>
+              </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refMEdit.close()">Back</button>
+            <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template> -->

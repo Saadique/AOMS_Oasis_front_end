@@ -1,0 +1,151 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-6">
+                <div class="row">
+                    <div class="col-sm-5">
+                        <label>Select User Role</label>
+                    </div>
+                    <div class="col-sm-7">
+                        <nb-select (selectedChange)="roleSelection($event)" placeholder="Choose User Role">
+                            <nb-option value="admin">Admin</nb-option>
+                            <nb-option value="teacher">Teacher</nb-option>
+                            <nb-option value="student">Student</nb-option>
+                            <nb-option value="admin_staff">Administrative Staff</nb-option>
+                            <nb-option value="front_officer">Front Officer</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-3">
+
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-header>
+        <button id="add-new" *ngIf="selectedRole=='admin' || selectedRole=='admin_staff'; else disabledButton" outline
+            nbButton shape="semi-round" status="info" (click)="onAddClick(FormModal)">Add new
+            User</button>
+        <ng-template #disabledButton>
+            <button id="add-new" outline nbButton shape="semi-round" status="info" disabled>Add new
+                role</button>
+        </ng-template>
+    </nb-card-header>
+    <nb-card-body>
+
+    </nb-card-body>
+</nb-card>
+
+
+<ng-template #FormModal let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <!-- alert message -->
+
+        <nb-card-header>Add New Admin</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="userAlert.status=='Error'">
+                    {{ userAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="userAlert.status=='warning'">
+                    {{ userAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="userAlert.status=='success'">
+                    {{ userAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body>
+            <br>
+            <form (ngSubmit)="createUser(ref)" [formGroup]="createAdminForm">
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="first_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            First Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="first_name" formControlName="first_name"
+                                style="font-size: 12.75px;" placeholder="First Name"><br><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="last_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Last Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="last_name" formControlName="last_name"
+                                style="font-size: 12.75px;" placeholder="Last Name"><br><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="user_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            User Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="user_name" formControlName="user_name"
+                                style="font-size: 12.75px;" placeholder="Username (Account Login)"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="contact_number" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Contact Number</label><br>
+                        <div>
+                            <input type="text" nbInput id="contact_number" formControlName="contact_number"
+                                style="font-size: 12.75px;" placeholder="Contact Number"><br><br>
+                        </div>
+                    </div><br>
+                </div>
+
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="email" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Email Address</label><br>
+                        <div>
+                            <input type="text" nbInput id="email" formControlName="email" style="font-size: 12.75px;"
+                                placeholder="Email Address"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="nic" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Enter
+                            NIC</label><br>
+                        <div>
+                            <input type="text" nbInput id="nic" formControlName="nic" style="font-size: 12.75px;"
+                                placeholder="NIC"><br><br>
+                        </div>
+                    </div><br>
+                </div>
+
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="password" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            New
+                            Password</label><br>
+                        <div>
+                            <input type="password" nbInput id="password" formControlName="password"
+                                style="font-size: 12.75px;" placeholder="Password"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="confirm_password" class="label form-control-label"
+                            style="font-size: 12.75px;">Re-enter
+                            Password</label><br>
+                        <div>
+                            <input type="password" nbInput id="confirm_password" formControlName="confirm_password"
+                                style="font-size: 12.75px;" placeholder="Confirm Password"><br><br>
+                        </div>
+                    </div><br>
+                </div>
+                <br><br>
+                <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

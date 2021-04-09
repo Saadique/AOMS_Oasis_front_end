@@ -6,6 +6,7 @@ import { UserRolesComponent } from './user-roles/user-roles.component';
 import { ErrorsComponent } from './errors/errors.component';
 import { NavigationPrivilegesComponent } from './navigation-privileges/navigation-privileges.component';
 import { RoutesAuthenticationService } from '../../authentication/services/authentication/routes-authentication.service';
+import { UserAccountsComponent } from './user-accounts/user-accounts.component';
 
 const routes: Routes = [
   {
@@ -13,7 +14,8 @@ const routes: Routes = [
     children: [
       { path: 'user-roles', component: UserRolesComponent },
       { path: 'errors', component: ErrorsComponent },
-      { path: 'privileges', component: NavigationPrivilegesComponent }
+      { path: 'privileges', component: NavigationPrivilegesComponent },
+      { path: 'accounts', component: UserAccountsComponent }
     ]
   }
 ];

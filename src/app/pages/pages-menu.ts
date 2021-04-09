@@ -525,6 +525,20 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    title: 'Medium',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create Medium',
+        link: '/pages/course/medium/create'
+      },
+      {
+        title: 'Edit & Delete Medium',
+        link: '/pages/course/create'
+      }
+    ]
+  },
+  {
     title: 'Courses',
     icon: 'book-outline',
     children: [
@@ -533,8 +547,12 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/course/create'
       },
       {
-        title: 'View All Course',
+        title: 'Course Operations',
         link: '/pages/course/view'
+      },
+      {
+        title: 'Edit And Delete Courses',
+        link: '/pages/course/edit'
       }
     ]
   },
@@ -615,6 +633,14 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'All Teacher Operations',
     link: '/pages/teachers/view'
+  },
+  {
+    title: 'User Management',
+    group: true,
+  },
+  {
+    title: 'User Accounts Operations',
+    link: '/pages/user-management/accounts'
   },
   {
     title: 'Report Generation',

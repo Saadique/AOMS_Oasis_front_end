@@ -12,6 +12,10 @@ export class CourseService {
   rootUrl = 'http://localhost:8000/api/courses';
   domain = 'http://localhost:8000';
 
+  createMedium(data) {
+    return this.http.post<any>(`${this.domain}/api/mediums`, data);
+  }
+
   getAllCourses() {
     return this.http.get<any>(`${this.domain}/api/courses`);
   }

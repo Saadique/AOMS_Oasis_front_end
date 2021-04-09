@@ -31,9 +31,12 @@ import { RouterModule } from '@angular/router';
 import { ViewCoursesComponent } from './view-courses/view-courses.component';
 import { ViewCourseComponent } from './view-course/view-course.component';
 import { RoomManagementComponent } from './room-management/room-management.component';
+import { EditCoursesComponent } from './edit-courses/edit-courses.component';
+import { CreateMediumComponent } from './create-medium/create-medium.component';
+import { EditMediumComponent } from './edit-medium/edit-medium.component';
 
 @NgModule({
-  declarations: [...routedComponents, CourseComponent, CreateSubjectComponent, CreateLectureComponent, ViewSchedulesComponent, ViewCoursesComponent, ViewCourseComponent, RoomManagementComponent],
+  declarations: [...routedComponents, CourseComponent, CreateSubjectComponent, CreateLectureComponent, ViewSchedulesComponent, ViewCoursesComponent, ViewCourseComponent, RoomManagementComponent, EditCoursesComponent, CreateMediumComponent, EditMediumComponent],
   imports: [
     CommonModule,
     CourseRoutingModule,

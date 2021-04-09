@@ -25,9 +25,10 @@ export class CreateCourseComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
-    public createCourseAlert: Alert,
     private loginService: LoginServiceService
   ) { }
+
+  createCourseAlert = new Alert();
 
   //mediums taken from 'mediums'   table
   availableMediums: [];

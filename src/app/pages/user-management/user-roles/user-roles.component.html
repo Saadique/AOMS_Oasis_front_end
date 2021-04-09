@@ -1,42 +1,3 @@
-<ng-template #dialog let-data let-ref="dialogRef">
-    <nb-card id="addNewForm">
-        <nb-card-header>Add New User Role</nb-card-header>
-        <nb-card-body>
-            <br>
-            <div class="form-group row">
-                <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Role
-                    Name</label>
-                <div class="col-sm-7">
-                    <input type="text" nbInput id="lectureName" style="font-size: 12.75px;"
-                        placeholder="Eg: Administrator">
-                </div>
-            </div><br>
-            <div class="form-group row">
-                <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Code
-                    Name</label>
-                <div class="col-sm-7">
-                    <input type="text" nbInput id="lectureName" style="font-size: 12.75px;" placeholder="Eg: ADM">
-                </div>
-            </div><br>
-
-            <div class="form-group row">
-                <label for="course_type" class="label col-sm-5 form-control-label"
-                    style="font-size: 12.75px;">Status</label>
-                <div class="col-sm-7">
-                    <nb-select placeholder="Please Select">
-                        <nb-option value="active">Active</nb-option>
-                        <nb-option value="in_active">InActive</nb-option>
-                    </nb-select>
-                </div>
-            </div>
-        </nb-card-body>
-        <nb-card-footer>
-            <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
-        </nb-card-footer>
-    </nb-card>
-</ng-template>
-
 <nb-card>
     <nb-card-header>User Roles</nb-card-header>
     <nb-card-body>
@@ -97,3 +58,42 @@
         </div>
     </nb-card-body>
 </nb-card>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Add New User Role</nb-card-header>
+        <nb-card-body>
+            <br>
+            <div class="form-group row">
+                <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Role
+                    Name</label>
+                <div class="col-sm-7">
+                    <input type="text" nbInput id="lectureName" style="font-size: 12.75px;"
+                        placeholder="Eg: Administrator">
+                </div>
+            </div><br>
+            <div class="form-group row">
+                <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Code
+                    Name</label>
+                <div class="col-sm-7">
+                    <input type="text" nbInput id="lectureName" style="font-size: 12.75px;" placeholder="Eg: ADM">
+                </div>
+            </div><br>
+
+            <div class="form-group row">
+                <label for="course_type" class="label col-sm-5 form-control-label"
+                    style="font-size: 12.75px;">Status</label>
+                <div class="col-sm-7">
+                    <nb-select placeholder="Please Select">
+                        <nb-option value="active">Active</nb-option>
+                        <nb-option value="in_active">InActive</nb-option>
+                    </nb-select>
+                </div>
+            </div>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

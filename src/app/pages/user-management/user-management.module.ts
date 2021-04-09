@@ -30,9 +30,10 @@ import { ThemeModule } from '../../@theme/theme.module';
 import { RouterModule } from '@angular/router';
 import { ErrorsComponent } from './errors/errors.component';
 import { NavigationPrivilegesComponent } from './navigation-privileges/navigation-privileges.component';
+import { UserAccountsComponent } from './user-accounts/user-accounts.component';
 
 @NgModule({
-  declarations: [UserManagementComponent, UserRolesComponent, ErrorsComponent, NavigationPrivilegesComponent],
+  declarations: [UserManagementComponent, UserRolesComponent, ErrorsComponent, NavigationPrivilegesComponent, UserAccountsComponent],
   imports: [
     CommonModule,
     UserManagementRoutingModule,
