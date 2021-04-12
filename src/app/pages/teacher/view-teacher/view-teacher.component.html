@@ -1,89 +1,213 @@
 <div class="col-12">
     <nb-card size="flexible">
         <nb-tabset fullWidth>
-            <nb-tab tabTitle="Profile-Dashboard">
+            <nb-tab tabTitle="Profile">
                 Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius harum omnis, nobis voluptatem tenetur
                 deserunt dolor excepturi explicabo dolore unde. Ad voluptas quidem, sapiente commodi est sed assumenda
             </nb-tab>
 
-            <nb-tab tabTitle="Fee Management">
-                <h1 align="center">FEES</h1><br>
-                <nb-tabset>
-                    <nb-tab tabTitle="Pending/Due payments">
+            <nb-tab tabTitle="Teacher Monthly Student Fee">
+                <div class="col-md-11 col-lg-11 col-xxxl-7 offset-md-1">
+                    <!-- alert message -->
+                    <div class="animated fadeIn">
+                        <div class="alert alert-danger" role="alert" *ngIf="alertRemun.status=='Error'">
+                            {{ alertRemun.message }}
+                        </div>
+                        <div class="alert alert-warning" role="alert" *ngIf="alertRemun.status=='warning'">
+                            {{ alertRemun.message }}
+                        </div>
+                        <div class="alert alert-success" role="alert" *ngIf="alertRemun.status=='success'">
+                            {{ alertRemun.message }}
+                        </div>
+                    </div>
+                </div>
 
+
+
+                <!-- start -->
+                <nb-card>
+                    <nb-card-header>
+                        <div class="row">
+                            <div class="col-sm-2">
+                                Remunerations Of Lectures
+                            </div>
+                            <div class="col-sm-4">
+                                <nb-select placeholder="Select Lecture"
+                                    (selectedChange)="selectRemunerationLec($event)">
+                                    <nb-option *ngFor="let lecture of lecturesOfTeacher" value={{lecture.id}}>
+                                        {{lecture.name}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                            <div class="col-sm-1">
+                                Year
+                            </div>
+                            <div class="col-sm-2">
+                                <nb-select placeholder="Year" (selectedChange)="selectYear($event)">
+                                    <nb-option *ngFor="let lecYear of lecYears | keyvalue" value={{lecYear.key}}>
+                                        {{lecYear.key}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                            <div class="col-sm-1">
+                                Month
+                            </div>
+                            <div class="col-sm-2">
+                                <nb-select placeholder="Month" (selectedChange)="selectMonth($event)">
+                                    <nb-option *ngFor="let lecMonth of lecMonths" value={{lecMonth}}>
+                                        {{lecMonth}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-header>
+                        <div class="row">
+                            <div class="col-sm-5"></div>
+                            <div class="col-sm-2">
+                                <button nbButton (click)="seeMyRemuns()">Student Fee Info</button>
+                            </div>
+                            <div class="col-sm-5"></div>
+                        </div>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <div class="col-12">
+                            <nb-card size="flexible">
+                                <nb-tabset fullWidth>
+                                    <nb-tab tabTitle="All Student Fee Status">
+                                        <div class="table-responsive">
+                                            <br>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Student Name</th>
+                                                        <th>Registration No.</th>
+                                                        <th>Payment Type</th>
+                                                        <th>Month</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr *ngFor="let remun of allMonthlyRemunerations">
+                                                        <td>{{remun.name}}</td>
+                                                        <td>{{remun.registration_no}}</td>
+                                                        <td>{{remun.payment_type}}</td>
+                                                        <td>{{remun.year}} {{remun.month}}</td>
+                                                        <td>{{remun.status}}</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </nb-tab>
+
+                                    <nb-tab tabTitle="Paid Students">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>Student Name</th>
+                                                    <th>Registration No.</th>
+                                                    <th>Payment Type</th>
+                                                    <th>Month</th>
+                                                    <th>Status</th>
+                                                    <th>Paid Date</th>
+                                                    <th>Teacher Amount</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr *ngFor="let remun of paidMonthlyRemunerations">
+                                                    <td>{{remun.name}}</td>
+                                                    <td>{{remun.registration_no}}</td>
+                                                    <td>{{remun.payment_type}}</td>
+                                                    <td>{{remun.year}} {{remun.month}}</td>
+                                                    <td>{{remun.status}}</td>
+                                                    <td>{{remun.payment_date}}</td>
+                                                    <td>Rs.{{remun.teacher_amount}}</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </nb-tab>
+
+                                    <nb-tab tabTitle="Payment History">
+
+                                    </nb-tab>
+                                </nb-tabset>
+                            </nb-card>
+                        </div>
+                    </nb-card-body>
+                </nb-card>
+            </nb-tab>
+
+            <nb-tab tabTitle="Total Monthly Share">
+                <br>
+                <nb-tabset fullWidth>
+                    <nb-tab tabTitle="By Lecture">
+                        <nb-card>
+                            <nb-card-header>
+                                <div class="row">
+                                    <div class="col-sm-2">
+                                        Select Lectures
+                                    </div>
+                                    <div class="col-sm-4">
+                                        <nb-select placeholder="Please Select A Lecture"
+                                            (selectedChange)="getTotalMonthlyIncomeForLecture($event)">
+                                            <nb-option *ngFor="let lecture of lecturesOfTeacher" value={{lecture.id}}>
+                                                {{lecture.name}}
+                                            </nb-option>
+                                        </nb-select>
+                                    </div>
+                                </div>
+                            </nb-card-header>
+                            <nb-card-body>
+                                <div class="table-responsive" *ngIf="totalMonthlyIncomeForLectures.length!=0">
+                                    <br>
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <tr>
+                                                <th>Year</th>
+                                                <th>Month</th>
+                                                <th>Total Amount</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let income of totalMonthlyIncomeForLectures">
+                                                <td>{{income.year}}</td>
+                                                <td>{{income.month}}</td>
+                                                <td>Rs.{{income.total_amount}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </nb-card-body>
+                        </nb-card>
                     </nb-tab>
-                    <nb-tab tabTitle="Pay Fee ">
-                        <br>
+
+                    <nb-tab tabTitle="Total">
                         <div class="table-responsive">
-                            <table class="table table-bordered table-striped">
+                            <br>
+                            <table class="table table-bordered" *ngIf="totalMonthlyIncome.length!=0">
                                 <thead>
                                     <tr>
-                                        <th> Extra small devices
-
-                                        </th>
-                                        <th> Small devices
-
-                                        </th>
-                                        <th> Medium devices
-                                        </th>
-                                        <th> Large devices
-                                        </th>
+                                        <th>Year</th>
+                                        <th>Month</th>
+                                        <th>Total Amount</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>None (auto)</td>
-                                        <td>None (auto)</td>
-                                        <td>540px</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>None (auto)</td>
-                                        <td>None (auto)</td>
-                                        <td>540px</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>None (auto)</td>
-                                        <td>None (auto)</td>
-                                        <td>540px</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>None (auto)</td>
-                                        <td>None (auto)</td>
-                                        <td>540px</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
-                                    </tr>
-                                    <tr>
-                                        <td>None (auto)</td>
-                                        <td>None (auto)</td>
-                                        <td>540px</td>
-                                        <td><button nbButton status="info">Pay Fee</button></td>
+                                    <tr *ngFor="let income of totalMonthlyIncome">
+                                        <td>{{income.year}}</td>
+                                        <td>{{income.month}}</td>
+                                        <td>Rs.{{income.total_amount}}</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-
-                    </nb-tab>
-                    <nb-tab tabTitle="Fee Payment History">
-
                     </nb-tab>
                 </nb-tabset>
-            </nb-tab>
-
-            <nb-tab tabTitle="Attendence">
-                <br><br>
-                aasasa
             </nb-tab>
 
             <nb-tab tabTitle="Lecture Details">
                 <span>Content #4</span>
             </nb-tab>
-            <!-- <nb-tab tabTitle="Fee">
-                <span>Content #5</span>
-            </nb-tab> -->
-
         </nb-tabset>
     </nb-card>
 </div>

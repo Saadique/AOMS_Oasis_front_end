@@ -8,6 +8,10 @@ export class TeacherService {
 
   constructor(private http: HttpClient) { }
 
+  getTeacherById(teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/teachers/${teacherId}`);
+  }
+
   getAllTeachers() {
     return this.http.get<any>(`http://localhost:8000/api/teachers`);
   }
@@ -34,6 +38,14 @@ export class TeacherService {
 
   getPaidMonthlyRemunerations(teacherId, lectureId, year, month) {
     return this.http.get<any>(`http://localhost:8000/api/teacher/lecture/month/remuneration/${teacherId}/${lectureId}/${year}/${month}/paid`);
+  }
+
+  getTotalMonthlyIncomeForLecture(lectureId, teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/teacher/income/total/lecture/${lectureId}/${teacherId}`);
+  }
+
+  getTotalMonthlyIncome(teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/teacher/income/total/${teacherId}`);
   }
 
   getSchedulesOfTeacher(teacherId) {

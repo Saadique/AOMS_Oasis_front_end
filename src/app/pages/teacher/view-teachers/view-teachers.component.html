@@ -1,44 +1,6 @@
 <nb-card accent="info">
     <nb-card-header>
-        <div class="row">
-            <div class="col-sm-4 offset-sm-2">
-                <div>
-                    <label for="subjectName" style="font-size: 14px;">Filter Students By: </label>
-                    <br>
-                    <div>
-                        <nb-select placeholder="Select Filter Parameter" (selectedChange)="change($event)">
-                            <nb-option value="super_course">Super Course</nb-option>
-                            <nb-option value="course">Course</nb-option>
-                            <nb-option value="lecture">Lecture</nb-option>
-                            <nb-option value="teacher">Teacher</nb-option>
-                        </nb-select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6" *ngIf="filterParam=='super_course'">
-                <div>
-                    <label for="subjectName" style="font-size: 14px;">Select All Students With Super Course: </label>
-                    <br>
-                    <div>
-                        <nb-select placeholder="Select Super Course" (selectedChange)="filterByCourse($event)">
-                            <nb-option *ngFor="let course of courses" value={{course.id}}>{{course.name}}</nb-option>
-                        </nb-select>
-                    </div>
-                </div>
-            </div>
-            <div class="col-sm-6" *ngIf="filterParam=='course'">
-                <div>
-                    <label for="subjectName" style="font-size: 14px;">Select All Students With Course: </label>
-                    <br>
-                    <div>
-                        <nb-select placeholder="Select Course" (selectedChange)="filterByCourseMedium($event)">
-                            <nb-option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
-                                {{courseMedium.name}}</nb-option>
-                        </nb-select>
-                    </div>
-                </div>
-            </div>
-        </div>
+
     </nb-card-header>
     <nb-card-body>
         <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="navigate($event)">

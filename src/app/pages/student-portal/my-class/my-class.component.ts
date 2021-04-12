@@ -20,6 +20,7 @@ export class MyClassComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.subscribe(routeParams => {
+      this.lectureId = routeParams.lectureId;
       this.getAllLessons(routeParams.lectureId);
     });
   }

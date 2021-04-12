@@ -11,7 +11,7 @@ const routes: Routes = [
     path: '', component: TeacherComponent,
     children: [
       { path: 'view', component: ViewTeachersComponent },
-      { path: 'view/:id', component: ViewTeacherComponent },
+      { path: 'view/:teacherId', component: ViewTeacherComponent },
       { path: 'create', component: CreateTeacherComponent }
     ]
   }
