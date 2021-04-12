@@ -16,6 +16,26 @@ export class CourseService {
     return this.http.post<any>(`${this.domain}/api/mediums`, data);
   }
 
+  updateMedium(data, mediumId) {
+    return this.http.put<any>(`${this.domain}/api/mediums/${mediumId}`, data);
+  }
+
+  getMediums() {
+    return this.http.get<any>(`${this.domain}/api/mediums/all/mediums`);
+  }
+
+  getCourses() {
+    return this.http.get<any>(`${this.domain}/api/courses/all/courses`);
+  }
+
+  deleteMedium(mediumId) {
+    return this.http.delete<any>(`${this.domain}/api/mediums/${mediumId}`);
+  }
+
+  activateMedium(mediumId) {
+    return this.http.get<any>(`${this.domain}/api/mediums/status/activate/${mediumId}`);
+  }
+
   getAllCourses() {
     return this.http.get<any>(`${this.domain}/api/courses`);
   }

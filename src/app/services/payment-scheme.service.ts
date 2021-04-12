@@ -20,4 +20,6 @@ export class PaymentSchemeService {
     return this.http.post<any>(`http://localhost:8000/api/student-scheme-lecture`, data);
   }
 
+
+
 }

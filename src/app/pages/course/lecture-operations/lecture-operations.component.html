@@ -1,0 +1,205 @@
+<nb-card>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-6">
+                <label>Course</label><br>
+                <nb-select placeholder="Select Course" (selectedChange)="courseMediumSelection($event)">
+                    <nb-option *ngFor="let course of courses" value={{course.id}}>
+                        {{course.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+            <div class="col-sm-6">
+                <label>Lecture</label><br>
+                <nb-select placeholder="Select Lecture" (selectedChange)="lectureSelection($event)">
+                    <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
+                        {{lecture.name}}
+                    </nb-option>
+                </nb-select>
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-body>
+        <nb-tabset fullWidth>
+            <nb-tab tabTitle="Lectures">
+                <table class="table table-bordered" *ngIf="selectedLecture!=null">
+                    <thead>
+                        <tr>
+                            <th>Lecture Name</th>
+                            <th>Type</th>
+                            <th>Class Level</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{selectedLecture.name}}</td>
+                            <td>{{selectedLecture.type}}</td>
+                            <td>{{selectedLecture.class_type}}</td>
+                            <td *ngIf="selectedLecture.status=='active'">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td *ngIf="selectedLecture.status=='deleted'">
+                                <span class="badge badge-warning">Deleted</span>
+                            </td>
+                            <td><button nbButton status="info"
+                                    (click)="editClickLecture(selectedLecture, lectureEdit)">Edit</button>
+                            </td>
+                            <td *ngIf="selectedLecture.status=='active'"><button nbButton status="warning"
+                                    (click)="deleteClick(selectedLecture)">Delete &nbsp;&nbsp;</button></td>
+                            <td *ngIf="selectedLecture.status=='deleted'"><button nbButton status="success"
+                                    (click)="activateClick(selectedLecture)">Activate</button></td>
+                        </tr>
+                    </tbody>
+                    <div *ngIf="selectedLecture==null">
+                        No Any lectures
+                    </div>
+                </table>
+            </nb-tab>
+            <nb-tab tabTitle="Schedule">
+                <table class="table table-bordered" *ngIf="selectedLecture!=null">
+                    <thead>
+                        <tr>
+                            <th>Lecture Name</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Room</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{selectedPayment.name}}</td>
+                            <td>{{selectedSchedule.start_time}}</td>
+                            <td>{{selectedSchedule.end_time}}</td>
+                            <td>{{selectedSchedule.schedule_start_date}}</td>
+                            <td>{{selectedSchedule.schedule_end_date}}</td>
+                            <td>{{selectedSchedule.room.name}}</td>
+                            <td *ngIf="selectedSchedule.status=='active'">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td *ngIf="selectedSchedule.status=='deleted'">
+                                <span class="badge badge-warning">Deleted</span>
+                            </td>
+                            <td><button nbButton status="info"
+                                    (click)="editClickSchedule(selectedSchedule, lectureEdit)">Edit</button>
+                            </td>
+                            <td *ngIf="selectedSchedule.status=='active'"><button nbButton status="warning"
+                                    (click)="deleteClick(selectedSchedule)">Delete &nbsp;&nbsp;</button></td>
+                            <td *ngIf="selectedSchedule.status=='deleted'"><button nbButton status="success"
+                                    (click)="activateClick(selectedSchedule)">Activate</button></td>
+                        </tr>
+                    </tbody>
+                    <div *ngIf="selectedSchedule==null">
+                        No Any lectures
+                    </div>
+                </table>
+            </nb-tab>
+            <nb-tab tabTitle="Payment">
+                <table class="table table-bordered" *ngIf="selectedPayment!=null">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Student Fee</th>
+                            <th>Fixed Institute Amount</th>
+                            <th>Teacher Percentage</th>
+                            <th>Status</th>
+                            <th>Edit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>{{selectedPayment.name}}</td>
+                            <td>{{selectedPayment.student_fee}}</td>
+                            <td>{{selectedPayment.fixed_institute_amount}}</td>
+                            <td>{{selectedPayment.teacher_percentage}}</td>
+                            <td *ngIf="selectedPayment.status=='active'">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td *ngIf="selectedPayment.status=='deleted'">
+                                <span class="badge badge-warning">Deleted</span>
+                            </td>
+                            <td><button nbButton status="info" (click)="editClickPayment(selectedPayment)">Edit</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <div *ngIf="selectedPayment==null">
+                        No Any lectures
+                    </div>
+                </table>
+            </nb-tab>
+        </nb-tabset>
+
+    </nb-card-body>
+</nb-card>
+
+<ng-template #lectureEdit let-data let-refLEdit="dialogRef">
+    <nb-card id="modal">
+        <nb-card-header>Edit Lecture</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form class="form-horizontal" [formGroup]="lectureForm">
+                <div class="form-group row">
+                    <label for="lectureName" class="label col-sm-3 form-control-label"
+                        style="font-size: 12.75px;">Lecture
+                        Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="name" nbInput fullWidth id="lectureName"
+                            style="font-size: 12.75px;" placeholder="Lecture Name">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="subjectName" class="label col-sm-3 form-control-label"
+                        style="font-size: 12.75px;">Select Subject </label>
+
+                    <div class="col-sm-9">
+                        <nb-select placeholder="Select Lecture Subject" [(selected)]="subjectIdSring"
+                            [(ngModel)]="selectedSubjectId">
+                            <nb-option *ngFor="let subject of subjects" value={{subject.id}}>
+                                {{subject.name}}</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="subjectName" class="label col-sm-3 form-control-label"
+                        style="font-size: 12.75px;">Select Lecture Type</label>
+
+                    <div class="col-sm-9">
+                        <nb-select formControlName="type" placeholder="Select Lecture Type">
+                            <nb-option value="normal" selected>Normal</nb-option>
+                            <nb-option value="revision">Revision Class</nb-option>
+                            <nb-option value="paper">Paper Class</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+
+                <!-- teacher -->
+                <div class="form-group row">
+                    <label for="subjectName" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">
+                        Select Teacher</label>
+
+                    <div class="col-sm-9">
+                        <nb-select placeholder="Select Teacher" [(selected)]="teacherIdString"
+                            [(ngModel)]="selectedTeacherId">
+                            <nb-option *ngFor="let teacher of teachers" value={{teacher.id}}>
+                                {{teacher.name}}</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+
+                <br>
+
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refLEdit.close()">Back</button>
+            <button nbButton id="submitButton" (click)="updateLecture(refLEdit)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

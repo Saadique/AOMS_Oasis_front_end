@@ -32,6 +32,157 @@
         </ng-template>
     </nb-card-header>
     <nb-card-body>
+        <!-- admin -->
+        <table class="table table-bordered" *ngIf="selectedRole=='admin' && admins.lenght!=0">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>NIC</th>
+
+                    <th>User Account Status</th>
+                    <th>Edit User</th>
+                    <th>Suspend/Activate Account</th>
+                    <th>Delete User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let admin of admins">
+                    <td>{{admin.first_name}}</td>
+                    <td>{{admin.last_name}}</td>
+                    <td>{{admin.user.username}}</td>
+                    <td>{{admin.email}}</td>
+                    <td>{{admin.contact_nubmer}}</td>
+                    <td>{{admin.nic}}</td>
+
+                    <td *ngIf="admin.user.status=='active'">
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td *ngIf="admin.user.status=='deleted'">
+                        <span class="badge badge-warning">Deleted</span>
+                    </td>
+                    <td><button nbButton status="info" (click)="editClickAdmin()">Edit</button>
+                    </td>
+                    <td *ngIf="admin.user.status=='active'"><button nbButton status="warning"
+                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="admin.user.status=='deleted'"><button nbButton status="success"
+                            (click)="activateAccount()">Activate</button></td>
+                    <td><button nbButton status="danger" (click)="deleteUserAdmin()">Delete &nbsp;&nbsp;</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- admin staff -->
+        <table class="table table-bordered" *ngIf="selectedRole=='admin_staff' && admin_staffs.lenght!==0">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Contact Number</th>
+                    <th>NIC</th>
+                    <th>User Account Status</th>
+                    <th>Edit User</th>
+                    <th>Suspend/Activate Account</th>
+                    <th>Delete User</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let admin_staff of admin_staffs">
+                    <td>{{admin_staff.first_name}}</td>
+                    <td>{{admin_staff.last_name}}</td>
+                    <td>{{admin_staff.user.username}}</td>
+                    <td>{{admin_staff.email}}</td>
+                    <td>{{admin_staff.contact_nubmer}}</td>
+                    <td>{{admin_staff.nic}}</td>
+
+                    <td *ngIf="admin_staff.user.status=='active'">
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td *ngIf="admin_staff.user.status=='deleted'">
+                        <span class="badge badge-warning">Deleted</span>
+                    </td>
+                    <td><button nbButton status="info" (click)="editClickAdminStaff()">Edit</button>
+                    </td>
+                    <td *ngIf="admin_staff.user.status=='active'"><button nbButton status="warning"
+                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="admin_staff.user.status=='deleted'"><button nbButton status="success"
+                            (click)="activateAccount()">Activate</button></td>
+                    <td><button nbButton status="danger" (click)="deleteUserAdminStaff()">Delete &nbsp;&nbsp;</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- teacher -->
+        <table class="table table-bordered" *ngIf="selectedRole=='teacher' && teachers.lenght!=0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Username</th>
+                    <th>Contact Number</th>
+                    <th>Email</th>
+                    <th>User Account Status</th>
+                    <th>Suspend/Activate Account</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let teacher of teachers">
+                    <td>{{teacher.name}}</td>
+                    <td>{{teacher.email}}</td>
+                    <td>{{teacher.user.username}}</td>
+                    <td>{{teacher.email}}</td>
+                    <td>{{teacher.mobile_no}}</td>
+                    <td *ngIf="teacher.user.status=='active'">
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td *ngIf="teacher.user.status=='deleted'">
+                        <span class="badge badge-warning">Deleted</span>
+                    </td>
+                    <td *ngIf="teacher.user.status=='active'"><button nbButton status="warning"
+                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="teacher.user.status=='deleted'"><button nbButton status="success"
+                            (click)="activateAccount()">Activate</button></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <!-- student -->
+        <table class="table table-bordered" *ngIf="selectedRole=='student' && students.lenght!=0">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Registration No.</th>
+                    <th>Username</th>
+                    <th>NIC</th>
+                    <th>User Account Status</th>
+                    <th>Suspend/Activate Account</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let student of students">
+                    <td>{{student.name}}</td>
+                    <td>{{student.registration_no}}</td>
+                    <td>{{student.user.username}}</td>
+                    <td>{{student.nic}}</td>
+                    <td *ngIf="student.user.status=='active'">
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td *ngIf="student.user.status=='deleted'">
+                        <span class="badge badge-warning">Deleted</span>
+                    </td>
+                    <td *ngIf="student.user.status=='active'"><button nbButton status="warning"
+                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="student.user.status=='deleted'"><button nbButton status="success"
+                            (click)="activateAccount()">Activate</button></td>
+                </tr>
+            </tbody>
+        </table>
 
     </nb-card-body>
 </nb-card>

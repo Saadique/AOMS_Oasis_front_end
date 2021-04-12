@@ -123,24 +123,21 @@
                                     Name</label>
                                 <div class="col-sm-9">
                                     <input type="text" formControlName="name" nbInput fullWidth id="lectureName"
-                                        style="font-size: 12.75px;" placeholder="Lecture Name"
-                                        [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                        style="font-size: 12.75px;" placeholder="Lecture Name">
                                 </div>
                             </div>
 
                             <!-- teacher -->
                             <div class="form-group row">
                                 <label for="subjectName" class="label col-sm-3 form-control-label"
-                                    style="font-size: 12.75px;"
-                                    [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
+                                    style="font-size: 12.75px;">
                                     Select Teacher</label>
 
                                 <div class="col-sm-9">
-                                    <select formControlName="teacher_id" placeholder="Select Lecture Type"
-                                        class="form-control"
-                                        [ngClass]="{'form-control-danger': lectureForm.invalid && (lectureForm.dirty || lectureForm.touched)}">
-                                        <option value="1" selected>Muzain Mubarak</option>
-                                    </select>
+                                    <nb-select formControlName="teacher_id" placeholder="Select Teacher">
+                                        <nb-option *ngFor="let teacher of teachers" value={{teacher.id}}>
+                                            {{teacher.name}}</nb-option>
+                                    </nb-select>
                                 </div>
                             </div>
 

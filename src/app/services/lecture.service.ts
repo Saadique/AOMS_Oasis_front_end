@@ -19,6 +19,10 @@ export class LectureService {
     return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}`);
   }
 
+  getAllLecByCourseMedium(courseMediumId) {
+    return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}/all`);
+  }
+
   getAllLecturesBySubject(subjectId) {
     return this.http.get<any>(`http://localhost:8000/api/lectures/subjects/${subjectId}`);
   }
@@ -33,6 +37,10 @@ export class LectureService {
 
   getAllLectureByStudent(studentId) {
     return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`);
+  }
+
+  updateLecture(lectureId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/lectures/${lectureId}`, data);
   }
 
   createLesson(data) {
@@ -62,6 +70,19 @@ export class LectureService {
   getAllLessonsWithMaterials(lecture_id) {
     return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
   }
+
+  getLecturePayment(lecture_id) {
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+  }
+
+  getLectureSchedule(lecture_id) {
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+  }
+
+  getPaymentOfLecture(lectureId) {
+    return this.http.get<any>(`http://localhost:8000/api/payment/lecture/${lectureId}`);
+  }
+
 
 
 

@@ -16,6 +16,12 @@ export class UserAccountsComponent implements OnInit {
 
   selectedRole;
 
+  admins;
+  teachers;
+  students;
+  admin_staffs;
+  front_officers;
+
   constructor(
     private dialogBoxService: NbDialogService,
     private userService: UserService) { }
@@ -61,6 +67,32 @@ export class UserAccountsComponent implements OnInit {
     if (this.selectedRole == 'admin_staff') {
       this.initAdminStaffForm();
     }
+
+    this.userService.getAllUserInfoByRole(value).subscribe({
+      next: (response) => {
+        switch (value) {
+          case 'admin':
+            this.admins = response;
+            console.log(this.admins)
+            break;
+          case 'admin_staff':
+            this.admin_staffs = response;
+            console.log(this.admin_staffs);
+            break;
+          case 'teacher':
+            this.teachers = response;
+            console.log(this.teachers);
+            break;
+          case 'student':
+            this.students = response;
+            console.log(this.students);
+            break;
+        }
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
   addNewRole(ref, data) {
@@ -132,6 +164,28 @@ export class UserAccountsComponent implements OnInit {
     } else {
       this.setAlert('warning', 'Please fill all required fields');
     }
+
+  }
+
+
+  editClickAdmin() {
+
+  }
+
+  deleteUserAdmin() {
+
+  }
+
+  deleteUserAdminStaff() { }
+
+
+  editClickAdminStaff() { }
+
+  suspendAccount() {
+
+  }
+
+  activateAccount() {
 
   }
 

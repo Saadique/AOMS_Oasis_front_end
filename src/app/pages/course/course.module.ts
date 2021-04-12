@@ -34,9 +34,10 @@ import { RoomManagementComponent } from './room-management/room-management.compo
 import { EditCoursesComponent } from './edit-courses/edit-courses.component';
 import { CreateMediumComponent } from './create-medium/create-medium.component';
 import { EditMediumComponent } from './edit-medium/edit-medium.component';
+import { LectureOperationsComponent } from './lecture-operations/lecture-operations.component';
 
 @NgModule({
-  declarations: [...routedComponents, CourseComponent, CreateSubjectComponent, CreateLectureComponent, ViewSchedulesComponent, ViewCoursesComponent, ViewCourseComponent, RoomManagementComponent, EditCoursesComponent, CreateMediumComponent, EditMediumComponent],
+  declarations: [...routedComponents, CourseComponent, CreateSubjectComponent, CreateLectureComponent, ViewSchedulesComponent, ViewCoursesComponent, ViewCourseComponent, RoomManagementComponent, EditCoursesComponent, CreateMediumComponent, EditMediumComponent, LectureOperationsComponent],
   imports: [
     CommonModule,
     CourseRoutingModule,

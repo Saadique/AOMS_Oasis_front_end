@@ -12,6 +12,10 @@ export class TeacherService {
     return this.http.get<any>(`http://localhost:8000/api/teachers`);
   }
 
+  getAllActiveTeachers() {
+    return this.http.get<any>(`http://localhost:8000/api/teachers/all/teachers`);
+  }
+
   createTeacher(data) {
     return this.http.post<any>(`http://localhost:8000/api/teachers`, data);
   }

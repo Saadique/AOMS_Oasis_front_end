@@ -49,7 +49,6 @@ export class CreateCourseComponent implements OnInit {
     this.createForm = new FormGroup({
       'name': new FormControl(null, Validators.required),
       'description': new FormControl(null, Validators.required),
-      'coordinator': new FormControl(null, Validators.required),
       'course_type': new FormControl(null, Validators.required),
       'formMediums': new FormControl(null)
     });
@@ -80,7 +79,6 @@ export class CreateCourseComponent implements OnInit {
       let data = {
         "name": this.createForm.value.name,
         "description": this.createForm.value.description,
-        "coordinator": this.createForm.value.coordinator,
         "course_type": this.createForm.value.course_type,
         "mediums": this.selectedMediums
       }

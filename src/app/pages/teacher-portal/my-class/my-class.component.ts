@@ -12,6 +12,8 @@ import { saveAs } from 'file-saver';
 })
 export class MyClassComponent implements OnInit {
 
+
+
   lectureId;
   lecture;
   lessons;
@@ -45,7 +47,6 @@ export class MyClassComponent implements OnInit {
       (response) => {
         this.lecture = response.data;
         this.getLessonsByLecture();
-
       }
     )
   }

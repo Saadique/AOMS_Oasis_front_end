@@ -12,6 +12,8 @@ import { RoutesAuthenticationService } from 'app/authentication/services/authent
 import { RoomManagementComponent } from './room-management/room-management.component';
 import { EditCoursesComponent } from './edit-courses/edit-courses.component';
 import { CreateMediumComponent } from './create-medium/create-medium.component';
+import { EditMediumComponent } from './edit-medium/edit-medium.component';
+import { LectureOperationsComponent } from './lecture-operations/lecture-operations.component';
 
 const routes: Routes = [{
   path: '', component: CourseComponent,
@@ -29,12 +31,14 @@ const routes: Routes = [{
     { path: 'create', component: CreateCourseComponent },
     { path: 'subject/create', component: CreateSubjectComponent },
     { path: 'lecture/create', component: CreateLectureComponent },
+    { path: 'lecture/edit', component: LectureOperationsComponent },
     { path: 'schedule/view', component: ViewSchedulesComponent },
     { path: 'view', component: ViewCoursesComponent },
     { path: 'view/:id', component: ViewCourseComponent },
     { path: 'rooms', component: RoomManagementComponent },
     { path: 'edit', component: EditCoursesComponent },
-    { path: 'medium/create', component: CreateMediumComponent }
+    { path: 'medium/create', component: CreateMediumComponent },
+    { path: 'medium/edit', component: EditMediumComponent }
   ]
 }];
 

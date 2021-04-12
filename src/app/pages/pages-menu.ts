@@ -534,7 +534,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
       },
       {
         title: 'Edit & Delete Medium',
-        link: '/pages/course/create'
+        link: '/pages/course/medium/edit'
       }
     ]
   },
@@ -573,6 +573,10 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create Lecture',
         link: '/pages/course/lecture/create'
+      },
+      {
+        title: 'Edit & Delete Lectures',
+        link: '/pages/course/lecture/edit'
       }
     ]
   },

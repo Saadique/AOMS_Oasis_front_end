@@ -24,5 +24,9 @@ export class UserService {
     return this.http.get<any>(`http://localhost:8000/api/administrative_staff`);
   }
 
+  getAllUserInfoByRole(role) {
+    return this.http.get<any>(`http://localhost:8000/api/users/role/${role}`);
+  }
+
 
 }

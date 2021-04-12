@@ -6,6 +6,7 @@ import { SubjectService } from '../../../services/subject.service';
 import { LectureService } from '../../../services/lecture.service';
 import { ScheduleService } from '../../../services/schedule.service';
 import { Alert } from '../create-course/create-course.component';
+import { TeacherService } from '../../../services/teacher.service';
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,7 @@ export class CreateLectureComponent implements OnInit {
   courses: [];
   courseMediums: [];
   subjects: [];
+  teachers;
 
   createdLecture = null;
 
@@ -41,12 +43,14 @@ export class CreateLectureComponent implements OnInit {
     private courseService: CourseService,
     private subjectService: SubjectService,
     private lectureService: LectureService,
-    private scheduleService: ScheduleService) { }
+    private scheduleService: ScheduleService,
+    private teacherService: TeacherService) { }
 
   ngOnInit(): void {
     this.initLectureForm();
     this.initPaymentForm();
     this.initScheduleForm();
+    this.getAllActiveTeachers()
   }
 
   initLectureForm() {
@@ -77,6 +81,22 @@ export class CreateLectureComponent implements OnInit {
       schedule_end_date: ['', Validators.required],
       room_id: ['', Validators.required]
     });
+  }
+
+  getAllActiveTeachers() {
+    this.teacherService.getAllActiveTeachers().subscribe(
+      {
+        next: (response) => {
+          console.log(response);
+          this.teachers = response;
+        },
+        error: (err) => {
+          console.log(err)
+          if (err.error.code == 400) {
+          }
+        }
+      }
+    )
   }
 
   courseTypeSelection(courseType) {

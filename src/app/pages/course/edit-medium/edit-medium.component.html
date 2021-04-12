@@ -1,1 +1,105 @@
-<p>edit-medium works!</p>
+<nb-card>
+    <nb-card-header>
+    </nb-card-header>
+    <nb-card-body>
+        <table class="table table-bordered" *ngIf="availableMediums.length>0">
+            <thead>
+                <tr>
+                    <th>Medium Name</th>
+                    <th>Medium Short Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let medium of availableMediums">
+                    <td>{{medium.name}}</td>
+                    <td>{{medium.short_name}}</td>
+                    <td>{{medium.description}}</td>
+                    <td *ngIf="medium.status=='active'">
+                        <span class="badge badge-success">Active</span>
+                    </td>
+                    <td *ngIf="medium.status=='deleted'">
+                        <span class="badge badge-warning">Deleted</span>
+                    </td>
+                    <td><button nbButton status="info" (click)="editClick(medium, editMediumForm)">Edit</button>
+                    </td>
+                    <td *ngIf="medium.status=='active'"><button nbButton status="warning"
+                            (click)="deleteClick(medium, deleteConfirmation)">Delete &nbsp;&nbsp;</button></td>
+                    <td *ngIf="medium.status=='deleted'"><button nbButton status="success"
+                            (click)="activateClick(medium)">Activate</button></td>
+                </tr>
+            </tbody>
+            <div *ngIf="availableMediums.length==0">
+                No Any Mediums
+            </div>
+        </table>
+    </nb-card-body>
+</nb-card>
+
+<ng-template #editMediumForm let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Create New Course</nb-card-header>
+        <nb-card-header>
+            <!-- alert message -->
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="mediumAlert.status=='Error'">
+                    {{ mediumAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="mediumAlert.status=='warning'">
+                    {{ mediumAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="mediumAlert.status=='success'">
+                    {{ mediumAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
+        <nb-card-body>
+            <form class="form-horizontal" [formGroup]="editMediumFormGroup">
+                <div class="form-group row">
+                    <label for="name" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Medium
+                        Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="name" nbInput fullWidth id="name"
+                            style="font-size: 12.75px;" placeholder="English">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label for="short_name" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Short Name</label>
+                    <div class="col-sm-9">
+                        <input type="text" formControlName="short_name" nbInput fullWidth id="short_name"
+                            placeholder="ENG">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+                        Medium Description</label>
+                    <div class="col-sm-9">
+                        <textarea rows="5" formControlName="description" nbInput fullWidth
+                            placeholder="Medium Description"></textarea>
+                    </div>
+                </div>
+                <br><br>
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton id="submitButton" (click)="editMedium(ref)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #deleteConfirmation let-data let-refDelete="dialogRef">
+    <nb-card>
+        <nb-card-header>Delete Confimation</nb-card-header>
+        <nb-card-body>Are you sure you want to delete this medium?</nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="onDeleteConfirmation(refDelete)">Yes</button>&nbsp;
+            <button nbButton (click)="refDelete.close()">Cancel</button>
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

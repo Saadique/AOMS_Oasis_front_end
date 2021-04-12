@@ -1,129 +1,8 @@
-<ng-template #dialog let-data let-ref="dialogRef">
-    <nb-card id="addNewForm">
-        <nb-card-header>Add Lectures</nb-card-header>
-        <nb-card-body>
-            <br>
-            <!-- alert message -->
-            <div class="animated fadeIn">
-                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
-                    {{ addLecAlert.message }}
-                </div>
-                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
-                    {{ addLecAlert.message }}
-                </div>
-                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
-                    {{ addLecAlert.message }}
-                </div>
-            </div> <br>
-            <form class="form-horizontal" [formGroup]="addNewLecForm" (ngSubmit)="addLecture()">
-                <div class="form-group row">
-                    <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
-                        style="font-size: 12.75px;">Choose Course </label>
-
-                    <div class="col-sm-7">
-                        <nb-select formControlName="course_medium_id" placeholder="Select Course"
-                            (selectedChange)="loadSubjects($event)">
-                            <nb-option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
-                                {{courseMedium.name}}
-                            </nb-option>
-                        </nb-select>
-                    </div>
-                </div><br><br><br>
-                <div class="form-group row">
-                    <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 15px;"
-                        style="font-size: 12.75px;">Select Subject </label>
-
-                    <div class="col-sm-7">
-                        <nb-select formControlName="subject_id" placeholder="Choose Subject"
-                            (selectedChange)="loadLectures($event)">
-                            <nb-option *ngFor="let subject of subjects" value={{subject.id}}>
-                                {{subject.name}}
-                            </nb-option>
-                        </nb-select>
-                    </div>
-                </div><br><br><br>
-                <div class="form-group row">
-                    <label class="label col-sm-5 form-control-label" style="font-size: 14px;">Select
-                        Lecture</label>
-                    <br>
-                    <div class="col-sm-7">
-                        <nb-select formControlName="lecture_id" placeholder="Choose Lecture"
-                            (selectedChange)="lectureSelection($event)">
-                            <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
-                                {{lecture.name}}
-                            </nb-option>
-                        </nb-select>
-                    </div>
-                    <br>
-                </div>
-            </form>
-
-        </nb-card-body>
-        <nb-card-footer>
-            <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="addLecture" (click)="addLecture(ref)">Add Lecture</button>&nbsp;
-        </nb-card-footer>
-    </nb-card>
-</ng-template>
-
-<ng-template #payFeeDialog let-data let-ref="dialogRef">
-    <nb-card id="addNewForm">
-        <nb-card-header>Pay Monthly Fee</nb-card-header>
-        <nb-card-body>
-            <br>
-            <!-- alert message -->
-            <div class="animated fadeIn">
-                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
-                    {{ addLecAlert.message }}
-                </div>
-                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
-                    {{ addLecAlert.message }}
-                </div>
-                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
-                    {{ addLecAlert.message }}
-                </div>
-            </div> <br>
-            <form class="form-horizontal" [formGroup]="monthlyPaymentForm">
-                <div class="form-group row">
-                    <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
-                        style="font-size: 12.75px;">Select Month</label>
-
-                    <div class="col-sm-7">
-                        <nb-select formControlName="month" placeholder="Month">
-                            <nb-option *ngFor="let month of monthlyPayments" value={{month.id}}>
-                                {{month.month}}
-                            </nb-option>
-                        </nb-select>
-                    </div>
-                </div><br><br><br>
-                <div class="form-group row">
-                    <label class="label col-sm-5 form-control-label" style="font-size: 15px;"
-                        style="font-size: 12.75px;">Amount</label>
-
-                    <div class="col-sm-7">
-                        <input type="text" nbInput style="font-size: 12.75px;"
-                            placeholder="{{selectedPayment.payment_amount}}" disabled>
-                    </div>
-                </div><br><br>
-            </form>
-
-        </nb-card-body>
-        <nb-card-footer>
-            <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton type="submit" id="addLecBtn" (click)="payMonthlyFee(ref)">Pay Fee</button>&nbsp;
-            <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
-                Payment</button>&nbsp;&nbsp;
-        </nb-card-footer>
-    </nb-card>
-</ng-template>
-
-
 <div class="col-12">
     <nb-card size="flexible">
         <nb-tabset fullWidth>
-            <nb-tab tabTitle="Profile-Dashboard">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Eius harum omnis, nobis voluptatem tenetur
-                deserunt dolor excepturi explicabo dolore unde. Ad voluptas quidem, sapiente commodi est sed assumenda
+            <nb-tab tabTitle="Profile">
+
             </nb-tab>
 
             <nb-tab tabTitle="Fee Management">
@@ -344,3 +223,122 @@
         </nb-tabset>
     </nb-card>
 </div>
+
+<ng-template #dialog let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Add Lectures</nb-card-header>
+        <nb-card-body>
+            <br>
+            <!-- alert message -->
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
+                    {{ addLecAlert.message }}
+                </div>
+            </div> <br>
+            <form class="form-horizontal" [formGroup]="addNewLecForm" (ngSubmit)="addLecture()">
+                <div class="form-group row">
+                    <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Choose Course </label>
+
+                    <div class="col-sm-7">
+                        <nb-select formControlName="course_medium_id" placeholder="Select Course"
+                            (selectedChange)="loadSubjects($event)">
+                            <nb-option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
+                                {{courseMedium.name}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div><br><br><br>
+                <div class="form-group row">
+                    <label for="lectureName" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Select Subject </label>
+
+                    <div class="col-sm-7">
+                        <nb-select formControlName="subject_id" placeholder="Choose Subject"
+                            (selectedChange)="loadLectures($event)">
+                            <nb-option *ngFor="let subject of subjects" value={{subject.id}}>
+                                {{subject.name}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div><br><br><br>
+                <div class="form-group row">
+                    <label class="label col-sm-5 form-control-label" style="font-size: 14px;">Select
+                        Lecture</label>
+                    <br>
+                    <div class="col-sm-7">
+                        <nb-select formControlName="lecture_id" placeholder="Choose Lecture"
+                            (selectedChange)="lectureSelection($event)">
+                            <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
+                                {{lecture.name}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                    <br>
+                </div>
+            </form>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton id="addLecture" (click)="addLecture(ref)">Add Lecture</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #payFeeDialog let-data let-ref="dialogRef">
+    <nb-card id="addNewForm">
+        <nb-card-header>Pay Monthly Fee</nb-card-header>
+        <nb-card-body>
+            <br>
+            <!-- alert message -->
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="addLecAlert.status=='error'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="addLecAlert.status=='warning'">
+                    {{ addLecAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="addLecAlert.status=='success'">
+                    {{ addLecAlert.message }}
+                </div>
+            </div> <br>
+            <form class="form-horizontal" [formGroup]="monthlyPaymentForm">
+                <div class="form-group row">
+                    <label for="courseMedium" class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Select Month</label>
+
+                    <div class="col-sm-7">
+                        <nb-select formControlName="month" placeholder="Month">
+                            <nb-option *ngFor="let month of monthlyPayments" value={{month.id}}>
+                                {{month.month}}
+                            </nb-option>
+                        </nb-select>
+                    </div>
+                </div><br><br><br>
+                <div class="form-group row">
+                    <label class="label col-sm-5 form-control-label" style="font-size: 15px;"
+                        style="font-size: 12.75px;">Amount</label>
+
+                    <div class="col-sm-7">
+                        <input type="text" nbInput style="font-size: 12.75px;"
+                            placeholder="{{selectedPayment.payment_amount}}" disabled>
+                    </div>
+                </div><br><br>
+            </form>
+
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton type="submit" id="addLecBtn" (click)="payMonthlyFee(ref)">Pay Fee</button>&nbsp;
+            <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
+                Payment</button>&nbsp;&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>

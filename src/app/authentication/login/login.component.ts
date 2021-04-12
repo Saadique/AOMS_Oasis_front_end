@@ -81,18 +81,9 @@ export class LoginComponent implements OnInit {
           this.localStorageService.setToken(response.token);
           switch (response.userRoleId) {
             case 1:
-              // response.userViews = TEACHER_MENU_ITEMS;
-              // this.localStorageService.setData(response);
-
-              let tempTeacherViews = TEACHER_MENU_ITEMS;
-              this.makeLectureMenuOfTeacher(response.teacher.id);
-              setTimeout(() => {
-                this.getAllTeacherViews(tempTeacherViews);
-                response.userViews = tempTeacherViews;
-                this.localStorageService.setData(response);
-                return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
-              }, 1000);
-              break;
+              response.userViews = ADMIN_MENU_ITEMS;
+              this.localStorageService.setData(response);
+              return this.router.navigateByUrl('/pages/admin/dashboard');
             case 2:
               let tempUserViews = STUDENT_MENU_ITEMS;
               this.makeLectureMenuOfStudents(response.student.id);
@@ -103,13 +94,16 @@ export class LoginComponent implements OnInit {
                 return this.router.navigateByUrl('/pages/student-portal/dashboard');
               }, 1000);
               break;
-            // response.userViews = STUDENT_MENU_ITEMS;
-            // this.localStorageService.setData(response);
-
             case 3:
-              response.userViews = ADMIN_MENU_ITEMS;
-              this.localStorageService.setData(response);
-              return this.router.navigateByUrl('/pages/admin/dashboard');
+              let tempTeacherViews = TEACHER_MENU_ITEMS;
+              this.makeLectureMenuOfTeacher(response.teacher.id);
+              setTimeout(() => {
+                this.getAllTeacherViews(tempTeacherViews);
+                response.userViews = tempTeacherViews;
+                this.localStorageService.setData(response);
+                return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
+              }, 1000);
+              break;
           }
         },
         error: (err) => {

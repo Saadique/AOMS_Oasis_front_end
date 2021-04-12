@@ -33,8 +33,7 @@ export class CreateSubjectComponent implements OnInit {
       'description': new FormControl(null),
       'type': new FormControl(null, Validators.required),
       'course_id': new FormControl(null, Validators.required),
-      'course_medium_id': new FormControl(null, Validators.required),
-      'subject_type': new FormControl(null, Validators.required),
+      'course_medium_id': new FormControl(null, Validators.required)
     });
   }
 
