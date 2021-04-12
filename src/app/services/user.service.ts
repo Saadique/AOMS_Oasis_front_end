@@ -12,13 +12,22 @@ export class UserService {
     return this.http.post<any>(`http://localhost:8000/api/admins`, data);
   }
 
+  createAdministrativeStaff(data) {
+    return this.http.post<any>(`http://localhost:8000/api/administrative_staff`, data);
+  }
+
+  updateAdmin(adminId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/admins/${adminId}`, data);
+  }
+
+  updateAdministrativeStaff(adminStaffId, data) {
+    return this.http.post<any>(`http://localhost:8000/api/administrative_staff/${adminStaffId}`, data);
+  }
+
   getAllAdmins() {
     return this.http.get<any>(`http://localhost:8000/api/admins`);
   }
 
-  createAdministrativeStaff(data) {
-    return this.http.post<any>(`http://localhost:8000/api/administrative_staff`, data);
-  }
 
   getAllAdministrativeStaff() {
     return this.http.get<any>(`http://localhost:8000/api/administrative_staff`);
@@ -26,6 +35,10 @@ export class UserService {
 
   getAllUserInfoByRole(role) {
     return this.http.get<any>(`http://localhost:8000/api/users/role/${role}`);
+  }
+
+  activateAndDeactivateAccount(userId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/users/status/${status}/${userId}`);
   }
 
 

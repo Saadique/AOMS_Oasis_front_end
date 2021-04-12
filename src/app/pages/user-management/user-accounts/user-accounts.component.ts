@@ -12,7 +12,11 @@ import { Alert } from '../../course/create-course/create-course.component';
 export class UserAccountsComponent implements OnInit {
 
   createAdminForm: FormGroup;
-  createAdminStaffForm: FormGroup;
+  editAdminForm: FormGroup;
+
+  selectedUpdate;
+  selectedDeleteAdmin;
+  selectedDeleteAdminStaff;
 
   selectedRole;
 
@@ -30,7 +34,6 @@ export class UserAccountsComponent implements OnInit {
 
   ngOnInit(): void {
     this.initAdminForm();
-    this.initAdminStaffForm();
   }
 
   private initAdminForm() {
@@ -46,26 +49,23 @@ export class UserAccountsComponent implements OnInit {
     });
   }
 
-  private initAdminStaffForm() {
-    this.createAdminStaffForm = new FormGroup({
-      'first_name': new FormControl(null, Validators.required),
-      'last_name': new FormControl(null),
-      'user_name': new FormControl(null, Validators.required),
-      'contact_number': new FormControl(null),
-      'nic': new FormControl(null, Validators.required),
-      'email': new FormControl(null, Validators.required),
-      'password': new FormControl(null, Validators.required),
-      'confirm_password': new FormControl(null, Validators.required),
+  private initAdminEditForm(admin) {
+    this.editAdminForm = new FormGroup({
+      'first_name': new FormControl(admin.first_name, Validators.required),
+      'last_name': new FormControl(admin.last_name),
+      'username': new FormControl(admin.user.username),
+      'contact_number': new FormControl(admin.contact_number),
+      'nic': new FormControl(admin.nic, Validators.required),
+      'email': new FormControl(admin.email, Validators.required),
     });
   }
 
+
+
   roleSelection(value) {
     this.selectedRole = value;
-    if (this.selectedRole == 'admin') {
+    if (this.selectedRole == 'admin' || this.selectedRole == 'admin_staff') {
       this.initAdminForm();
-    }
-    if (this.selectedRole == 'admin_staff') {
-      this.initAdminStaffForm();
     }
 
     this.userService.getAllUserInfoByRole(value).subscribe({
@@ -95,9 +95,6 @@ export class UserAccountsComponent implements OnInit {
     })
   }
 
-  addNewRole(ref, data) {
-
-  }
 
   //alert set
   setAlert(alertStatus, alertMessage): void {
@@ -126,7 +123,6 @@ export class UserAccountsComponent implements OnInit {
           "password": this.createAdminForm.value.password,
           "contact_number": this.createAdminForm.value.contact_number,
           "email": this.createAdminForm.value.email,
-          "status": 'active',
         };
 
         if (this.selectedRole == 'admin') {
@@ -167,9 +163,47 @@ export class UserAccountsComponent implements OnInit {
 
   }
 
+  updateAdmin(ref) {
+    let data = {
+      "first_name": this.editAdminForm.value.first_name,
+      "last_name": this.editAdminForm.value.last_name,
+      "contact_number": this.editAdminForm.value.contact_number,
+      "nic": this.editAdminForm.value.nic,
+      "email": this.editAdminForm.value.email
+    }
 
-  editClickAdmin() {
+    if (this.selectedRole == 'admin') {
+      this.userService.updateAdmin(this.selectedUpdate.id, data).subscribe({
+        next: (reponse) => {
+          console.log(reponse);
+          this.roleSelection(this.selectedRole);
+          ref.close();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
+    }
 
+    if (this.selectedRole == 'admin_staff') {
+      this.userService.updateAdministrativeStaff(this.selectedUpdate.id, data).subscribe({
+        next: (reponse) => {
+          console.log(reponse);
+          this.roleSelection(this.selectedRole);
+          ref.close();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
+    }
+  }
+
+
+  editClickAdmin(admin, modal) {
+    this.initAdminEditForm(admin);
+    this.open(modal);
+    this.selectedUpdate = admin;
   }
 
   deleteUserAdmin() {
@@ -179,14 +213,33 @@ export class UserAccountsComponent implements OnInit {
   deleteUserAdminStaff() { }
 
 
-  editClickAdminStaff() { }
-
-  suspendAccount() {
-
+  editClickAdminStaff(admin_staff) {
+    this.initAdminEditForm(admin_staff);
   }
 
-  activateAccount() {
+  suspendAccount(user) {
+    this.userService.activateAndDeactivateAccount(user.id, 'suspended').subscribe({
+      next: (reponse) => {
+        console.log(reponse);
+        console.log(user);
+        this.roleSelection(this.selectedRole);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
 
+  activateAccount(user) {
+    this.userService.activateAndDeactivateAccount(user.id, 'active').subscribe({
+      next: (reponse) => {
+        console.log(reponse);
+        this.roleSelection(this.selectedRole);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
 }

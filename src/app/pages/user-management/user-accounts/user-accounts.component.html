@@ -55,21 +55,21 @@
                     <td>{{admin.last_name}}</td>
                     <td>{{admin.user.username}}</td>
                     <td>{{admin.email}}</td>
-                    <td>{{admin.contact_nubmer}}</td>
+                    <td>{{admin.contact_number}}</td>
                     <td>{{admin.nic}}</td>
 
                     <td *ngIf="admin.user.status=='active'">
                         <span class="badge badge-success">Active</span>
                     </td>
-                    <td *ngIf="admin.user.status=='deleted'">
-                        <span class="badge badge-warning">Deleted</span>
+                    <td *ngIf="admin.user.status=='suspended'">
+                        <span class="badge badge-warning">Suspended</span>
                     </td>
-                    <td><button nbButton status="info" (click)="editClickAdmin()">Edit</button>
+                    <td><button nbButton status="info" (click)="editClickAdmin(admin, EditFormModal)">Edit</button>
                     </td>
                     <td *ngIf="admin.user.status=='active'"><button nbButton status="warning"
-                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
-                    <td *ngIf="admin.user.status=='deleted'"><button nbButton status="success"
-                            (click)="activateAccount()">Activate</button></td>
+                            (click)="suspendAccount(admin.user)">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="admin.user.status=='suspended'"><button nbButton status="success"
+                            (click)="activateAccount(admin.user)">Activate</button></td>
                     <td><button nbButton status="danger" (click)="deleteUserAdmin()">Delete &nbsp;&nbsp;</button></td>
                 </tr>
             </tbody>
@@ -103,15 +103,16 @@
                     <td *ngIf="admin_staff.user.status=='active'">
                         <span class="badge badge-success">Active</span>
                     </td>
-                    <td *ngIf="admin_staff.user.status=='deleted'">
-                        <span class="badge badge-warning">Deleted</span>
+                    <td *ngIf="admin_staff.user.status=='suspended'">
+                        <span class="badge badge-warning">Suspended</span>
                     </td>
-                    <td><button nbButton status="info" (click)="editClickAdminStaff()">Edit</button>
+                    <td><button nbButton status="info"
+                            (click)="editClickAdminStaff(admin_staff, EditFormModal)">Edit</button>
                     </td>
                     <td *ngIf="admin_staff.user.status=='active'"><button nbButton status="warning"
-                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
-                    <td *ngIf="admin_staff.user.status=='deleted'"><button nbButton status="success"
-                            (click)="activateAccount()">Activate</button></td>
+                            (click)="suspendAccount(admin_staff.user)">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="admin_staff.user.status=='suspended'"><button nbButton status="success"
+                            (click)="activateAccount(admin_staff.user)">Activate</button></td>
                     <td><button nbButton status="danger" (click)="deleteUserAdminStaff()">Delete &nbsp;&nbsp;</button>
                     </td>
                 </tr>
@@ -141,13 +142,13 @@
                     <td *ngIf="teacher.user.status=='active'">
                         <span class="badge badge-success">Active</span>
                     </td>
-                    <td *ngIf="teacher.user.status=='deleted'">
-                        <span class="badge badge-warning">Deleted</span>
+                    <td *ngIf="teacher.user.status=='suspended'">
+                        <span class="badge badge-warning">Suspended</span>
                     </td>
                     <td *ngIf="teacher.user.status=='active'"><button nbButton status="warning"
-                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
-                    <td *ngIf="teacher.user.status=='deleted'"><button nbButton status="success"
-                            (click)="activateAccount()">Activate</button></td>
+                            (click)="suspendAccount(teacher.user)">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="teacher.user.status=='suspended'"><button nbButton status="success"
+                            (click)="activateAccount(teacher.user)">Activate</button></td>
                 </tr>
             </tbody>
         </table>
@@ -173,13 +174,13 @@
                     <td *ngIf="student.user.status=='active'">
                         <span class="badge badge-success">Active</span>
                     </td>
-                    <td *ngIf="student.user.status=='deleted'">
-                        <span class="badge badge-warning">Deleted</span>
+                    <td *ngIf="student.user.status=='suspended'">
+                        <span class="badge badge-warning">Suspended</span>
                     </td>
                     <td *ngIf="student.user.status=='active'"><button nbButton status="warning"
-                            (click)="suspendAccount()">Suspend &nbsp;&nbsp;</button></td>
-                    <td *ngIf="student.user.status=='deleted'"><button nbButton status="success"
-                            (click)="activateAccount()">Activate</button></td>
+                            (click)="suspendAccount(student.user)">Suspend &nbsp;&nbsp;</button></td>
+                    <td *ngIf="student.user.status=='suspended'"><button nbButton status="success"
+                            (click)="activateAccount(student.user)">Activate</button></td>
                 </tr>
             </tbody>
         </table>
@@ -209,7 +210,7 @@
 
         <nb-card-body>
             <br>
-            <form (ngSubmit)="createUser(ref)" [formGroup]="createAdminForm">
+            <form [formGroup]="createAdminForm">
                 <div class="row">
                     <div class="form-group row" class="col-sm-6">
                         <label for="first_name" class="label form-control-label" style="font-size: 12.75px;">Enter
@@ -292,11 +293,102 @@
                     </div><br>
                 </div>
                 <br><br>
-                <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
             </form>
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
+            <button nbButton id="submitButton" (click)="createUser(ref)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #EditFormModal let-data let-refE="dialogRef">
+    <nb-card id="addNewForm">
+        <!-- alert message -->
+
+        <nb-card-header>Edit</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="userAlert.status=='Error'">
+                    {{ userAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="userAlert.status=='warning'">
+                    {{ userAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="userAlert.status=='success'">
+                    {{ userAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
+
+        <nb-card-body>
+            <br>
+            <form [formGroup]="editAdminForm">
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="first_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            First Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="first_name" formControlName="first_name"
+                                style="font-size: 12.75px;" placeholder="First Name"><br><br>
+                        </div>
+                    </div>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="last_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Last Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="last_name" formControlName="last_name"
+                                style="font-size: 12.75px;" placeholder="Last Name"><br><br>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="user_name" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            User Name</label><br>
+                        <div>
+                            <input type="text" nbInput id="user_name" formControlName="username"
+                                style="font-size: 12.75px;" disabled placeholder="Username (Account Login)"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="contact_number" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Contact Number</label><br>
+                        <div>
+                            <input type="text" nbInput id="contact_number" formControlName="contact_number"
+                                style="font-size: 12.75px;" placeholder="Contact Number"><br><br>
+                        </div>
+                    </div><br>
+                </div>
+
+                <div class="row">
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="email" class="label form-control-label" style="font-size: 12.75px;">Enter
+                            Email Address</label><br>
+                        <div>
+                            <input type="text" nbInput id="email" formControlName="email" style="font-size: 12.75px;"
+                                placeholder="Email Address"><br><br>
+                        </div>
+                    </div><br>
+
+                    <div class="form-group row" class="col-sm-6">
+                        <label for="nic" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Enter
+                            NIC</label><br>
+                        <div>
+                            <input type="text" nbInput id="nic" formControlName="nic" style="font-size: 12.75px;"
+                                placeholder="NIC"><br><br>
+                        </div>
+                    </div><br>
+                </div>
+                <br><br>
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refE.close()">Back</button>
+            <button nbButton id="submitButton" (click)="updateAdmin(refE)">Submit</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>
