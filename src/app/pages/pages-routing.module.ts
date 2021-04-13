@@ -11,7 +11,7 @@ import { UserManagementComponent } from './user-management/user-management.compo
 const routes: Routes = [{
   path: '',
   component: PagesComponent,
-  // canActivate: [RoutesAuthenticationService],
+  canActivate: [RoutesAuthenticationService],
   children: [
     {
       path: 'dashboard',
@@ -80,47 +80,50 @@ const routes: Routes = [{
     {
       path: 'course',
       loadChildren: () => import('./course/course.module')
-        .then(m => m.CourseModule)
+        .then(m => m.CourseModule),
+      canActivate: [RoutesAuthenticationService],
     },
     {
       path: 'student',
       loadChildren: () => import('./student/student.module')
-        .then(m => m.StudentModule)
+        .then(m => m.StudentModule),
+      canActivate: [RoutesAuthenticationService],
     },
     {
       path: 'teachers',
       loadChildren: () => import('./teacher/teacher.module')
-        .then(m => m.TeacherModule)
+        .then(m => m.TeacherModule),
+      canActivate: [RoutesAuthenticationService],
     },
     {
       path: 'student-portal',
       loadChildren: () => import('./student-portal/student-portal.module')
         .then(m => m.StudentPortalModule),
-      // canActivate: [RoutesAuthenticationService]
+      canActivate: [RoutesAuthenticationService]
     },
     {
       path: 'teacher-portal',
       loadChildren: () => import('./teacher-portal/teacher-portal.module')
         .then(m => m.TeacherPortalModule),
-      // canActivate: [RoutesAuthenticationService]
+      canActivate: [RoutesAuthenticationService]
     },
     {
       path: 'user-management',
       loadChildren: () => import('./user-management/user-management.module')
         .then(m => m.UserManagementModule),
-      // canActivate: [RoutesAuthenticationService]
+      canActivate: [RoutesAuthenticationService]
     },
     {
       path: 'reports',
       loadChildren: () => import('./report-generation/report-generation.module')
         .then(m => m.ReportGenerationModule),
-      // canActivate: [RoutesAuthenticationService]
+      canActivate: [RoutesAuthenticationService]
     },
     {
       path: 'admin',
       loadChildren: () => import('./admin/admin.module')
         .then(m => m.AdminModule),
-      // canActivate: [RoutesAuthenticationService]
+      canActivate: [RoutesAuthenticationService]
     },
     {
       path: '**',
