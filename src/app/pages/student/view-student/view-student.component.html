@@ -9,7 +9,31 @@
                 <h1 align="center">FEES</h1><br>
                 <nb-tabset>
                     <nb-tab tabTitle="Pending/Due payments">
-
+                        <table class="table table-bordered table-striped" *ngIf="duePayments.length!=0">
+                            <thead>
+                                <tr>
+                                    <th>Payment Name</th>
+                                    <th>Type</th>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Amount</th>
+                                    <th>Due Date</th>
+                                    <th>Pay Fee</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let payment of duePayments">
+                                    <td>{{payment.student_payment.payment.name}}</td>
+                                    <td *ngIf="payment.student_payment.payment_type=='normal'">Normal</td>
+                                    <td *ngIf="payment.student_payment.payment_type=='scheme'">Scheme</td>
+                                    <td>{{payment.year}}</td>
+                                    <td>{{payment.month}}</td>
+                                    <td>{{payment.due_date}}</td>
+                                    <td><button nbButton status="success" (click)="payFee(payFeeDialog, payment)">Pay
+                                            Fee</button></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </nb-tab>
                     <nb-tab tabTitle="Pay Fee ">
                         <br>
@@ -26,10 +50,11 @@
                                 </thead>
                                 <tbody>
                                     <tr *ngFor="let payment of studentPayments">
-                                        <td></td>
+                                        <td *ngIf="payment.payment_type=='normal'">{{payment.payment.name}}</td>
+                                        <td *ngIf="payment.payment_type=='scheme'">{{payment.payment_scheme.name}}</td>
                                         <td>{{payment.payment_type}}</td>
                                         <td>Payable</td>
-                                        <td>{{payment.payment_type}}</td>
+                                        <td>{{payment.payment_amount}}</td>
                                         <td><button nbButton status="success"
                                                 (click)="payFee(payFeeDialog, payment)">Pay
                                                 Fee</button></td>
@@ -40,7 +65,29 @@
 
                     </nb-tab>
                     <nb-tab tabTitle="Fee Payment History">
-
+                        <table class="table table-bordered table-striped" *ngIf="paidPayments.length!=0">
+                            <thead>
+                                <tr>
+                                    <th>Payment Name</th>
+                                    <th>Type</th>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Amount</th>
+                                    <th>Paid Date</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let payment of paidPayments">
+                                    <td>{{payment.student_payment.payment.name}}</td>
+                                    <td *ngIf="payment.student_payment.payment_type=='normal'">Normal</td>
+                                    <td *ngIf="payment.student_payment.payment_type=='scheme'">Scheme</td>
+                                    <td>{{payment.year}}</td>
+                                    <td>{{payment.month}}</td>
+                                    <td>{{payment.student_payment.payment_amount}}</td>
+                                    <td>{{payment.payment_date}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </nb-tab>
                 </nb-tabset>
             </nb-tab>
