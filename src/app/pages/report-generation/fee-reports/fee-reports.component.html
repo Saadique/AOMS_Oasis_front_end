@@ -2,6 +2,7 @@
     <nb-card id="addNewForm">
         <nb-card-header>Select Filter Options</nb-card-header>
         <nb-card-body>
+
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -11,13 +12,12 @@
                             </div>
                             <div class="col-sm-8">
                                 <nb-select placeholder="Select Filter Option">
-                                    <nb-option value="subject">None(All Records)</nb-option>
-                                    <nb-option value="subject">Course Level</nb-option>
-                                    <nb-option value="subject">Course</nb-option>
+                                    <nb-option value="all">None(All Records)</nb-option>
+                                    <nb-option value="course">Course</nb-option>
                                     <nb-option value="subject">Subject</nb-option>
-                                    <nb-option value="subject">Lecture/Class</nb-option>
-                                    <nb-option value="subject">Teacher</nb-option>
-                                    <nb-option value="subject">Lecture Type</nb-option>
+                                    <nb-option value="lecture">Lecture/Class</nb-option>
+                                    <nb-option value="teacher">Teacher</nb-option>
+                                    <nb-option value="lecture_type">Lecture Type</nb-option>
                                 </nb-select>
                             </div>
                         </div>
@@ -25,17 +25,18 @@
                 </ul>
             </div><br>
 
+
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
                             <div class="col-sm-4">
-                                <label>Course Level</label>
+                                <label>Course</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select placeholder="Choose Course Level">
-                                    <nb-option value="advance_level">Advance Level</nb-option>
-                                    <nb-option value="ordinary_level">Ordinary Level</nb-option>
+                                <nb-select placeholder="Choose Course" (selectedChange)="selectCourse($event)">
+                                    <nb-option *ngFor="let course of courses" value={{course.id}}>{{course.name}}
+                                    </nb-option>
                                 </nb-select>
                             </div>
                         </div>

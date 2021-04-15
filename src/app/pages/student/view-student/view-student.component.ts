@@ -52,6 +52,9 @@ export class ViewStudentComponent implements OnInit {
   attendanceStatus;
   dailySchedulesByLec = "default";
 
+  duePayments: [] = [];
+  paidPayments: [] = [];
+
   ngOnInit(): void {
     this.getStudent();
     this.initAddNewLecForm();
@@ -99,15 +102,12 @@ export class ViewStudentComponent implements OnInit {
       this.student = response;
       this.getPaymentsOfStudent(this.studentId);
       this.getLecturesOfStudent(this.studentId);
+      this.getDueMonthlyPayments();
+      this.getPaidMonthlyPayments();
     })
   }
 
-  getPaymentsOfStudent($studentId) {
-    this.studentPaymentsService.getStudentPayments($studentId).subscribe((response) => {
-      console.log(response);
-      this.studentPayments = response;
-    })
-  }
+
 
   getLecturesOfStudent(studentId) {
     this.lectureService.getAllLectureByStudent(studentId).subscribe((response) => {
@@ -196,12 +196,39 @@ export class ViewStudentComponent implements OnInit {
     }
   }
 
+  getPaymentsOfStudent($studentId) {
+    this.studentPaymentsService.getStudentPayments($studentId).subscribe((response) => {
+      console.log(response);
+      this.studentPayments = response;
+    },
+      (error) => {
+        console.log(error);
+      })
+  }
+
   getMonthlyPayments(studentPayment) {
     this.selectedPayment = studentPayment;
     this.studentPaymentsService.getMonthlyPayments(studentPayment.id).subscribe((response) => {
       console.log(response);
       this.monthlyPayments = response;
     })
+  }
+
+  getDueMonthlyPayments() {
+    this.studentPaymentsService.getMonthlyDuePayments(this.studentId).subscribe((response) => {
+      console.log(response);
+      this.duePayments = response;
+    })
+  }
+
+  getPaidMonthlyPayments() {
+    this.studentPaymentsService.getMonthlyPaidPayments(this.studentId).subscribe((response) => {
+      console.log(response);
+      this.paidPayments = response;
+    },
+      (error) => {
+        console.log(error);
+      })
   }
 
   payFee(dialog: TemplateRef<any>, studentPaymentId) {

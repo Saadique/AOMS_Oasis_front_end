@@ -1,7 +1,9 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
+import { CourseService } from 'app/services/course.service';
 import { LocalDataSource } from 'ng2-smart-table';
+import { ReportService } from '../../../services/report.service';
 
 @Component({
   selector: 'ngx-fee-reports',
@@ -9,100 +11,41 @@ import { LocalDataSource } from 'ng2-smart-table';
   styleUrls: ['./fee-reports.component.scss']
 })
 export class FeeReportsComponent implements OnInit {
-  data = [
-    {
-      registration_no: 'r2020110',
-      name: 'R Gulaam',
-      payment_number: 'P-N-20110-12',
-      payment_mode: 'SCHEME',
-      payment_amount: 3000,
-      month: 'November',
-      payment_date: '2020-11-20',
-      teacher_rem_status: 'PAID'
-    },
-    {
-      registration_no: 'r2020011',
-      name: 'M Salaah',
-      payment_number: 'P-N-20011-13',
-      payment_mode: 'SCHEME',
-      payment_amount: 3000,
-      month: 'November',
-      payment_date: '2020-11-20',
-      teacher_rem_status: 'PAID'
-    },
-    {
-      registration_no: 'r2020111',
-      name: 'M Yasith',
-      payment_number: 'P-J-20132-45',
-      payment_mode: 'NORMAL',
-      payment_amount: 1900,
-      month: 'November',
-      payment_date: '2020-11-20',
-      teacher_rem_status: 'PAID'
-    },
-    {
-      registration_no: 'r2020156',
-      name: 'WS Shaan',
-      payment_number: 'P-J-20156-55',
-      payment_mode: 'NORMAL',
-      payment_amount: 1900,
-      month: 'December',
-      payment_date: '2020-12-02',
-      teacher_rem_status: 'PAID'
-    },
-    {
-      registration_no: 'r2020090',
-      name: 'MZM Sadiq',
-      payment_number: 'P-J-20090-12',
-      payment_mode: 'NORMAL',
-      payment_amount: 1700,
-      month: 'January',
-      payment_date: '2020-01-27',
-      teacher_rem_status: 'PAID'
-    },
-  ];
 
   settings = {
     actions: {
       add: false,
       edit: false,
-    },
-    delete: {
-      deleteButtonContent: '<i class="fas fa-info-circle"></i>',
-      confirmDelete: true,
+      delete: false
     },
     columns: {
       registration_no: {
         title: 'STD Reg No.',
         type: 'string',
       },
-      name: {
+      student_name: {
         title: 'STD Name',
         type: 'string',
       },
-      payment_number: {
-        title: 'Payment No.',
-        type: 'string',
-      },
-      payment_mode: {
+      mode: {
         title: 'Payment Mode',
         type: 'number',
       },
-      payment_amount: {
-        title: 'Payment Amount',
+      payment_name: {
+        title: 'Payment Name',
+        type: 'string'
+      },
+      amount: {
+        title: 'Fee Amount',
         type: 'string',
       },
       month: {
-        title: 'Payment Month',
+        title: 'Month',
         type: 'string',
       },
-      payment_date: {
+      date: {
         title: 'Payment Date',
         type: 'string',
-      },
-      teacher_rem_status: {
-        title: 'Teacher Remuneration Status',
-        type: 'string'
       }
     }
   };
@@ -110,23 +53,41 @@ export class FeeReportsComponent implements OnInit {
   source: LocalDataSource = new LocalDataSource();
   students: any[] = [];
   courses: [];
-  courseMediums: [];
+
+  records;
 
   filterParam: string;
 
   constructor(
     private router: Router,
-    private dialogBoxService: NbDialogService
-  ) {
-
-  }
+    private dialogBoxService: NbDialogService,
+    private reportService: ReportService,
+    private courseService: CourseService
+  ) { }
 
   ngOnInit(): void {
-    this.source.load(this.data);
+    this.getAllStudentFeeRecords();
+    this.getAllCourses();
+  }
+
+  initData(data) {
+    this.records = data;
+    this.source.load(this.records);
   }
 
   submitFilter(ref, data) {
 
+  }
+
+  getAllCourses() {
+    this.courseService.getAllCourseMediums().subscribe({
+      next: (response) => {
+        this.courses = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   open(dialog: TemplateRef<any>) {
@@ -140,6 +101,28 @@ export class FeeReportsComponent implements OnInit {
   navigate(event): void {
     let studentId = event.data.id;
     this.router.navigateByUrl(`/pages/student/view/${studentId}`);
+  }
+
+  getAllStudentFeeRecords() {
+    this.reportService.getAllStudentFeeRecords().subscribe({
+      next: (response) => {
+        this.initData(response.records);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+  selectCourse(courseId) {
+    this.reportService.getAllStudentFeeRecordsByCourse(courseId).subscribe({
+      next: (response) => {
+        this.initData(response.records);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
 }

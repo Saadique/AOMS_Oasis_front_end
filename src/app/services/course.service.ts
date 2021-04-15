@@ -1,5 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { LocalStorageService } from '../authentication/services/local-storage/local-storage.service';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 
 @Injectable({
@@ -7,13 +10,37 @@ import { HttpClient } from '@angular/common/http';
 })
 export class CourseService {
 
-  constructor(private http: HttpClient) { }
+
+
+  constructor(
+    private http: HttpClient,
+    private localStorageService: LocalStorageService) { }
 
   rootUrl = 'http://localhost:8000/api/courses';
   domain = 'http://localhost:8000';
 
+  httpOptions;
+  initHttpOptions() {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + window.localStorage.getItem('token-oasis')
+      })
+    };
+  }
+
+  private handleError(error: HttpErrorResponse) {
+    if (error.status == 401) {
+      // window.location.replace("./authentication/login")
+    }
+    return throwError(error);
+  }
+
   createMedium(data) {
-    return this.http.post<any>(`${this.domain}/api/mediums`, data);
+    return this.http.post<any>(`${this.domain}/api/mediums`, data, this.httpOptions).pipe(
+      catchError(this.handleError)
+    );
   }
 
   updateMedium(data, mediumId) {
@@ -49,7 +76,8 @@ export class CourseService {
   }
 
   createCourse(course) {
-    return this.http.post<any>(`http://localhost:8000/api/courses`, course);
+    this.initHttpOptions();
+    return this.http.post<any>(`http://localhost:8000/api/courses`, course, this.httpOptions);
   }
 
   getOneCourse(courseId) {

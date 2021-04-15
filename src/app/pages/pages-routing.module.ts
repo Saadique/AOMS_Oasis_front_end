@@ -6,7 +6,6 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { ECommerceComponent } from './e-commerce/e-commerce.component';
 import { NotFoundComponent } from './miscellaneous/not-found/not-found.component';
 import { RoutesAuthenticationService } from 'app/authentication/services/authentication/routes-authentication.service';
-import { UserManagementComponent } from './user-management/user-management.component';
 
 const routes: Routes = [{
   path: '',

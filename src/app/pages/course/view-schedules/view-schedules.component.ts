@@ -6,6 +6,7 @@ import { LectureService } from '../../../services/lecture.service';
 import { pluck } from 'rxjs/operators';
 import { Alert } from '../create-course/create-course.component';
 import { NbDialogService } from '@nebular/theme';
+import { RoomService } from '../../../services/room.service';
 
 @Component({
   selector: 'ngx-view-schedules',
@@ -16,12 +17,15 @@ export class ViewSchedulesComponent implements OnInit {
 
   constructor(
     private scheduleService: ScheduleService,
+    private roomService: RoomService,
     private fb: FormBuilder,
     private courseService: CourseService,
     private lectureService: LectureService,
     private dialogBoxService: NbDialogService) { }
 
   scheduleForm: FormGroup;
+
+  rooms;
 
   viewScheduleAlert = new Alert();
   deleteAlertMessage = new Alert();
@@ -67,10 +71,11 @@ export class ViewSchedulesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.getAllRooms();
     this.initForm();
     this.isFormValid();
-    this.initScheduleCreateForm();
     this.getAllCourseMediums();
+    this.initScheduleCreateForm();
   }
 
   dateSelectionForm: FormGroup;
@@ -112,14 +117,16 @@ export class ViewSchedulesComponent implements OnInit {
     });
   }
 
-  onCreateClick() {
-
+  onCreateClick(modal) {
+    this.openForm(modal);
     this.displayScheduleForm = true;
     this.isCreateForm = true;
     this.isEditForm = false;
     this.initScheduleCreateForm();
-    console.log("create click");
+  }
 
+  openForm(dialog: TemplateRef<any>) {
+    this.dialogBoxService.open(dialog);
   }
 
   // @ViewChild('scheduleForm') public scheduleForm2: HTMLElement;
@@ -129,7 +136,8 @@ export class ViewSchedulesComponent implements OnInit {
   //   console.log("Scrll");
   // }
 
-  onEditClick(schedule) {
+  onEditClick(schedule, modal) {
+    this.openForm(modal);
     this.isEditForm = true;
     this.isCreateForm = false;
     this.displayScheduleForm = true;
@@ -172,7 +180,7 @@ export class ViewSchedulesComponent implements OnInit {
     );
   }
 
-  updateSchedule() {
+  updateSchedule(modal) {
     console.log(this.schedule);
     if (this.scheduleForm.valid) {
       let data = {
@@ -186,6 +194,8 @@ export class ViewSchedulesComponent implements OnInit {
         {
           next: (response) => {
             console.log(response);
+            modal.close();
+            this.scheduleForm.reset();
             this.setAlert('success', 'Updated Schedule');
             this.getAllSchedulesByDate(this.dateSelectionForm.value.date);
           },
@@ -203,13 +213,13 @@ export class ViewSchedulesComponent implements OnInit {
     }
   }
 
-  createNewOneTimeSchedule() {
+  createNewOneTimeSchedule(modal) {
     if (this.scheduleForm.valid) {
       let data = {
         'day': 'Wednesday',
         'date': this.dateSelectionForm.value.date,
-        'start_time': this.scheduleForm.value.start_time,
-        'end_time': this.scheduleForm.value.end_time,
+        'start_time': this.scheduleForm.value.start_time + ":00",
+        'end_time': this.scheduleForm.value.end_time + ":00",
         'room_id': this.scheduleForm.value.room_id,
         'lecture_id': this.scheduleForm.value.lecture_id
       }
@@ -218,12 +228,13 @@ export class ViewSchedulesComponent implements OnInit {
         {
           next: (response) => {
             console.log(response);
+            modal.close();
+            this.scheduleForm.reset();
             this.setAlert('success', 'One time schedule created successfully');
             this.getAllSchedulesByDate(this.dateSelectionForm.value.date);
           },
           error: (err) => {
-            // this.alreadyExists = true;
-            // this.setAlert('Error', err.error.message);
+            console.log(err);
             if (err.error.code == 400) {
               this.setAlert('Error', 'This time slot is not free');
             }
@@ -244,6 +255,19 @@ export class ViewSchedulesComponent implements OnInit {
     }
   }
 
+  getAllRooms() {
+    this.roomService.getAllRooms().subscribe(
+      {
+        next: (response) => {
+          this.rooms = response;
+        },
+        error: (err) => {
+          console.log(err.error);
+        }
+      }
+    )
+  }
+
   getHour(time) {
     var date = new Date("May 1,2019 " + time);
     return date.getHours();
@@ -254,11 +278,13 @@ export class ViewSchedulesComponent implements OnInit {
       {
         next: (response) => {
           this.schedules = response;
+          console.log(this.schedules);
         },
         error: (err) => {
           if (err.error.code == 400) {
             console.log(err.error);
           }
+          console.log(err);
         }
       }
     )

@@ -3,6 +3,7 @@ import { CourseService } from '../../../services/course.service';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { pluck } from 'rxjs/operators';
 import { LoginServiceService } from '../../../authentication/services/login/login-service.service';
+import { Router } from '@angular/router';
 
 
 @Injectable({
@@ -25,7 +26,8 @@ export class CreateCourseComponent implements OnInit {
 
   constructor(
     private courseService: CourseService,
-    private loginService: LoginServiceService
+    private loginService: LoginServiceService,
+    private router: Router
   ) { }
 
   createCourseAlert = new Alert();
@@ -93,6 +95,9 @@ export class CreateCourseComponent implements OnInit {
             if (err.error.code == 400) {
               // this.alreadyExists = true;
               this.setAlert('Error', err.error.message);
+            }
+            if (err.error.code == 401) {
+              this.router.navigateByUrl('/authentication/login');
             }
           }
         }

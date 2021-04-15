@@ -144,6 +144,8 @@ export class LectureOperationsComponent implements OnInit {
       subject_id: [lecture.subject_id, Validators.required],
       teacher_id: [lecture.teacher_id, Validators.required]
     });
+    this.selectedSubjectId = lecture.subject_id;
+    this.selectedTeacherId = lecture.teacher_id;
   }
 
 

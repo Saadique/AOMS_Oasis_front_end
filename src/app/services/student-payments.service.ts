@@ -24,12 +24,12 @@ export class StudentPaymentsService {
     return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/payable/${studentPaymentId}`);
   }
 
-  getMonthlyPaidPayments(studentPaymentId) {
-    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/paid/${studentPaymentId}`);
+  getMonthlyPaidPayments(studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/paid/${studentId}`);
   }
 
-  getMonthlyDuePayments(studentPaymentId) {
-    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/due/${studentPaymentId}`);
+  getMonthlyDuePayments(studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/due/${studentId}`);
   }
 
   payFee(monthlyPaymentId, data) {

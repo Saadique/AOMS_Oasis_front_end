@@ -19,9 +19,6 @@ export class LocalStorageService {
   }
 
   getToken(): string {
-    if (window.localStorage.getItem('token-oasis') == null) {
-      this.router.navigate(['/login']);
-    }
     return window.localStorage.getItem('token-oasis');
   }
 
