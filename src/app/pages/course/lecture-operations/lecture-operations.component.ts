@@ -1,6 +1,7 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
+import { LocalStorageService } from 'app/authentication/services/local-storage/local-storage.service';
 import { pluck } from 'rxjs/operators';
 import { CourseService } from '../../../services/course.service';
 import { LectureService } from '../../../services/lecture.service';
@@ -47,10 +48,19 @@ export class LectureOperationsComponent implements OnInit {
     private teacherService: TeacherService,
     private dialogBoxService: NbDialogService,
     private fb: FormBuilder,
+    private localStorageService: LocalStorageService
   ) { }
+
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+  }
 
   ngOnInit(): void {
     this.getAllCourses();
+    this.getUserRoleId();
   }
 
   getAllCourses() {

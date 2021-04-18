@@ -10,14 +10,14 @@
                 </nb-card-header>
                 <nb-list>
                     <nb-list-item *ngFor="let notification of notifications">
-                        <ng-container *ngIf="notification.message=='create'">
+                        <ng-container *ngIf="notification.action=='create'">
                             A New lecture for {{notification.lecture_name}} has been created at <br>
                             Room - {{notification.room_name}} on <br>
                             Date - {{notification.date}} <br>
                             From - {{notification.start_time}} <br>
                             To - {{notification.end_time}}
                         </ng-container>
-                        <ng-container *ngIf="notification.message=='update'">
+                        <ng-container *ngIf="notification.action=='update'">
                             A New lecture for {{notification.lecture_name}} has been created at <br>
                             Room - {{notification.room_name}} on <br>
                             Date - {{notification.date}} <br>

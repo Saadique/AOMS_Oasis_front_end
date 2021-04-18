@@ -2,9 +2,22 @@
     <div [ngClass]="decideClass()">
         <nb-card size="flexible">
             <nb-card-body>
-                <nb-stepper #stepper>
+                <nb-card-header>
+                    <div class="animated fadeIn">
+                        <div class="alert alert-danger" role="alert" *ngIf="studentAlert.status=='error'">
+                            {{ studentAlert.message }}
+                        </div>
+                        <div class="alert alert-warning" role="alert" *ngIf="studentAlert.status=='warning'">
+                            {{ studentAlert.message }}
+                        </div>
+                        <div class="alert alert-success" role="alert" *ngIf="studentAlert.status=='success'">
+                            {{ studentAlert.message }}
+                        </div>
+                    </div>
+                </nb-card-header>
+                <nb-stepper #stepper class="col-md-8 offset-md-2">
                     <!-- Create Student -->
-                    <nb-step [stepControl]="studentForm" label="First step">
+                    <nb-step [stepControl]="studentForm" label="Student Details">
                         <form [formGroup]="studentForm" (ngSubmit)="onFirstSubmit()" class="step-container">
                             <h1><small>Fill Up Student Details</small></h1>
                             <br>
@@ -13,20 +26,18 @@
                             <div class="form-group row">
                                 <label for="studentName" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Student Name</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <input type="text" formControlName="name" nbInput fullWidth id="studentName"
-                                        style="font-size: 12.75px;" placeholder="Student Name"
-                                        [ngClass]="{'form-control-danger': studentForm.invalid && (studentForm.dirty || studentForm.touched)}">
+                                        style="font-size: 12.75px;" placeholder="Student Name">
                                 </div>
                             </div><br>
 
                             <div class="form-group row">
                                 <label for="email" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Student Email</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <input type="text" formControlName="email" nbInput fullWidth id="email"
-                                        style="font-size: 12.75px;" placeholder="Email Address"
-                                        [ngClass]="{'form-control-danger': studentForm.invalid && (studentForm.dirty || studentForm.touched)}">
+                                        style="font-size: 12.75px;" placeholder="Email Address">
                                 </div>
                             </div><br>
 
@@ -34,22 +45,9 @@
                             <div class="form-group row">
                                 <label for="studentName" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Student School Name</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <input type="text" formControlName="schoolName" nbInput fullWidth id="schoolName"
-                                        style="font-size: 12.75px;" placeholder="Student School Name"
-                                        [ngClass]="{'form-control-danger': studentForm.invalid && (studentForm.dirty || studentForm.touched)}">
-                                </div>
-                            </div><br>
-
-                            <!-- student mobile parent number -->
-                            <div class="form-group row">
-                                <label for="parentContact" class="label col-sm-4 form-control-label"
-                                    style="font-size: 12.75px;">Enter Parent/Gurdian Contact Number</label>
-                                <div class="col-sm-8">
-                                    <input type="text" formControlName="parentContact" nbInput fullWidth
-                                        id="parentContact" style="font-size: 12.75px;"
-                                        placeholder="Parent/Gurdian Contact Number"
-                                        [ngClass]="{'form-control-danger': studentForm.invalid && (studentForm.dirty || studentForm.touched)}">
+                                        style="font-size: 12.75px;" placeholder="Student School Name">
                                 </div>
                             </div><br>
 
@@ -57,10 +55,9 @@
                             <div class="form-group row">
                                 <label for="mobileNo" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Student Mobile Number</label>
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <input type="text" formControlName="mobileNo" nbInput fullWidth id="mobileNo"
-                                        style="font-size: 12.75px;" placeholder="Student Mobile Number"
-                                        [ngClass]="{'form-control-danger': studentForm.invalid && (studentForm.dirty || studentForm.touched)}">
+                                        style="font-size: 12.75px;" placeholder="Student Mobile Number">
                                 </div>
                             </div><br>
 
@@ -69,8 +66,8 @@
                                     style="font-size: 12.75px;">Select Student Course Type</label>
 
                                 <div class="col-sm-2">
-                                    <nb-select select-min-width formControlName="student_type"
-                                        placeholder="Select Course Type" (selectedChange)="courseTypeSelection($event)">
+                                    <nb-select formControlName="student_type" placeholder="Select Course Type"
+                                        (selectedChange)="courseTypeSelection($event)">
                                         <nb-option value="advance_level">Advance Level</nb-option>
                                         <nb-option value="ordinary_level">Ordinary Level</nb-option>
                                     </nb-select>
@@ -80,7 +77,7 @@
                                 <label for="subjectName" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Select Super Course</label>
 
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <select id="inputState" class="form-control" formControlName="super_course"
                                         placeholder="Select Super Course"
                                         (change)="superCourseSelection($event.target.value)">
@@ -95,7 +92,7 @@
                                 <label for="subjectName" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Select Course </label>
 
-                                <div class="col-sm-8">
+                                <div class="col-sm-5">
                                     <select id="courseMedium" class="form-control" formControlName="course"
                                         placeholder="Select Super Course"
                                         (change)="courseSelection($event.target.value)"
@@ -113,7 +110,7 @@
 
 
                     <!-- Create Schedule -->
-                    <nb-step [stepControl]="studLecturesForm" label="Second step">
+                    <nb-step [stepControl]="studLecturesForm" label="Add Lectures">
                         <form [formGroup]="studLecturesForm" (ngSubmit)="onSecondSubmit()" class="step-container">
                             <br>
                             <div class="row">
@@ -160,7 +157,7 @@
                                     </nb-card-body>
                                 </nb-card>
                             </div><br><br>
-
+                            <input type="hidden" formControlName="hidden">
                             <button nbButton nbStepperPrevious type="button">prev</button>
                             <button nbButton nbStepperNext type="button" (click)="onSecondSubmit()">Next</button>
                         </form>
@@ -263,8 +260,8 @@
 
                     <nb-step [stepControl]="studLecturesForm" [hidden]="true" label="Second step">
                         <div class="step-container">
-                            <h3>Wizard completed!</h3>
-                            <button nbButton (click)="stepper.reset()" type="button">Try again</button>
+                            <h3>Student Registartion Successfully</h3>
+                            <button nbButton (click)="stepper.reset()" type="button">Register Student</button>
                         </div>
                     </nb-step>
 

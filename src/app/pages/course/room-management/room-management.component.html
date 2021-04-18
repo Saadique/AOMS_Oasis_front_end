@@ -84,7 +84,7 @@
                             <th>Description</th>
                             <th>Status</th>
                             <th>Edit</th>
-                            <th>Delete</th>
+                            <th *ngIf="role=='Admin'">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -94,7 +94,7 @@
                             <td>{{room.description}}</td>
                             <td>{{room.status}}</td>
                             <td><button class="btn btn-primary" (click)="editClick(room)">Edit</button></td>
-                            <td><button class="btn btn-warning"> Delete</button></td>
+                            <td *ngIf="role=='Admin'"><button class="btn btn-warning"> Delete</button></td>
                         </tr>
                     </tbody>
                 </table>

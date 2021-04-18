@@ -672,6 +672,16 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    title: 'Medium',
+    icon: 'book-outline',
+    children: [
+      {
+        title: 'Create Medium',
+        link: '/pages/course/medium/create'
+      }
+    ]
+  },
+  {
     title: 'Courses',
     icon: 'book-outline',
     children: [
@@ -702,6 +712,10 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create Lecture',
         link: '/pages/course/lecture/create'
+      },
+      {
+        title: 'Edit & Delete Lectures',
+        link: '/pages/course/lecture/edit'
       }
     ]
   },
@@ -744,14 +758,6 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Fee Management',
-    group: true,
-  },
-  {
-    title: 'Payment Scheme Operations',
-    link: '/pages/student/payment-scheme/create'
-  },
-  {
     title: 'Teacher Management',
     group: true,
   },
@@ -762,18 +768,6 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'All Teacher Operations',
     link: '/pages/teachers/view'
-  },
-  {
-    title: 'Report Generation',
-    group: true,
-  },
-  {
-    title: 'Student Fee Reports',
-    link: '/pages/reports/fee'
-  },
-  {
-    title: 'Teacher Reports',
-    link: '/pages/reports/teacher'
   }
 ];
 

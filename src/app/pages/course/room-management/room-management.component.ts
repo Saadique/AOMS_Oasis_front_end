@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { LocalStorageService } from 'app/authentication/services/local-storage/local-storage.service';
 import { RoomService } from '../../../services/room.service';
 import { Alert } from '../create-course/create-course.component';
 
@@ -14,14 +15,23 @@ export class RoomManagementComponent implements OnInit {
   roomUpdationForm: FormGroup;
 
   constructor(
-    private roomService: RoomService
+    private roomService: RoomService,
+    private localStorageService: LocalStorageService
   ) { }
 
   createCourseAlert = new Alert();
   editFormDisplay: boolean = false;
   rooms;
 
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+  }
+
   ngOnInit(): void {
+    this.getUserRoleId();
     this.initForm();
     this.getAllRooms();
   }

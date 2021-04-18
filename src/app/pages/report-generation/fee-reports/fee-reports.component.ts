@@ -4,6 +4,10 @@ import { NbDialogService } from '@nebular/theme';
 import { CourseService } from 'app/services/course.service';
 import { LocalDataSource } from 'ng2-smart-table';
 import { ReportService } from '../../../services/report.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable'
+import { Alert } from '../../course/create-course/create-course.component';
 
 @Component({
   selector: 'ngx-fee-reports',
@@ -56,7 +60,27 @@ export class FeeReportsComponent implements OnInit {
 
   records;
 
-  filterParam: string;
+  filter = {
+    'filterOption': '',
+    'courseId': '',
+    'lectureId': '',
+    'teacherId': '',
+    'level': '',
+    'reportTimeSpan': '',
+    'by_month': {
+      'year': '',
+      'month': '',
+    },
+    'by_range': {
+      'from_date': '',
+      'to_date': ''
+    }
+  }
+
+  filterOption: string;
+  timeSpan: string;
+
+  studentFeeReportAlert = new Alert();
 
   constructor(
     private router: Router,
@@ -66,7 +90,7 @@ export class FeeReportsComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.getAllStudentFeeRecords();
+    this.loadInitialData();
     this.getAllCourses();
   }
 
@@ -75,8 +99,11 @@ export class FeeReportsComponent implements OnInit {
     this.source.load(this.records);
   }
 
-  submitFilter(ref, data) {
-
+  //alert set
+  setAlert(alertStatus, alertMessage): void {
+    this.studentFeeReportAlert.status = alertStatus;
+    this.studentFeeReportAlert.message = alertMessage;
+    setTimeout(() => { this.studentFeeReportAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
   getAllCourses() {
@@ -103,7 +130,17 @@ export class FeeReportsComponent implements OnInit {
     this.router.navigateByUrl(`/pages/student/view/${studentId}`);
   }
 
-  getAllStudentFeeRecords() {
+  selectFilterOption(filterOption) {
+    console.log(this.filter);
+    this.filterOption = filterOption;
+  }
+
+  selectTimeSpan(timeSpan) {
+    this.timeSpan = timeSpan;
+    console.log(this.filter);
+  }
+
+  loadInitialData() {
     this.reportService.getAllStudentFeeRecords().subscribe({
       next: (response) => {
         this.initData(response.records);
@@ -115,14 +152,149 @@ export class FeeReportsComponent implements OnInit {
   }
 
   selectCourse(courseId) {
-    this.reportService.getAllStudentFeeRecordsByCourse(courseId).subscribe({
-      next: (response) => {
-        this.initData(response.records);
-      },
-      error: (error) => {
-        console.log(error);
-      }
+
+  }
+
+
+  makePDF() {
+    let recordsArray: any[] = [];
+    for (let i = 0; i < this.records.length; i++) {
+      let dataArray: any[] = [];
+      const record = this.records[i];
+      dataArray.push(record.registration_no);
+      dataArray.push(record.student_name);
+      dataArray.push(record.mode);
+      dataArray.push(record.payment_name);
+      dataArray.push(record.amount);
+      dataArray.push(record.month);
+      dataArray.push(record.date);
+      recordsArray.push(dataArray);
+    }
+
+    const pdf = new jsPDF();
+    autoTable(pdf, {
+      head: [['STD Reg No.', 'STD Name', 'Payment Mode', 'Payment Name', 'Fee Amount', 'Month', 'Payment Date']],
+      body: recordsArray,
     })
+    pdf.save();
+  }
+
+  submitFilter(modal, data) {
+    if (this.filter.filterOption != '') {
+      switch (this.filter.filterOption) {
+        case 'all':
+          if (this.filter.reportTimeSpan != '') {
+            this.getAllStudentFeeRecords(modal);
+          } else {
+            this.setAlert('error', 'Please Select Report Time Span');
+          }
+          break;
+        case 'course':
+          if (this.filter.courseId != '') {
+            if (this.filter.reportTimeSpan != '') {
+              this.getRecordsByCourse(modal);
+            } else {
+              this.setAlert('error', 'Please Select Report Time Span');
+            }
+          } else {
+            this.setAlert('error', 'Please Select A Course');
+          }
+          break;
+        case 'lecture':
+          if (this.filter.lectureId != '') {
+            if (this.filter.reportTimeSpan != '') {
+              this.getAllStudentFeeRecords(modal);
+            } else {
+              this.setAlert('error', 'Please Select Report Time Span');
+            }
+          } else {
+            this.setAlert('error', 'Please Select A Lecture');
+          }
+          break;
+        case 'teacher':
+          if (this.filter.teacherId != '') {
+            if (this.filter.reportTimeSpan != '') {
+              this.getAllStudentFeeRecords(modal);
+            } else {
+              this.setAlert('error', 'Please Select Report Time Span');
+            }
+          } else {
+            this.setAlert('error', 'Please Select A Teacher');
+          }
+          break;
+        case 'level':
+          if (this.filter.level != '') {
+            if (this.filter.reportTimeSpan != '') {
+              this.getAllStudentFeeRecords(modal);
+            } else {
+              this.setAlert('error', 'Please Select Report Time Span');
+            }
+          } else {
+            this.setAlert('error', 'Please Select A Level');
+          }
+      }
+    } else {
+      this.setAlert('error', 'Please Select A Filter Option');
+    }
+  }
+
+  getAllStudentFeeRecords(modal) {
+    switch (this.filter.reportTimeSpan) {
+      case 'all_time':
+        this.reportService.getAllStudentFeeRecords().subscribe({
+          next: (response) => {
+            this.initData(response.records);
+            modal.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+        break;
+      case 'by_month':
+        if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+
+        } else {
+          this.setAlert('error', 'Please Select An Year And A Month');
+        }
+        break;
+      case 'by_range':
+        if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+
+        } else {
+          this.setAlert('error', 'Please Select A Date Frame');
+        }
+    }
+  }
+
+
+  getRecordsByCourse(modal) {
+    switch (this.filter.reportTimeSpan) {
+      case 'all_time':
+        this.reportService.getAllStudentFeeRecordsByCourse(this.filter.courseId).subscribe({
+          next: (response) => {
+            this.initData(response.records);
+            modal.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+        break;
+      case 'by_month':
+        if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+
+        } else {
+          this.setAlert('error', 'Please Select An Year And A Month');
+        }
+        break;
+      case 'by_range':
+        if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+
+        } else {
+          this.setAlert('error', 'Please Select A Date Frame');
+        }
+    }
   }
 
 }

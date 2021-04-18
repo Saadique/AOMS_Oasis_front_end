@@ -7,6 +7,7 @@ import { LectureService } from '../../../services/lecture.service';
 import { ScheduleService } from '../../../services/schedule.service';
 import { Alert } from '../create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
+import { RoomService } from '../../../services/room.service';
 
 @Injectable({
   providedIn: 'root'
@@ -32,26 +33,79 @@ export class CreateLectureComponent implements OnInit {
   subjects: [];
   teachers;
 
+  rooms;
+
   createdLecture = null;
 
 
   scheduleStepper: boolean = false;
 
   constructor(
-    public createLectureAlert: Alert,
     private fb: FormBuilder,
     private courseService: CourseService,
     private subjectService: SubjectService,
     private lectureService: LectureService,
     private scheduleService: ScheduleService,
-    private teacherService: TeacherService) { }
+    private teacherService: TeacherService,
+    private roomService: RoomService) { }
+
+  createLectureAlert = new Alert();
 
   ngOnInit(): void {
     this.initLectureForm();
     this.initPaymentForm();
     this.initScheduleForm();
-    this.getAllActiveTeachers()
+    this.getTodaysDate();
+    this.getAllActiveTeachers();
+    this.getAllRooms();
   }
+
+  getAllRooms() {
+    this.roomService.getAllRooms().subscribe({
+      next: (response) => {
+        this.rooms = response;
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+  todaysDate;
+  getTodaysDate() {
+    var today: any = new Date();
+    var dd: any = today.getDate();
+    var mm: any = today.getMonth() + 1; //January is 0!
+    var yyyy: any = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+
+    this.todaysDate = yyyy + '-' + mm + '-' + dd;
+  }
+
+  // initLectureForm() {
+  //   this.lectureForm = this.fb.group({
+  //     name: ['', [Validators.required]],
+  //     course_id: ['', Validators.required],
+  //     course_medium_id: ['', Validators.required],
+  //     type: ['', Validators.required],
+  //     class_type: ['', Validators.required],
+  //     subject_id: ['', Validators.required],
+  //     teacher_id: ['', Validators.required]
+  //   });
+  // }
+
+  // initPaymentForm() {
+  //   this.paymentForm = this.fb.group({
+  //     student_fee: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+  //     fixed_institute_amount: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+  //     teacher_percentage: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(2)]]
+  //   });
+  // }
 
   initLectureForm() {
     this.lectureForm = this.fb.group({
@@ -67,15 +121,15 @@ export class CreateLectureComponent implements OnInit {
 
   initPaymentForm() {
     this.paymentForm = this.fb.group({
-      student_fee: ['', Validators.required],
+      student_fee: ['', null],
       fixed_institute_amount: ['', null],
-      teacher_percentage: ['', null],
+      teacher_percentage: ['', null]
     });
   }
 
   initScheduleForm() {
     this.scheduleForm = this.fb.group({
-      start_time: ['', Validators.required],
+      start_time: ['', [Validators.required]],
       end_time: ['', Validators.required],
       schedule_start_date: ['', Validators.required],
       schedule_end_date: ['', Validators.required],
@@ -164,16 +218,21 @@ export class CreateLectureComponent implements OnInit {
     }
   }
 
+  weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
   addSchedule(lecture_id) {
     if (this.scheduleForm.valid) {
+      let start_date = new Date(this.scheduleForm.value.schedule_start_date);
+      let day = this.weekdays[start_date.getDay()];
       let data = {
-        'day': 'Wednesday',
+        'day': day,
         'schedule_start_date': this.scheduleForm.value.schedule_start_date,
         'schedule_end_date': this.scheduleForm.value.schedule_end_date,
-        'start_time': this.scheduleForm.value.start_time,
-        'end_time': this.scheduleForm.value.end_time,
+        'start_time': this.scheduleForm.value.start_time + ":00",
+        'end_time': this.scheduleForm.value.end_time + ":00",
         'room_id': this.scheduleForm.value.room_id,
-        'lecture_id': lecture_id
+        'lecture_id': lecture_id,
+        'teacher_id': this.lectureForm.value.teacher_id,
       }
       console.log(data);
       this.scheduleService.createSchedule(data).pipe(pluck('data')).subscribe(
@@ -188,6 +247,7 @@ export class CreateLectureComponent implements OnInit {
               // this.alreadyExists = true;
               this.setAlert('Error', err.error.message);
             }
+            console.log(err);
           }
         }
       )
@@ -201,14 +261,27 @@ export class CreateLectureComponent implements OnInit {
     this.lectureForm.markAsDirty();
   }
 
+
   onSecondSubmit() {
     if (!this.paymentForm.valid) {
-      this.setAlert('warning', 'Please fill all required fields');
-    }
-    this.scheduleStepper = true;
-    console.log(this.scheduleStepper);
+      if (this.paymentForm.get('teacher_percentage').hasError('maxlength')) {
+        this.setAlert('warning', 'Percentage Should be numbered value less than 100');
+      }
+      if (this.paymentForm.get('student_fee').hasError('required')) {
+        this.setAlert('warning', 'Please fill all fields');
+      }
+      if (this.paymentForm.get('fixed_institute_amount').hasError('required')) {
+        this.setAlert('warning', 'Please fill all fields');
+      }
+      if (this.paymentForm.get('teacher_percentage').hasError('required')) {
+        this.setAlert('warning', 'Please fill all fields');
+      }
+    } else {
 
-    this.paymentForm.markAsDirty();
+      this.scheduleStepper = true;
+      console.log(this.scheduleStepper);
+      this.paymentForm.markAsDirty();
+    }
   }
 
   onThirdSubmit() {

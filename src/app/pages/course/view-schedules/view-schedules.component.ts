@@ -188,6 +188,7 @@ export class ViewSchedulesComponent implements OnInit {
         'start_time': this.scheduleForm.value.start_time,
         'end_time': this.scheduleForm.value.end_time,
         'room_id': this.scheduleForm.value.room_id,
+        'lecture_id': this.schedule.lecture.id
       }
       console.log(data);
       this.scheduleService.updateDailySchedule(data, this.schedule.id).pipe(pluck('data')).subscribe(
@@ -205,6 +206,7 @@ export class ViewSchedulesComponent implements OnInit {
             if (err.error.code == 400) {
               this.setAlert('Error', 'This time slot is not free');
             }
+            console.log(err);
           }
         }
       )

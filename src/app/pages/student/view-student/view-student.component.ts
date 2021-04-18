@@ -11,6 +11,7 @@ import { Alert } from '../../course/create-course/create-course.component';
 import { StudentPaymentsService } from '../../../services/student-payments.service';
 import { ScheduleService } from '../../../services/schedule.service';
 import { AttendanceService } from '../../../services/attendance.service';
+import { LocalStorageService } from 'app/authentication/services/local-storage/local-storage.service';
 
 @Component({
   selector: 'ngx-view-student',
@@ -29,7 +30,8 @@ export class ViewStudentComponent implements OnInit {
     private subjectService: SubjectService,
     private scheduleService: ScheduleService,
     private attendanceService: AttendanceService,
-    private dialogBoxService: NbDialogService) { }
+    private dialogBoxService: NbDialogService,
+    private localStorageService: LocalStorageService) { }
 
   lecturesOfStudent: any[] = [];
   addLecAlert = new Alert();
@@ -55,8 +57,16 @@ export class ViewStudentComponent implements OnInit {
   duePayments: [] = [];
   paidPayments: [] = [];
 
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+  }
+
   ngOnInit(): void {
     this.getStudent();
+    this.getUserRoleId();
     this.initAddNewLecForm();
   }
 

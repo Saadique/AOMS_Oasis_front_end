@@ -3,6 +3,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
 import { pluck } from 'rxjs/operators';
 import { CourseService } from '../../../services/course.service';
+import { LocalStorageService } from '../../../authentication/services/local-storage/local-storage.service';
 
 @Component({
   selector: 'ngx-edit-courses',
@@ -14,13 +15,26 @@ export class EditCoursesComponent implements OnInit {
   allCourses;
   courseMediums: [] = [];
 
+
   editCourseForm: FormGroup;
 
-  constructor(private courseService: CourseService, private dialogBoxService: NbDialogService) { }
+  constructor(
+    private courseService: CourseService,
+    private dialogBoxService: NbDialogService,
+    private localStorageService: LocalStorageService) { }
+
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+  }
 
   ngOnInit(): void {
     this.getAllCourses();
+    this.getUserRoleId();
   }
+
 
   open(dialog: TemplateRef<any>) {
     this.dialogBoxService.open(dialog);

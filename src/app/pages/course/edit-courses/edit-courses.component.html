@@ -1,78 +1,77 @@
 <nb-card size="flexible">
-    <nb-card-header>
-    </nb-card-header>
-    <nb-card-body>
-        <nb-tabset fullWidth>
-            <nb-tab tabTitle="Edit Super Course">
-                <div class="row">
-                    <table class="table table-bordered" *ngIf="allCourses.length>0">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <!-- <th>Number Of Students</th> -->
-                                <th>Course Mediums</th>
-                                <th>Edit</th>
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let course of allCourses">
-                                <td>{{course.course.name}}</td>
-                                <!-- <td>{{course.course.no_of_students}}</td> -->
-                                <td>
-                                    <ul *ngFor="let courseM of course.course_mediums">
-                                        <li>{{courseM.name}}</li>
-                                    </ul>
-                                </td>
-                                <td><button nbButton status="success" (click)="editClickCourse(course)">Edit</button>
-                                </td>
-                                <td><button nbButton status="warning">Delete</button></td>
-                            </tr>
-                        </tbody>
-                        <div *ngIf="allCourses.length==0">
-                            No courses with mediums
-                        </div>
-                    </table>
-                </div>
-            </nb-tab>
-            <nb-tab tabTitle="Edit Course (with medium)">
-                <div class="row">
-                    <label class="col-sm-3" for="name" class="label col-sm-3 form-control-label"
-                        style="font-size: 12.75px;">Select
-                        Course</label>
-                    <nb-select class="col-sm-4" (selectedChange)="superCourseSelection($event)"
-                        placeholder="Please Select Lesson">
-                        <nb-option *ngFor="let course of allCourses" value={{course.course.id}}>{{course.course.name}}
-                        </nb-option>
-                    </nb-select>
-                    <br>
-                </div> <br>
-                <div class="row">
-                    <table class="table table-bordered" *ngIf="courseMediums.length>0">
-                        <thead>
-                            <tr>
-                                <th>Course Name</th>
-                                <!-- <th>Number Of Students</th> -->
-                                <th>Delete</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let courseM of courseMediums">
-                                <td>{{courseM.name}}</td>
-                                <!-- <td>{{courseM.no_of_students}}</td> -->
-                                <td><button nbButton status="warning"
-                                        (click)="deleteClickCourseMedium(courseM)">Delete</button></td>
-                            </tr>
-                        </tbody>
-                        <div *ngIf="courseMediums.length==0">
-                            No courses with mediums
-                        </div>
-                    </table>
-                </div>
+  <nb-card-header>
+  </nb-card-header>
+  <nb-card-body>
+    <nb-tabset fullWidth>
+      <nb-tab tabTitle="Edit Super Course">
+        <div class="row">
+          <table class="table table-bordered" *ngIf="allCourses.length>0">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <!-- <th>Number Of Students</th> -->
+                <th>Course Mediums</th>
+                <th>Edit</th>
+                <th *ngIf="role=='Admin'">Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let course of allCourses">
+                <td>{{course.course.name}}</td>
+                <!-- <td>{{course.course.no_of_students}}</td> -->
+                <td>
+                  <ul *ngFor="let courseM of course.course_mediums">
+                    <li>{{courseM.name}}</li>
+                  </ul>
+                </td>
+                <td><button nbButton status="success" (click)="editClickCourse(course)">Edit</button>
+                </td>
+                <td *ngIf="role=='Admin'"><button nbButton status="warning">Delete</button></td>
+              </tr>
+            </tbody>
+            <div *ngIf="allCourses.length==0">
+              No courses with mediums
+            </div>
+          </table>
+        </div>
+      </nb-tab>
+      <nb-tab tabTitle="Edit Course (with medium)">
+        <div class="row">
+          <label class="col-sm-3" for="name" class="label col-sm-3 form-control-label"
+            style="font-size: 12.75px;">Select
+            Course</label>
+          <nb-select class="col-sm-4" (selectedChange)="superCourseSelection($event)"
+            placeholder="Please Select Lesson">
+            <nb-option *ngFor="let course of allCourses" value={{course.course.id}}>{{course.course.name}}
+            </nb-option>
+          </nb-select>
+          <br>
+        </div> <br>
+        <div class="row">
+          <table class="table table-bordered" *ngIf="courseMediums.length>0">
+            <thead>
+              <tr>
+                <th>Course Name</th>
+                <!-- <th>Number Of Students</th> -->
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let courseM of courseMediums">
+                <td>{{courseM.name}}</td>
+                <!-- <td>{{courseM.no_of_students}}</td> -->
+                <td><button nbButton status="warning" (click)="deleteClickCourseMedium(courseM)">Delete</button></td>
+              </tr>
+            </tbody>
+            <div *ngIf="courseMediums.length==0">
+              No courses with mediums
+            </div>
+          </table>
+        </div>
 
-            </nb-tab>
-        </nb-tabset>
-    </nb-card-body>
+      </nb-tab>
+    </nb-tabset>
+  </nb-card-body>
 </nb-card>
 
 <!-- <ng-template #super_course_edit let-data let-refEdit="dialogRef">

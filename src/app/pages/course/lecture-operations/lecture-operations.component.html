@@ -30,7 +30,7 @@
                             <th>Class Level</th>
                             <th>Status</th>
                             <th>Edit</th>
-                            <th>Delete</th>
+                            <th *ngIf="role=='Admin'">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -47,10 +47,11 @@
                             <td><button nbButton status="info"
                                     (click)="editClickLecture(selectedLecture, lectureEdit)">Edit</button>
                             </td>
-                            <td *ngIf="selectedLecture.status=='active'"><button nbButton status="warning"
-                                    (click)="deleteClick(selectedLecture)">Delete &nbsp;&nbsp;</button></td>
-                            <td *ngIf="selectedLecture.status=='deleted'"><button nbButton status="success"
-                                    (click)="activateClick(selectedLecture)">Activate</button></td>
+                            <td *ngIf="selectedLecture.status=='active' && role=='Admin'"><button nbButton
+                                    status="warning" (click)="deleteClick(selectedLecture)">Delete &nbsp;&nbsp;</button>
+                            </td>
+                            <td *ngIf="selectedLecture.status=='deleted'  && role=='Admin'"><button nbButton
+                                    status="success" (click)="activateClick(selectedLecture)">Activate</button></td>
                         </tr>
                     </tbody>
                     <div *ngIf="selectedLecture==null">
@@ -70,7 +71,7 @@
                             <th>Room</th>
                             <th>Status</th>
                             <th>Edit</th>
-                            <th>Delete</th>
+                            <th *ngIf="role=='Admin'">Delete</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -90,10 +91,11 @@
                             <td><button nbButton status="info"
                                     (click)="editClickSchedule(selectedSchedule, lectureEdit)">Edit</button>
                             </td>
-                            <td *ngIf="selectedSchedule.status=='active'"><button nbButton status="warning"
-                                    (click)="deleteClick(selectedSchedule)">Delete &nbsp;&nbsp;</button></td>
-                            <td *ngIf="selectedSchedule.status=='deleted'"><button nbButton status="success"
-                                    (click)="activateClick(selectedSchedule)">Activate</button></td>
+                            <td *ngIf="selectedSchedule.status=='active' && role=='Admin'"><button nbButton
+                                    status="warning" (click)="deleteClick(selectedSchedule)">Delete
+                                    &nbsp;&nbsp;</button></td>
+                            <td *ngIf="selectedSchedule.status=='deleted' && role=='Admin'"><button nbButton
+                                    status="success" (click)="activateClick(selectedSchedule)">Activate</button></td>
                         </tr>
                     </tbody>
                     <div *ngIf="selectedSchedule==null">
