@@ -29,8 +29,6 @@ export class CreateTeacherComponent implements OnInit {
 
   ngOnInit(): void {
     this.initTeacherDetailsForm();
-    this.initTeacherQualificationForm();
-    this.initTeacherSubjectsForm();
   }
 
   initTeacherDetailsForm() {
@@ -43,17 +41,6 @@ export class CreateTeacherComponent implements OnInit {
     });
   }
 
-  initTeacherQualificationForm() {
-    this.teacherQualificationForm = this.fb.group({
-      highestQualification: ['', null]
-    });
-  }
-
-  initTeacherSubjectsForm() {
-    this.teacherSubjectsForm = this.fb.group({
-      subjects: ['', null]
-    });
-  }
 
   trimSpaces(text) {
     const newText = text.split(/\s/).join('');

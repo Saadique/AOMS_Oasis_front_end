@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Alert } from 'app/pages/course/create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
+import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'ngx-view-teacher',
@@ -12,6 +13,7 @@ export class ViewTeacherComponent implements OnInit {
 
   teacherId;
   teacher;
+  teacherEditForm: FormGroup;
   lecturesOfTeacher;
   lecYears;
   lecMonths = [];
@@ -27,7 +29,8 @@ export class ViewTeacherComponent implements OnInit {
 
   constructor(
     private teacherService: TeacherService,
-    private route: ActivatedRoute,) { }
+    private route: ActivatedRoute,
+    private fb: FormBuilder) { }
 
   alertRemun = new Alert();
 
@@ -41,10 +44,20 @@ export class ViewTeacherComponent implements OnInit {
     });
   }
 
+  initTeacherEditForm() {
+    this.teacherEditForm = this.fb.group({
+      name: [this.teacher.name, Validators.required],
+      email: [this.teacher.email, Validators.required],
+      mobile_no: [this.teacher.mobile_no, Validators.required],
+      address: [this.teacher.address, null]
+    });
+  }
+
   getTeacherById() {
     this.teacherService.getTeacherById(this.teacherId).subscribe({
       next: (response) => {
         this.teacher = response;
+        this.initTeacherEditForm();
       },
       error: (error) => {
 
@@ -65,6 +78,10 @@ export class ViewTeacherComponent implements OnInit {
         }
       }
     )
+  }
+
+  submitTeacherEditForm() {
+
   }
 
   selectRemunerationLec(lectureId) {
