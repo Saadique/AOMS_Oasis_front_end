@@ -25,6 +25,7 @@ export class MyClassComponent implements OnInit {
   createForm: FormGroup;
   materialForm: FormGroup;
   editForm: FormGroup;
+  editLessonForm: FormGroup;
 
 
   constructor(
@@ -55,7 +56,14 @@ export class MyClassComponent implements OnInit {
   private initForm() {
     this.createForm = new FormGroup({
       'name': new FormControl(null, Validators.required),
-      'description': new FormControl(null, Validators.required),
+      'description': new FormControl(null),
+    });
+  }
+
+  private initLessonEditForm(lesson) {
+    this.editLessonForm = new FormGroup({
+      'name': new FormControl(lesson.name, Validators.required),
+      'description': new FormControl(lesson.description),
     });
   }
 
@@ -124,6 +132,7 @@ export class MyClassComponent implements OnInit {
 
   onEditFileSelect(event) {
     this.newFile = event.target.files[0];
+    console.log(this.newFile);
   }
 
 
@@ -207,20 +216,17 @@ export class MyClassComponent implements OnInit {
     // link.click();
   }
 
-  // not complete
   EditMaterials(ref) {
-    if (this.newFile != null && this.editForm.valid) {
-      console.log("came");
+    if (this.newFile != null) {
       const formData = new FormData();
-      formData.append('file_name', this.materialForm.value.file_name);
       formData.append('file', this.newFile, this.newFile.name);
-      formData.append('hasFile', 'true');
 
       this.lectureService.updateLessonMaterial(this.selectedEditMaterial.id, formData).subscribe({
         next: (response) => {
           console.log(response);
           ref.close();
           this.newFile = null;
+          this.getMaterialsByLesson();
         },
         error: (err) => {
           console.log(err);
@@ -228,20 +234,90 @@ export class MyClassComponent implements OnInit {
       })
 
     }
+  }
 
-    if (this.newFile == null && this.editForm.valid) {
-      const formData = new FormData();
-      formData.append('file_name', this.materialForm.value.file_name);
-      formData.append('hasFile', 'false');
+  selectedEditInfoMaterial;
+  editInfoClick(material, dialog) {
+    this.open(dialog);
+    this.editForm = new FormGroup({
+      'file_name': new FormControl(material.file_name, Validators.required),
+    });
+    this.selectedEditInfoMaterial = material;
+  }
 
-      this.lectureService.updateLessonMaterial(this.selectedEditMaterial.id, formData).subscribe({
+  editMaterialInfo(modal) {
+    if (this.editForm.valid) {
+      let data = {
+        "file_name": this.editForm.value.file_name
+      }
+      this.lectureService.updateLessonMaterialInfo(this.selectedEditInfoMaterial.id, data).subscribe({
         next: (response) => {
-          console.log(response);
-          ref.close();
-          this.newFile = null;
+          this.getMaterialsByLesson();
+          modal.close()
         },
         error: (err) => {
           console.log(err);
+        }
+      })
+    }
+  }
+
+  deleteMaterial(material) {
+    this.lectureService.deleteMaterial(material.id).subscribe({
+      next: (response) => {
+        console.log(response)
+        this.getMaterialsByLesson();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  selectedEditLesson;
+  editLessonClick(lesson, modal) {
+    this.selectedEditLesson = lesson;
+    this.open(modal);
+    this.initLessonEditForm(lesson);
+  }
+
+  deleteLessonClick(lesson) {
+    this.lectureService.changeLessonDeleteStatus(lesson.id, "deleted").subscribe({
+      next: (reponse) => {
+        this.getLessonsByLecture();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  activateLessonClick(lesson) {
+    this.lectureService.changeLessonDeleteStatus(lesson.id, "active").subscribe({
+      next: (reponse) => {
+        this.getLessonsByLecture();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  editLesson(modal) {
+    if (this.editLessonForm.valid) {
+      let data = {
+        "lecture_id": this.lecture.id,
+        "name": this.editLessonForm.value.name,
+        "description": this.editLessonForm.value.description
+      }
+
+      this.lectureService.updateLesson(this.selectedEditLesson.id, data).subscribe({
+        next: (reponse) => {
+          this.getLessonsByLecture();
+          modal.close();
+        },
+        error: (err) => {
+          console.log(err)
         }
       })
     }

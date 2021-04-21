@@ -19,4 +19,8 @@ export class RoomService {
   updateRoom(data, roomId) {
     return this.http.put<any>(`http://localhost:8000/api/rooms/${roomId}`, data);
   }
+
+  changeStatus(roomId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/rooms/status/${roomId}/${status}`);
+  }
 }

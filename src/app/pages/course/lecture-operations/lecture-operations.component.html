@@ -69,9 +69,9 @@
                             <th>Start Date</th>
                             <th>End Date</th>
                             <th>Room</th>
-                            <th>Status</th>
+                            <!-- <th>Status</th>
                             <th>Edit</th>
-                            <th *ngIf="role=='Admin'">Delete</th>
+                            <th *ngIf="role=='Admin'">Delete</th> -->
                         </tr>
                     </thead>
                     <tbody>
@@ -82,7 +82,7 @@
                             <td>{{selectedSchedule.schedule_start_date}}</td>
                             <td>{{selectedSchedule.schedule_end_date}}</td>
                             <td>{{selectedSchedule.room.name}}</td>
-                            <td *ngIf="selectedSchedule.status=='active'">
+                            <!-- <td *ngIf="selectedSchedule.status=='active'">
                                 <span class="badge badge-success">Active</span>
                             </td>
                             <td *ngIf="selectedSchedule.status=='deleted'">
@@ -95,7 +95,7 @@
                                     status="warning" (click)="deleteClick(selectedSchedule)">Delete
                                     &nbsp;&nbsp;</button></td>
                             <td *ngIf="selectedSchedule.status=='deleted' && role=='Admin'"><button nbButton
-                                    status="success" (click)="activateClick(selectedSchedule)">Activate</button></td>
+                                    status="success" (click)="activateClick(selectedSchedule)">Activate</button></td> -->
                         </tr>
                     </tbody>
                     <div *ngIf="selectedSchedule==null">
@@ -127,7 +127,8 @@
                             <td *ngIf="selectedPayment.status=='deleted'">
                                 <span class="badge badge-warning">Deleted</span>
                             </td>
-                            <td><button nbButton status="info" (click)="editClickPayment(selectedPayment)">Edit</button>
+                            <td><button nbButton status="info"
+                                    (click)="editClickPayment(paymentEditModal)">Edit</button>
                             </td>
                         </tr>
                     </tbody>
@@ -202,6 +203,46 @@
         <nb-card-footer>
             <button nbButton (click)="refLEdit.close()">Back</button>
             <button nbButton id="submitButton" (click)="updateLecture(refLEdit)">Submit</button>&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+
+<ng-template #paymentEditModal let-data let-refLEdit="dialogRef">
+    <nb-card id="modalPayment">
+        <nb-card-header>Edit Lecture</nb-card-header>
+        <nb-card-body>
+            <br>
+            <form [formGroup]="paymentForm" class="step-container">
+                <div class="form-group row">
+                    <label for="student_fee" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Enter
+                        Student Fee Amount</label>
+                    <div class="col-sm-7">
+                        <input type="number" formControlName="student_fee" nbInput fullWidth id="student_fee"
+                            style="font-size: 12.75px;" placeholder="Eg: 1700">
+                    </div>
+                </div> <br>
+                <div class="form-group row">
+                    <label for="fixed_institute_amount" class="label col-sm-5 form-control-label"
+                        style="font-size: 12.75px;">Enter Fixed Institute Amount</label>
+                    <div class="col-sm-7">
+                        <input type="number" formControlName="fixed_institute_amount" nbInput fullWidth
+                            id="fixed_institute_amount" style="font-size: 12.75px;" placeholder="Eg: 300">
+                    </div>
+                </div><br>
+                <div class="form-group row">
+                    <label for="teacher_percentage" class="label col-sm-5 form-control-label"
+                        style="font-size: 12.75px;">Enter Teacher Percentage</label>
+                    <div class="col-sm-7">
+                        <input type="text" formControlName="teacher_percentage" nbInput fullWidth
+                            id="teacher_percentage" style="font-size: 12.75px;" placeholder="Eg: 70">
+                    </div>
+                </div>
+            </form>
+        </nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="refLEdit.close()">Back</button>
+            <button nbButton id="submitButton" (click)="updatePayment(refLEdit)">Submit</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>

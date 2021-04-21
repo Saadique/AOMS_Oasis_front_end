@@ -210,7 +210,7 @@ export class LoginComponent implements OnInit {
 
   getAllTeacherViews(tempTeacherViews) {
     for (let i = 0; i < tempTeacherViews.length; i++) {
-      if (tempTeacherViews[i].title == 'My Classes') {
+      if (tempTeacherViews[i].title == 'My Lectures') {
         tempTeacherViews[i]["children"] = this.classChildrenTeacherMenu;
         break;
       }

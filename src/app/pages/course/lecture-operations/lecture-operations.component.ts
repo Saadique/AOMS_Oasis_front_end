@@ -195,16 +195,51 @@ export class LectureOperationsComponent implements OnInit {
 
   }
 
-  editClickPayment(payment) {
-
+  editClickPayment(modal) {
+    this.initPaymentForm(this.selectedPayment);
+    this.open(modal);
   }
 
-  deleteClick() {
+  updatePayment(modal) {
+    if (this.paymentForm.valid) {
+      let data = {
+        "student_fee": this.paymentForm.value.student_fee,
+        "fixed_institute_amount": this.paymentForm.value.fixed_institute_amount,
+        "teacher_percentage": this.paymentForm.value.teacher_percentage,
+      }
 
+      this.lectureService.updateLecturePayment(this.selectedPayment.id, data).subscribe({
+        next: (response) => {
+          this.lectureSelection(this.selectedLecture.id);
+          modal.close();
+        },
+        error: (error) => {
+          console.log(error);
+        }
+      })
+    }
   }
 
-  activateClick() {
+  deleteClick(lecture) {
+    this.lectureService.changeLectureDeleteStatus(lecture.id, "deleted").subscribe({
+      next: (response) => {
+        this.lectureSelection(this.selectedLecture.id);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
 
+  activateClick(lecture) {
+    this.lectureService.changeLectureDeleteStatus(lecture.id, "active").subscribe({
+      next: (response) => {
+        this.lectureSelection(this.selectedLecture.id);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
   updateLecture(modal) {

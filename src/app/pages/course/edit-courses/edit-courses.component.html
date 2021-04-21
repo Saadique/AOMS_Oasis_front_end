@@ -67,8 +67,8 @@
               <tr *ngFor="let courseM of courseMediums">
                 <td>{{courseM.name}}</td>
                 <!-- <td>{{courseM.no_of_students}}</td> -->
-                <td *ngIf="courseM.status=='active'"><span class="badge badge-success">Delete</span></td>
-                <td *ngIf="courseM.status=='deleted'"><span class="badge badge-warning">Activate</span></td>
+                <td *ngIf="courseM.status=='active'"><span class="badge badge-success">Active</span></td>
+                <td *ngIf="courseM.status=='deleted'"><span class="badge badge-warning">Deleted</span></td>
 
                 <td *ngIf="role=='Admin' && courseM.status=='active'"><button nbButton status="warning"
                     (click)="deleteCourseMedium(courseM)">Delete</button></td>

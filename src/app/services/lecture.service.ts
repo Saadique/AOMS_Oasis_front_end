@@ -19,6 +19,7 @@ export class LectureService {
     return this.http.post<any>(`${this.rootUrl}`, lecture);
   }
 
+
   getAllLecturesByCourseMedium(courseMediumId) {
     return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}`);
   }
@@ -47,8 +48,24 @@ export class LectureService {
     return this.http.put<any>(`http://localhost:8000/api/lectures/${lectureId}`, data);
   }
 
+  updateLecturePayment(paymentId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/payments/${paymentId}`, data);
+  }
+
+  changeLectureDeleteStatus(lectureId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/lectures/status/${lectureId}/${status}`);
+  }
+
   createLesson(data) {
     return this.http.post<any>(`http://localhost:8000/api/lessons`, data);
+  }
+
+  updateLesson(lessonId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/lessons/${lessonId}`, data);
+  }
+
+  changeLessonDeleteStatus(lessonId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/lessons/status/${lessonId}/${status}`);
   }
 
   getLessonsByLecture(lectureId) {
@@ -60,7 +77,15 @@ export class LectureService {
   }
 
   updateLessonMaterial(materialId, data) {
-    return this.http.put<any>(`http://localhost:8000/api/lessons_materials/${materialId}`, data);
+    return this.http.post<any>(`http://localhost:8000/api/lesson_materials/material/${materialId}`, data);
+  }
+
+  updateLessonMaterialInfo(materialId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/lesson_materials/info/${materialId}`, data);
+  }
+
+  deleteMaterial(materialId) {
+    return this.http.delete<any>(`http://localhost:8000/api/lessons_materials/${materialId}`);
   }
 
   getMaterialsByLesson(lessonId) {

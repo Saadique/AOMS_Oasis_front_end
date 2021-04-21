@@ -19,7 +19,8 @@ export class RoomManagementComponent implements OnInit {
     private localStorageService: LocalStorageService
   ) { }
 
-  createCourseAlert = new Alert();
+  createRoomAlert = new Alert();
+
   editFormDisplay: boolean = false;
   rooms;
 
@@ -41,17 +42,15 @@ export class RoomManagementComponent implements OnInit {
     this.roomCreationForm = new FormGroup({
       'name': new FormControl(null, Validators.required),
       'no_of_seats': new FormControl(null, Validators.required),
-      // 'is_ac_available': new FormControl(null, Validators.required),
-      'description': new FormControl(null, Validators.required),
-      'status': new FormControl(null, Validators.required)
+      'description': new FormControl(null, Validators.required)
     });
   }
 
   //alert set
   setAlert(alertStatus, alertMessage): void {
-    this.createCourseAlert.status = alertStatus;
-    this.createCourseAlert.message = alertMessage;
-    setTimeout(() => { this.createCourseAlert = { "status": null, "message": null } }, 4500); // fade alert
+    this.createRoomAlert.status = alertStatus;
+    this.createRoomAlert.message = alertMessage;
+    setTimeout(() => { this.createRoomAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
 
@@ -60,15 +59,13 @@ export class RoomManagementComponent implements OnInit {
       let data = {
         "name": this.roomCreationForm.value.name,
         "no_of_seats": this.roomCreationForm.value.no_of_seats,
-        // "is_ac_available": this.roomCreationForm.value.student_fee,
         "description": this.roomCreationForm.value.description,
-        "status": this.roomCreationForm.value.status,
       }
       this.roomService.createRoom(data).subscribe(
         {
           next: (response) => {
             console.log(response);
-            this.setAlert('success', 'Payment Scheme Created Successfully');
+            this.setAlert('success', 'Room Created Succesfully');
             this.roomCreationForm.reset();
           },
           error: (err) => {
@@ -103,9 +100,7 @@ export class RoomManagementComponent implements OnInit {
     this.roomUpdationForm = new FormGroup({
       'name': new FormControl(room.name, Validators.required),
       'no_of_seats': new FormControl(room.no_of_seats, Validators.required),
-      // 'is_ac_available': new FormControl(room.name, Validators.required),
       'description': new FormControl(room.description, Validators.required),
-      'status': new FormControl(room.status, Validators.required)
     });
   }
 
@@ -116,9 +111,7 @@ export class RoomManagementComponent implements OnInit {
       let data = {
         "name": this.roomUpdationForm.value.name,
         "no_of_seats": this.roomUpdationForm.value.no_of_seats,
-        // "is_ac_available": this.roomUpdationForm.value.student_fee,
-        "description": this.roomUpdationForm.value.description,
-        "status": this.roomUpdationForm.value.status,
+        "description": this.roomUpdationForm.value.description
       }
       this.roomService.updateRoom(data, roomId).subscribe(
         {
@@ -138,6 +131,17 @@ export class RoomManagementComponent implements OnInit {
     } else {
       this.setAlert('warning', 'Please fill all required fields');
     }
+  }
+
+  changeStatus(room, status) {
+    this.roomService.changeStatus(room.id, status).subscribe({
+      next: (response) => {
+        this.getAllRooms();
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
   }
 
   cancelEditForm() {
