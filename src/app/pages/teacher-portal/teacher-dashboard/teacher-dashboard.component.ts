@@ -12,6 +12,11 @@ export class TeacherDashboardComponent implements OnInit {
   teacher;
   notifications = [];
 
+  attendanceLink;
+  timeTableLink;
+  monthlyRemunLink;
+  totalIncome;
+
   constructor(
     private localStorageService: LocalStorageService,
     private teacherService: TeacherService) { }
@@ -19,6 +24,10 @@ export class TeacherDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getTeacher();
     this.getUptoDateNotifications();
+    this.attendanceLink = "/pages/teacher-portal/my_student_attendances";
+    this.timeTableLink = "/pages/teacher-portal/my_timetable";
+    this.totalIncome = "/pages/teacher-portal/total_income";
+    this.monthlyRemunLink = "/pages/teacher-portal/my_remunerations";
   }
 
   getTeacher() {
@@ -37,6 +46,13 @@ export class TeacherDashboardComponent implements OnInit {
         console.log(err);
       }
     })
+  }
+
+  decideClass() {
+    if (this.getUptoDateNotifications.length != 0) {
+      return "col-sm-8";
+    }
+    return "col-sm-12";
   }
 
 }

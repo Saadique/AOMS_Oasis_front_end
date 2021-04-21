@@ -517,7 +517,7 @@ export const MENU_ITEMS: NbMenuItem[] = [
 export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
-    icon: 'shopping-cart-outline',
+    icon: 'bar-chart',
     link: '/pages/admin/dashboard',
   },
   {
@@ -540,7 +540,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Courses',
-    icon: 'book-outline',
+    icon: 'book',
     children: [
       {
         title: 'Create New Course',
@@ -558,7 +558,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Subects',
-    icon: 'book-outline',
+    icon: 'book-open',
     children: [
       {
         title: 'Create New Subjects',
@@ -568,7 +568,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Lectures',
-    icon: 'book-outline',
+    icon: 'edit-2',
     children: [
       {
         title: 'Create Lecture',
@@ -582,7 +582,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Schedules',
-    icon: 'book-outline',
+    icon: 'calendar',
     children: [
       {
         title: 'View Daily Schedules',
@@ -592,7 +592,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Room Management',
-    icon: 'book-outline',
+    icon: 'home',
     children: [
       {
         title: 'All Operations',
@@ -606,7 +606,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Student',
-    icon: 'people-outline',
+    icon: 'people',
     children: [
       {
         title: 'Admit Student',
@@ -619,22 +619,16 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
     ]
   },
   {
-    title: 'Fee Management',
-    group: true,
-  },
-  {
-    title: 'Payment Scheme Operations',
-    link: '/pages/student/payment-scheme/create'
-  },
-  {
     title: 'Teacher Management',
     group: true,
   },
   {
+    icon: 'person-add',
     title: 'Register Teacher',
     link: '/pages/teachers/create'
   },
   {
+    icon: 'more-horizontal',
     title: 'All Teacher Operations',
     link: '/pages/teachers/view'
   },
@@ -644,6 +638,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'User Accounts Operations',
+    icon: 'people-outline',
     link: '/pages/user-management/accounts'
   },
   {
@@ -651,10 +646,12 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    icon: 'activity',
     title: 'Student Fee Reports',
     link: '/pages/reports/fee'
   },
   {
+    icon: 'activity',
     title: 'Teacher Reports',
     link: '/pages/reports/teacher'
   }
@@ -664,7 +661,7 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
 export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
-    icon: 'shopping-cart-outline',
+    icon: 'bar-chart',
     link: '/pages/admin/dashboard',
   },
   {
@@ -683,7 +680,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Courses',
-    icon: 'book-outline',
+    icon: 'book',
     children: [
       {
         title: 'Create New Course',
@@ -697,7 +694,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Subects',
-    icon: 'book-outline',
+    icon: 'book-open',
     children: [
       {
         title: 'Create New Subjects',
@@ -707,7 +704,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Lectures',
-    icon: 'book-outline',
+    icon: 'edit-2',
     children: [
       {
         title: 'Create Lecture',
@@ -721,7 +718,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Schedules',
-    icon: 'book-outline',
+    icon: 'calendar',
     children: [
       {
         title: 'View Daily Schedules',
@@ -731,7 +728,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Room Management',
-    icon: 'book-outline',
+    icon: 'home',
     children: [
       {
         title: 'All Operations',
@@ -745,7 +742,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     title: 'Student',
-    icon: 'people-outline',
+    icon: 'people',
     children: [
       {
         title: 'Admit Student',
@@ -762,10 +759,12 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    icon: 'person-add',
     title: 'Register Teacher',
     link: '/pages/teachers/create'
   },
   {
+    icon: 'more-horizontal',
     title: 'All Teacher Operations',
     link: '/pages/teachers/view'
   }
@@ -777,23 +776,33 @@ export const STUDENT_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    icon: 'home',
     title: 'My Dashboard',
     link: '/pages/student-portal/dashboard',
   },
   {
+    icon: 'book-open',
     title: 'My Classes',
   },
   {
+    icon: 'calendar',
     title: 'My schedules',
     link: '/pages/student-portal/my_schedules',
   },
   {
+    icon: 'credit-card',
     title: 'My Payments',
     link: '/pages/student-portal/my_payments',
   },
   {
+    icon: 'book',
     title: 'Payment History',
     link: '/pages/student-portal/payment_history',
+  },
+  {
+    title: 'hidden',
+    link: '/pages/profile',
+    hidden: true
   }
 ];
 
@@ -803,26 +812,31 @@ export const TEACHER_MENU_ITEMS: NbMenuItem[] = [
     group: true,
   },
   {
+    icon: 'home',
     title: 'My Dashboard',
     link: '/pages/teacher-portal/dashboard',
   },
   {
-    title: 'My Classes',
-    // link: '/pages/teacher-portal/my_classes',
+    icon: 'book-open',
+    title: 'My Lectures',
   },
   {
+    icon: 'clock',
     title: 'My Timetable',
     link: '/pages/teacher-portal/my_timetable'
   },
   {
+    icon: 'percent',
     title: 'My Monthly Remunerations',
     link: '/pages/teacher-portal/my_remunerations'
   },
   {
+    icon: 'layers',
     title: 'Total Income',
     link: '/pages/teacher-portal/total_income'
   },
   {
+    icon: 'done-all',
     title: "My Students' Attendances",
     link: '/pages/teacher-portal/my_student_attendances'
   },

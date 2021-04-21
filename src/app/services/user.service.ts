@@ -53,6 +53,10 @@ export class UserService {
     return this.http.post<any>(`http://localhost:8000/api/users/reset_password/reset`, data);
   }
 
+  getAdminDashboardData() {
+    return this.http.get<any>(`http://localhost:8000/api/admins/dashboard/data`);
+  }
+
 
 
 }

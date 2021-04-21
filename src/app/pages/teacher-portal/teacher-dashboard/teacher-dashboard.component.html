@@ -1,8 +1,68 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-8">
+        <div [ngClass]="decideClass()">
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card-box bg-blue">
+                            <div class="inner">
+                                <h3>My Student Attendances</h3>
+                                <p> Students </p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                            </div>
+                            <a [routerLink]="attendanceLink" class="card-box-footer">View<i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
 
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card-box bg-red">
+                            <div class="inner">
+                                <h3> My Timetable </h3>
+                                <p> Lecture Timetable </p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <a [routerLink]="timeTableLink" class="card-box-footer">View<i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card-box bg-green">
+                            <div class="inner">
+                                <h3>Monthly Student Fee</h3>
+                                <p>Student Fee Info</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-users"></i>
+                            </div>
+                            <a [routerLink]="monthlyRemunLink" class="card-box-footer">View <i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <div class="card-box bg-orange">
+                            <div class="inner">
+                                <h3>Total Income</h3>
+                                <p>Total Income From Classes</p>
+                            </div>
+                            <div class="icon">
+                                <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                            </div>
+                            <a [routerLink]="totalIncome" class="card-box-footer">View<i
+                                    class="fa fa-arrow-circle-right"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
         <div class="col-sm-4">
             <nb-card size="large" *ngIf="notifications.length!=0">
                 <nb-card-header>

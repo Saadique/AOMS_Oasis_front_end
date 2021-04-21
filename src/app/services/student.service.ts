@@ -36,4 +36,8 @@ export class StudentService {
     return this.http.put<any>(`http://localhost:8000/api/students/${studentId}`, data);
   }
 
+  getAllLecturesOfStudent(studentId) {
+    return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`);
+  }
+
 }

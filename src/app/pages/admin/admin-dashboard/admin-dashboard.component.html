@@ -3,7 +3,7 @@
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-blue">
                 <div class="inner">
-                    <h3>3000</h3>
+                    <h3>{{countData.student_count}}</h3>
                     <p> Students </p>
                 </div>
                 <div class="icon">
@@ -17,38 +17,38 @@
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-red">
                 <div class="inner">
-                    <h3> 723 </h3>
-                    <p> User Management </p>
+                    <h3> {{countData.user_count}} </h3>
+                    <p> Users </p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-users"></i>
                 </div>
-                <a [routerLink]="userMgtLink" class="card-box-footer">User Roles <i
-                        class="fa fa-arrow-circle-right"></i></a>
+                <a [routerLink]="userMgtLink" class="card-box-footer">Users<i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-orange">
                 <div class="inner">
-                    <h3> 5464 </h3>
-                    <p> New Admissions </p>
+                    <h3> New Admissions </h3>
+                    <p> Create Student </p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-user-plus" aria-hidden="true"></i>
                 </div>
-                <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                <a href="#" class="card-box-footer">Admit Student<i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-red">
                 <div class="inner">
-                    <h3> 723 </h3>
-                    <p> Faculty Strength </p>
+                    <h3>{{countData.teacher_count}}</h3>
+                    <p> Teachers</p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-users"></i>
                 </div>
-                <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                <a [routerLink]="teacherOpLink" class="card-box-footer">All Teacher Operations <i
+                        class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
     </div>
@@ -57,26 +57,28 @@
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-blue">
                 <div class="inner">
-                    <h3> 13436 </h3>
-                    <p> Student Strength </p>
+                    <h3> {{countData.lecture_count}} </h3>
+                    <p> Lectures </p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-graduation-cap" aria-hidden="true"></i>
                 </div>
-                <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                <a [routerLink]="addNewLec" class="card-box-footer">Add New Lecture<i
+                        class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
 
         <div class="col-lg-3 col-sm-6">
             <div class="card-box bg-green">
                 <div class="inner">
-                    <h3> ₹185358 </h3>
-                    <p> Today’s Collection </p>
+                    <h3> Daily Schedules </h3>
+                    <p> View Schedules By Date </p>
                 </div>
                 <div class="icon">
                     <i class="fa fa-money" aria-hidden="true"></i>
                 </div>
-                <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
+                <a [routerLink]="dailyScheduleOpLink" class="card-box-footer">All Daily Schedule Operations<i
+                        class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
         <div class="col-lg-3 col-sm-6">

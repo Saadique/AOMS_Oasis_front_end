@@ -1,6 +1,21 @@
 <div class="container-fluid">
     <div class="row">
-        <div class="col-sm-8">
+        <div [ngClass]="decideClass()" *ngFor="let lecture of lecturesOfStudent">
+            <div class="col-lg-12 col-sm-12">
+                <div class="card-box bg-blue">
+                    <div class="inner">
+                        <h3>{{lecture.name}}</h3>
+                        <p> Teacher Incharge - {{lecture.teacher.name}} </p>
+                    </div>
+                    <div class="icon">
+                        <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                    </div>
+                    <a [routerLink]="lecture.link" class="card-box-footer">View<i
+                            class="fa fa-arrow-circle-right"></i></a>
+                </div>
+            </div>
+        </div>
+        <div [ngClass]="decideClass()">
 
         </div>
         <div class="col-sm-4" *ngIf="notifications.length!=0">

@@ -11,6 +11,7 @@ export class StudentDashboardComponent implements OnInit {
 
   student;
   notifications = [];
+  lecturesOfStudent;
 
   constructor(private localStorageService: LocalStorageService,
     private studentService: StudentService) { }
@@ -25,6 +26,7 @@ export class StudentDashboardComponent implements OnInit {
     let userData = this.localStorageService.getData();
     this.student = userData.student;
     console.log(this.student);
+    this.getLecturesOfStudent()
   }
 
   getUptoDateNotifications() {
@@ -38,4 +40,31 @@ export class StudentDashboardComponent implements OnInit {
     })
   }
 
+  getLecturesOfStudent() {
+    this.studentService.getAllLecturesOfStudent(this.student.id).subscribe({
+      next: (response) => {
+        this.lecturesOfStudent = response;
+        this.addLink();
+        console.log(this.lecturesOfStudent);
+      },
+      error: (err) => {
+
+      }
+    })
+  }
+
+  decideClass() {
+    if (this.getUptoDateNotifications.length != 0) {
+      return "col-sm-4";
+    }
+    return "col-sm-6";
+  }
+
+  addLink() {
+    for (let i = 0; i < this.lecturesOfStudent.length; i++) {
+      this.lecturesOfStudent[i]["link"] = `/pages/student-portal/my_class/${this.lecturesOfStudent[i].id}`;
+    }
+  }
+
 }
+

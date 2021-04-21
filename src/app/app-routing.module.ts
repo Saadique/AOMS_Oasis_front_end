@@ -22,36 +22,7 @@ export const routes: Routes = [
     loadChildren: () => import('./authentication/authentication.module')
       .then(m => m.AuthenticationModule)
   },
-  {
-    path: 'auth',
-    component: NbAuthComponent,
-    children: [
-      {
-        path: '',
-        component: NbLoginComponent,
-      },
-      {
-        path: 'login',
-        component: NbLoginComponent,
-      },
-      {
-        path: 'register',
-        component: NbRegisterComponent,
-      },
-      {
-        path: 'logout',
-        component: NbLogoutComponent,
-      },
-      {
-        path: 'request-password',
-        component: NbRequestPasswordComponent,
-      },
-      {
-        path: 'reset-password',
-        component: NbResetPasswordComponent,
-      },
-    ],
-  },
+
   { path: '', redirectTo: 'pages', pathMatch: 'full' },
   { path: 'teacher', loadChildren: () => import('./pages/teacher/teacher.module').then(m => m.TeacherModule) },
   { path: 'student-portal', loadChildren: () => import('./pages/student-portal/student-portal.module').then(m => m.StudentPortalModule) },

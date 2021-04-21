@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [{ title: 'Profile', link: '/pages/profile' }, { title: 'Log out', link: '/authentication' }];
+  userMenu;
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
@@ -40,6 +40,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.loggedInUser = this.localStorageService.getData();
     this.role = this.loggedInUser.userRole;
     this.getName();
+    this.initUserMenu();
   }
 
   getName() {
@@ -51,6 +52,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
     if (this.role == "Teacher") {
       this.name = this.loggedInUser.teacher.name;
+    }
+  }
+
+  initUserMenu() {
+    if (this.role == "Student" || this.role == "Teacher") {
+      this.userMenu = [{ title: 'Profile', link: '/pages/profile' }, { title: 'Log out', link: '/authentication' }];
+    } else if (this.role == "Admin") {
+      this.userMenu = [{ title: 'Profile', link: 'pages/user-management/accounts' }, { title: 'Log out', link: '/authentication' }];
+    } else {
+      this.userMenu = [{ title: 'Log out', link: '/authentication' }]
     }
   }
 

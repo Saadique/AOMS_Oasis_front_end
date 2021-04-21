@@ -8,6 +8,7 @@ import { LocalStorageService } from '../services/local-storage/local-storage.ser
 import { ADMINISTRATION_STAFF_MENU_ITEMS, ADMIN_MENU_ITEMS, STUDENT_MENU_ITEMS, TEACHER_MENU_ITEMS } from '../../pages/pages-menu';
 import { LectureService } from 'app/services/lecture.service';
 import { StudentPaymentsService } from '../../services/student-payments.service';
+import { Alert } from '../../pages/course/create-course/create-course.component';
 
 @Component({
   selector: 'ngx-login',
@@ -54,6 +55,8 @@ export class LoginComponent implements OnInit {
     this.socialLinks = this.getConfigValue('forms.login.socialLinks');
     this.rememberMe = this.getConfigValue('forms.login.rememberMe');
   }
+
+  loginAlert = new Alert();
 
   ngOnInit(): void {
     this.clearLogin();
@@ -120,34 +123,20 @@ export class LoginComponent implements OnInit {
           //   })
         },
         error: (err) => {
-          // if (err.error.code == 400) {
-          //   // this.alreadyExists = true;
-          //   // this.setAlert('Error', err.error.message);
-          //   this.errors.push(err.error.message);
-          // }
-          // this.errors = err.error.message;
-          // alert(err.error.message);
-          console.log(err.error);
+          if (err.status == 400) {
+            this.setAlert('error', err.error.message);
+          }
+          console.log(err);
         }
+
       })
+  }
 
-    // this.service.authenticate(this.strategy, this.user).subscribe((result: NbAuthResult) => {
-    //   this.submitted = false;
-
-    //   if (result.isSuccess()) {
-    //     this.messages = result.getMessages();
-    //   } else {
-    //     this.errors = result.getErrors();
-    //   }
-
-    //   const redirect = result.getRedirect();
-    //   if (redirect) {
-    //     setTimeout(() => {
-    //       return this.router.navigateByUrl(redirect);
-    //     }, this.redirectDelay);
-    //   }
-    //   this.cd.detectChanges();
-    // });
+  //alert set
+  setAlert(alertStatus, alertMessage): void {
+    this.loginAlert.status = alertStatus;
+    this.loginAlert.message = alertMessage;
+    setTimeout(() => { this.loginAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
   getConfigValue(key: string): any {
