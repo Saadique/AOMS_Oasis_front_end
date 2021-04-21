@@ -100,7 +100,7 @@ export class MyRenumerationsComponent implements OnInit {
         {
           next: (response) => {
             this.paidMonthlyRemunerations = response;
-            console.log(this.paidMonthlyRemunerations);
+            this.calculateTotal();
           },
           error: (err) => {
             console.log(err)
@@ -110,6 +110,16 @@ export class MyRenumerationsComponent implements OnInit {
     } else {
       this.setAlert('Error', 'Please select all required parameters');
     }
+  }
+
+  totalAmountReceivedForMonth;
+  calculateTotal() {
+    let totalAmount = 0;
+    for (let i = 0; i < this.paidMonthlyRemunerations.length; i++) {
+      let feeRecord = this.paidMonthlyRemunerations[i];
+      totalAmount = totalAmount + feeRecord.teacher_amount;
+    }
+    this.totalAmountReceivedForMonth = totalAmount;
   }
 
 

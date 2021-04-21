@@ -60,5 +60,9 @@ export class TeacherService {
     return this.http.get<any>(`http://localhost:8000/api/attendances/lecture/date/${lectureId}/${date}`);
   }
 
+  updateTeacher(data, teacherId) {
+    return this.http.put<any>(`http://localhost:8000/api/teachers/${teacherId}`, data);
+  }
+
 
 }

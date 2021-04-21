@@ -93,7 +93,7 @@
                                     <nb-option value="course">Course</nb-option>
                                     <nb-option value="lecture">Lecture/Class</nb-option>
                                     <nb-option value="teacher">Teacher</nb-option>
-                                    <nb-option value="level">Course Level</nb-option>
+                                    <!-- <nb-option value="level">Course Level</nb-option> -->
                                 </nb-select>
                             </div>
                         </div>
@@ -129,12 +129,30 @@
                                 <label>Teacher</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select placeholder="Choose Teacher">
-                                    <nb-option value="advance_level">Keerthi Kaariyavasam</nb-option>
-                                    <nb-option value="ordinary_level">Muzain Mubarak</nb-option>
-                                    <nb-option value="ordinary_level">Naiomi Ekanaayaka</nb-option>
-                                    <nb-option value="ordinary_level">Leelarathna</nb-option>
-                                    <nb-option value="ordinary_level">Isham Mohammed</nb-option>
+                                <nb-select placeholder="Choose Teacher" [(ngModel)]="filter.teacherId">
+                                    <nb-option *ngFor="let teacher of teachers" value={{teacher.id}}>
+                                        {{teacher.name}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div><br>
+
+            <div class="card" *ngIf="filterOption=='lecture'">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Lecture</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <nb-select placeholder="Choose Lecture" [(ngModel)]="filter.teacherId"
+                                    [(ngModel)]="filter.lectureId">
+                                    <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
+                                        {{lecture.name}}
+                                    </nb-option>
                                 </nb-select>
                             </div>
                         </div>
@@ -210,7 +228,7 @@
                                 <label>From : </label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" min="2020-09-10"
+                                <input type="date" class="form-control" max={{filter.by_range.to_date}}
                                     [(ngModel)]="filter.by_range.from_date">
                             </div>
                         </div><br>
@@ -220,7 +238,7 @@
                                 <label>To :</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" min="2020-09-10"
+                                <input type="date" class="form-control" min={{filter.by_range.from_date}}
                                     [(ngModel)]="filter.by_range.to_date">
                             </div>
                         </div>

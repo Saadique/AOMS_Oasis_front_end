@@ -5,6 +5,7 @@ import { UserData } from '../../../@core/data/users';
 import { LayoutService } from '../../../@core/utils';
 import { map, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
+import { LocalStorageService } from '../../../authentication/services/local-storage/local-storage.service';
 
 @Component({
   selector: 'ngx-header',
@@ -20,17 +21,42 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   currentTheme = 'default';
 
-  userMenu = [{ title: 'Profile' }, { title: 'Log out', link: '/authentication' }];
+  userMenu = [{ title: 'Profile', link: '/pages/profile' }, { title: 'Log out', link: '/authentication' }];
 
   constructor(private sidebarService: NbSidebarService,
     private menuService: NbMenuService,
     private themeService: NbThemeService,
     private userService: UserData,
     private layoutService: LayoutService,
-    private breakpointService: NbMediaBreakpointsService) {
+    private breakpointService: NbMediaBreakpointsService,
+    private localStorageService: LocalStorageService) {
   }
 
+  name;
+
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+    this.getName();
+  }
+
+  getName() {
+    if (this.role == "Admin") {
+      this.name = this.loggedInUser.admin.first_name;
+    }
+    if (this.role == "Student") {
+      this.name = this.loggedInUser.student.name;
+    }
+    if (this.role == "Teacher") {
+      this.name = this.loggedInUser.teacher.name;
+    }
+  }
+
+
   ngOnInit() {
+    this.getUserRoleId();
     this.currentTheme = this.themeService.currentTheme;
 
     this.userService.getUsers()

@@ -1,15 +1,138 @@
 <div class="col-12">
     <nb-card size="flexible">
         <nb-tabset fullWidth>
-            <nb-tab tabTitle="Profile">
+            <nb-tab tabTitle="Student">
+                <nb-card size="flexible" class="col-md-8 offset-md-2">
+                    <nb-card-header>
+                        Student Details
+                    </nb-card-header>
+                    <nb-card-header *ngIf="editAlert!=null">
+                        <div class="animated fadeIn">
+                            <div class="alert alert-danger" role="alert" *ngIf="editAlert.status=='error'">
+                                {{ editAlert.message }}
+                            </div>
+                            <div class="alert alert-warning" role="alert" *ngIf="editAlert.status=='warning'">
+                                {{ editAlert.message }}
+                            </div>
+                            <div class="alert alert-success" role="alert" *ngIf="editAlert.status=='success'">
+                                {{ editAlert.message }}
+                            </div>
+                        </div> <br>
+                    </nb-card-header>
+                    <nb-card-body>
+                        <br><br>
+                        <form class="form-horizontal">
+                            <div class="form-group row">
+                                <label for="name" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Registration Number</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="registration_no" disabled
+                                        [(ngModel)]="student.registration_no" nbInput fullWidth id="name"
+                                        style="font-size: 12.75px;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="mobileNo" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="name" [(ngModel)]="student.name" nbInput fullWidth
+                                        id="mobileNo" style="font-size: 12.75px;">
+                                </div>
+                            </div>
 
+                            <div class="form-group row">
+                                <label for="email" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">
+                                    Mobile Number</label>
+                                <div class="col-sm-8">
+                                    <input type="email" name="mobileNo" [(ngModel)]="student.mobile_no" nbInput
+                                        fullWidth id="email" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="schoolName" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">School Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="schoolName" [(ngModel)]="student.school_name" nbInput
+                                        fullWidth id="schoolName" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="schoolName" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="email" [(ngModel)]="student.email" nbInput fullWidth
+                                        id="schoolName" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+                            <button nbButton style="float: right;" type="submit" (click)="editStudent()">Edit</button>
+                        </form>
+                    </nb-card-body>
+                </nb-card>
+                <!-- <nb-card size="flexible" class="col-md-8 offset-md-2">
+                    <nb-card-header>
+                        Student Details
+                    </nb-card-header>
+                    <nb-card-body>
+                        <br><br>
+                        <form class="form-horizontal" [formGroup]="studentViewForm">
+                            <div class="form-group row">
+                                <label for="name" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Registration Number</label>
+                                <div class="col-sm-8">
+                                    <input type="text" formControlName="registration_no" nbInput
+                                        fullWidth style="font-size: 12.75px;">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="mobileNo" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="name" [(ngModel)]="student.name" nbInput fullWidth
+                                        id="mobileNo" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="email" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">
+                                    Mobile Number</label>
+                                <div class="col-sm-8">
+                                    <input type="email" name="mobileNo" [(ngModel)]="student.mobile_no" nbInput
+                                        fullWidth id="email" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="schoolName" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">School Name</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="schoolName" [(ngModel)]="student.school_name" nbInput
+                                        fullWidth id="schoolName" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <label for="schoolName" class="label col-sm-4 form-control-label"
+                                    style="font-size: 12.75px;">Email</label>
+                                <div class="col-sm-8">
+                                    <input type="text" name="email" [(ngModel)]="student.email" nbInput fullWidth
+                                        id="schoolName" style="font-size: 12.75px;">
+                                </div>
+                            </div>
+                            <button nbButton style="float: right;" type="submit">Edit</button>
+                        </form>
+                    </nb-card-body>
+                </nb-card> -->
             </nb-tab>
 
             <nb-tab tabTitle="Fee Management">
                 <h1 align="center">FEES</h1><br>
                 <nb-tabset>
                     <nb-tab tabTitle="Pending/Due payments">
-                        <table class="table table-bordered table-striped" *ngIf="duePayments.length!=0">
+                        <table class="table table-bordered table-striped" *ngIf="duePayments.length!=0; else noDue">
                             <thead>
                                 <tr>
                                     <th>Payment Name</th>
@@ -34,6 +157,7 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <span #noDue>There are no any due payments for this student at the moment</span>
                     </nb-tab>
                     <nb-tab tabTitle="Pay Fee ">
                         <br>
@@ -258,7 +382,8 @@
                                         <td>{{lecture.course_medium.name}}</td>
                                         <td>{{lecture.type}}</td>
                                         <td>{{lecture.teacher.name}}</td>
-                                        <td><button nbButton outline status="warning">Delete</button></td>
+                                        <td><button nbButton outline status="warning"
+                                                (click)="removeLecture(lecture)">Delete</button></td>
                                     </tr>
 
                                 </tbody>
@@ -270,6 +395,8 @@
         </nb-tabset>
     </nb-card>
 </div>
+
+
 
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card id="addNewForm">

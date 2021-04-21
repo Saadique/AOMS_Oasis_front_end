@@ -45,13 +45,20 @@
                                     style="font-size: 12.75px;">Select Super Course</label>
 
                                 <div class="col-sm-6">
-                                    <select id="inputState" class="form-control" formControlName="course_id"
+                                    <nb-select id="inputState" formControlName="course_id"
+                                        placeholder="Select Super Course"
+                                        (selectedChange)="superCourseSelection($event)">
+                                        <nb-option *ngFor="let course of courses" value={{course.id}}>
+                                            {{course.name}}
+                                        </nb-option>
+                                    </nb-select>
+                                    <!-- <select id="inputState" class="form-control" formControlName="course_id"
                                         placeholder="Select Super Course"
                                         (change)="superCourseSelection($event.target.value)">
                                         <option *ngFor="let course of courses" value={{course.id}}>
                                             {{course.name}}
                                         </option>
-                                    </select>
+                                    </select> -->
                                 </div>
                             </div>
                         </div>
@@ -61,12 +68,12 @@
                                     style="font-size: 12.75px;">Select Course </label>
 
                                 <div class="col-sm-6">
-                                    <select id="inputState" class="form-control" formControlName="course_medium_id"
-                                        placeholder="Select Super Course">
-                                        <option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
+                                    <nb-select id="inputState" formControlName="course_medium_id"
+                                        placeholder="Select Course">
+                                        <nb-option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
                                             {{courseMedium.name}}
-                                        </option>
-                                    </select>
+                                        </nb-option>
+                                    </nb-select>
                                 </div>
                             </div>
                         </div>

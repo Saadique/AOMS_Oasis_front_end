@@ -7,6 +7,7 @@ import { pluck } from 'rxjs/operators';
 import { StudentService } from '../../../services/student.service';
 import { PaymentSchemeService } from '../../../services/payment-scheme.service';
 import { StudentPaymentsService } from 'app/services/student-payments.service';
+import { Alert } from 'app/pages/course/create-course/create-course.component';
 
 @Component({
   selector: 'ngx-register-student',
@@ -41,6 +42,8 @@ export class RegisterStudentComponent implements OnInit {
   // schemePaymentEndDate: string = '';
 
   // paymentStepperValidation: FormGroup;
+
+  studentAlert = new Alert();
 
 
   constructor(

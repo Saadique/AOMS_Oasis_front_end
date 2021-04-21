@@ -826,6 +826,12 @@ export const TEACHER_MENU_ITEMS: NbMenuItem[] = [
     title: "My Students' Attendances",
     link: '/pages/teacher-portal/my_student_attendances'
   },
+
+  {
+    title: 'hidden',
+    link: '/pages/profile',
+    hidden: true
+  }
 ];
 
 

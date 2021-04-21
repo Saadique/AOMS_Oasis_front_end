@@ -5,8 +5,9 @@ import { getDeepFromObject, NbAuthService, NbAuthSocialLink, NB_AUTH_OPTIONS } f
 import { LoginService } from '../../services/login.service';
 import { LoginServiceService } from '../services/login/login-service.service';
 import { LocalStorageService } from '../services/local-storage/local-storage.service';
-import { ADMIN_MENU_ITEMS, STUDENT_MENU_ITEMS, TEACHER_MENU_ITEMS } from '../../pages/pages-menu';
+import { ADMINISTRATION_STAFF_MENU_ITEMS, ADMIN_MENU_ITEMS, STUDENT_MENU_ITEMS, TEACHER_MENU_ITEMS } from '../../pages/pages-menu';
 import { LectureService } from 'app/services/lecture.service';
+import { StudentPaymentsService } from '../../services/student-payments.service';
 
 @Component({
   selector: 'ngx-login',
@@ -43,7 +44,8 @@ export class LoginComponent implements OnInit {
     private fb: FormBuilder,
     private loginService: LoginServiceService,
     private localStorageService: LocalStorageService,
-    private lectureService: LectureService
+    private lectureService: LectureService,
+    private studentPaymentService: StudentPaymentsService
   ) {
 
     this.redirectDelay = this.getConfigValue('forms.login.redirectDelay');
@@ -104,7 +106,18 @@ export class LoginComponent implements OnInit {
                 return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
               }, 1000);
               break;
+            case 4:
+              response.userViews = ADMINISTRATION_STAFF_MENU_ITEMS;
+              this.localStorageService.setData(response);
+              return this.router.navigateByUrl('/pages/admin/dashboard');
           }
+          // this.studentPaymentService.changeDueStatus().subscribe(
+          //   (response) => {
+
+          //   },
+          //   (error) => {
+          //     console.log(error);
+          //   })
         },
         error: (err) => {
           // if (err.error.code == 400) {

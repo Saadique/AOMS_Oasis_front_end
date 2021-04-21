@@ -10,7 +10,7 @@ import { TeacherService } from '../../../services/teacher.service';
 export class TeacherDashboardComponent implements OnInit {
 
   teacher;
-  notifications;
+  notifications = [];
 
   constructor(
     private localStorageService: LocalStorageService,
@@ -31,6 +31,7 @@ export class TeacherDashboardComponent implements OnInit {
     this.teacherService.getTeacherUptoDateNotifications(this.teacher.id).subscribe({
       next: (response) => {
         this.notifications = response;
+        console.log(this.notifications);
       },
       error: (err) => {
         console.log(err);

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Alert } from 'app/pages/course/create-course/create-course.component';
 import { pluck } from 'rxjs/operators';
 import { TeacherService } from '../../../services/teacher.service';
@@ -22,8 +22,6 @@ export class CreateTeacherComponent implements OnInit {
   teacher = null;
 
 
-  scheduleStepper: boolean = false;
-
   constructor(
     public createTeacherAlert: Alert,
     private fb: FormBuilder,
@@ -37,10 +35,10 @@ export class CreateTeacherComponent implements OnInit {
 
   initTeacherDetailsForm() {
     this.teacherDetailsForm = this.fb.group({
-      name: ['', null],
-      email: ['', null],
-      nic: ['', null],
-      mobile_no: ['', null],
+      name: ['', Validators.required],
+      email: ['', Validators.required],
+      nic: ['', Validators.required],
+      mobile_no: ['', Validators.required],
       address: ['', null]
     });
   }
@@ -57,11 +55,16 @@ export class CreateTeacherComponent implements OnInit {
     });
   }
 
-  createTeacher() {
+  trimSpaces(text) {
+    const newText = text.split(/\s/).join('');
+    return newText;
+  }
+
+  submitTeacherForm() {
     if (this.teacherDetailsForm.valid) {
       let data = {
         'name': this.teacherDetailsForm.value.name,
-        'nic': this.teacherDetailsForm.value.nic,
+        'nic': this.trimSpaces(this.teacherDetailsForm.value.nic),
         'email': this.teacherDetailsForm.value.email,
         'mobile_no': this.teacherDetailsForm.value.mobile_no,
         'address': this.teacherDetailsForm.value.address
@@ -78,34 +81,14 @@ export class CreateTeacherComponent implements OnInit {
           }
         }
       )
-    }
-  }
-
-  addTeacher() {
-
-  }
-
-  onFirstSubmit() {
-    if (!this.teacherDetailsForm.valid) {
+    } else {
       this.setAlert('warning', 'Please fill all required fields');
     }
-    this.teacherDetailsForm.markAsDirty();
   }
 
-  onSecondSubmit() {
-    if (!this.teacherQualificationForm.valid) {
-      this.setAlert('warning', 'Please fill all required fields');
-    }
-    this.teacherQualificationForm.markAsDirty();
-  }
 
-  onThirdSubmit() {
-    if (!this.teacherSubjectsForm.valid) {
-      this.setAlert('warning', 'Please fill all required fields');
-    }
-    this.createTeacher();
-    this.teacherSubjectsForm.markAsDirty();
-  }
+
+
 
   //alert set
   setAlert(alertStatus, alertMessage): void {
@@ -114,19 +97,7 @@ export class CreateTeacherComponent implements OnInit {
     setTimeout(() => { this.createTeacherAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
-  scheduleStepperClass() {
-    if (this.scheduleStepper) {
-      return 'col-md-5 col-lg-5';
-    }
-    return 'col-md-10 col-lg-10 col-xxxl-7 offset-md-1';
-  }
 
-  moveOut() {
-    this.scheduleStepper = false;
-  }
 
-  moveIn() {
-    this.scheduleStepper = true;
-  }
 
 }

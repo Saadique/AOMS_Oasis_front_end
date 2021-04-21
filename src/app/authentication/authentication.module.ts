@@ -19,10 +19,11 @@ import { AuthenticationComponent } from './authentication.component';
 import { LoginComponent } from './login/login.component';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 
 @NgModule({
-  declarations: [...routedComponents, AuthenticationComponent, LoginComponent],
+  declarations: [...routedComponents, AuthenticationComponent, LoginComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     AuthenticationRoutingModule,

@@ -36,4 +36,8 @@ export class StudentPaymentsService {
     return this.http.put<any>(`http://localhost:8000/api/monthly-payments/${monthlyPaymentId}`, data);
   }
 
+  changeDueStatus() {
+    return this.http.get<any>(`http://localhost:8000/api/monthly-payment/student-payment/check_due`);
+  }
+
 }

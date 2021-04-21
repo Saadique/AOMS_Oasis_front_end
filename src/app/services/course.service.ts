@@ -80,6 +80,18 @@ export class CourseService {
     return this.http.post<any>(`http://localhost:8000/api/courses`, course, this.httpOptions);
   }
 
+  updateCourse(courseId, data) {
+    return this.http.put<any>(`http://localhost:8000/api/courses/${courseId}`, data, this.httpOptions);
+  }
+
+  changeDeleteStatusCourse(courseId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/courses/status/${status}/${courseId}`, this.httpOptions);
+  }
+
+  changeDeleteStatusCourseMedium(courseId, status) {
+    return this.http.get<any>(`http://localhost:8000/api/course_mediums/status/${status}/${courseId}`, this.httpOptions);
+  }
+
   getOneCourse(courseId) {
     return this.http.get<any>(`${this.domain}/api/courses/${courseId}`);
   }

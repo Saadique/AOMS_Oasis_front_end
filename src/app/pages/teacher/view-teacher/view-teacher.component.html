@@ -123,12 +123,14 @@
                                                     <td>{{remun.payment_date}}</td>
                                                     <td>Rs.{{remun.teacher_amount}}</td>
                                                 </tr>
+                                                <tr>
+                                                    <td colspan="6" align="center"><strong>Total Teacher Amount For This
+                                                            Month</strong>
+                                                    </td>
+                                                    <td>Rs.{{totalAmountReceivedForMonth}}</td>
+                                                </tr>
                                             </tbody>
                                         </table>
-                                    </nb-tab>
-
-                                    <nb-tab tabTitle="Payment History">
-
                                     </nb-tab>
                                 </nb-tabset>
                             </nb-card>
@@ -203,10 +205,6 @@
                         </div>
                     </nb-tab>
                 </nb-tabset>
-            </nb-tab>
-
-            <nb-tab tabTitle="Lecture Details">
-                <span>Content #4</span>
             </nb-tab>
         </nb-tabset>
     </nb-card>

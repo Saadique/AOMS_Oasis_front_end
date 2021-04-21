@@ -37,6 +37,8 @@ export class CreateCourseComponent implements OnInit {
   selectedMediums: any[] = [];
   test: string;
 
+
+
   //If a course name already exists
   alreadyExists: boolean = false;
 

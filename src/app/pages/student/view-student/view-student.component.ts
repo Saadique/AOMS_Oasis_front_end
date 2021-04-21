@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { LectureService } from '../../../services/lecture.service';
 import { StudentService } from '../../../services/student.service';
@@ -12,6 +12,7 @@ import { StudentPaymentsService } from '../../../services/student-payments.servi
 import { ScheduleService } from '../../../services/schedule.service';
 import { AttendanceService } from '../../../services/attendance.service';
 import { LocalStorageService } from 'app/authentication/services/local-storage/local-storage.service';
+import { PaymentSchemeService } from '../../../services/payment-scheme.service';
 
 @Component({
   selector: 'ngx-view-student',
@@ -30,17 +31,21 @@ export class ViewStudentComponent implements OnInit {
     private subjectService: SubjectService,
     private scheduleService: ScheduleService,
     private attendanceService: AttendanceService,
+    private paymentSchemeService: PaymentSchemeService,
     private dialogBoxService: NbDialogService,
     private localStorageService: LocalStorageService) { }
 
   lecturesOfStudent: any[] = [];
   addLecAlert = new Alert();
   lecAlert = new Alert();
+  editAlert = new Alert();
 
   studentId;
   student;
   addNewLecForm: FormGroup;
   monthlyPaymentForm: FormGroup;
+  studentViewForm: FormGroup;
+
   courseMediums;
   subjects: any;
   lectures: any;
@@ -54,8 +59,14 @@ export class ViewStudentComponent implements OnInit {
   attendanceStatus;
   dailySchedulesByLec = "default";
 
+  testE: string = 'ppp';
+
+  isSchemeMode;
+  isNormalMode;
+
   duePayments: [] = [];
   paidPayments: [] = [];
+  selectedLectureIds: any[] = [];
 
   loggedInUser;
   role;
@@ -84,6 +95,29 @@ export class ViewStudentComponent implements OnInit {
     })
   }
 
+  // initStudentViewForm() {
+  //   this.studentViewForm = this.fb.group({
+  //     'registration_no': [this.student.registration_no],
+  //     'name': [this.student.name],
+  //     'mobileNo': [this.student.mobile_no],
+  //     'schoolName': [this.student.school_name],
+  //     'student_type': [this.student.student_type],
+  //     'email': [this.student.email]
+  //   });
+  // }
+
+  initStudentViewForm() {
+    this.studentViewForm = new FormGroup({
+      'registration_no': new FormControl(this.student.registration_no),
+      // 'name': new FormControl(this.student.name, Validators.required),
+      // 'mobileNo': new FormControl(this.student.mobile_no, Validators.required),
+      // 'schoolName': new FormControl(this.student.school_name, null),
+      // 'student_type': new FormControl(this.student.student_type, Validators.required),
+      // 'email': new FormControl(this.student.email, Validators.required)
+    });
+    console.log(this.studentViewForm);
+  }
+
   open(dialog: TemplateRef<any>) {
     this.dialogBoxService.open(dialog, { context: 'Add New Lecture' });
   }
@@ -101,6 +135,12 @@ export class ViewStudentComponent implements OnInit {
     setTimeout(() => { this.lecAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
+  setEditAlert(alertStatus, alertMessage): void {
+    this.editAlert.status = alertStatus;
+    this.editAlert.message = alertMessage;
+    setTimeout(() => { this.editAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
   onAddClick(dialog: TemplateRef<any>) {
     this.open(dialog);
   }
@@ -110,17 +150,37 @@ export class ViewStudentComponent implements OnInit {
     this.studentService.getStudentById(this.studentId).subscribe((response) => {
       console.log(response);
       this.student = response;
+      this.initStudentViewForm();
       this.getPaymentsOfStudent(this.studentId);
-      this.getLecturesOfStudent(this.studentId);
+      this.getLecturesOfStudent();
       this.getDueMonthlyPayments();
       this.getPaidMonthlyPayments();
     })
   }
 
+  editStudent() {
+    if (this.student.name != '' && this.student.mobile_no != '' && this.student.school_name != '' && this.student.email != '') {
+      this.studentService.updateStudent(this.student, this.student.id).subscribe({
+        next: (response) => {
+          this.student = response;
+          this.getStudent();
+          this.setEditAlert('success', 'Student Updated Sucessfully');
+        },
+        error: (err) => {
+          console.log(err);
+          if (err.status == 400) {
+            this.setEditAlert('err', err.error);
+          }
+        }
+      })
+    } else {
+      this.setEditAlert('warning', 'Please Fill All Required Fields')
+    }
+  }
 
 
-  getLecturesOfStudent(studentId) {
-    this.lectureService.getAllLectureByStudent(studentId).subscribe((response) => {
+  getLecturesOfStudent() {
+    this.lectureService.getAllLectureByStudent(this.student.id).subscribe((response) => {
       console.log(response);
       this.lecturesOfStudent = response;
       this.loadCourses();
@@ -174,6 +234,12 @@ export class ViewStudentComponent implements OnInit {
     return found;
   }
 
+  takeLectureIdsOfSelectedLectures() {
+    for (var i = 0; i < this.lecturesOfStudent.length; i++) {
+      this.selectedLectureIds.push(this.lecturesOfStudent[i].id)
+    }
+  }
+
   addLecture(ref) {
     if (this.addNewLecForm.valid) {
       let lectureId = this.addNewLecForm.value.lecture_id;
@@ -186,12 +252,10 @@ export class ViewStudentComponent implements OnInit {
         this.studentService.addLecture(data).subscribe(
           {
             next: (response) => {
+              lectureId = null;
               ref.close();
-              this.lectureService.getAllLectureByStudent(this.student.id).subscribe((response) => {
-                console.log(response);
-                this.setAlert('success', 'Lecture was added successfully');
-                this.lecturesOfStudent = response;
-              })
+              this.takeLectureIdsOfSelectedLectures();
+              this.getLecturesOfStudent();
             },
             error: (error) => {
               console.log(error);
@@ -205,6 +269,23 @@ export class ViewStudentComponent implements OnInit {
 
     }
   }
+
+  removeLecture(lecture) {
+    let data = {
+      "student_id": this.student.id,
+      "lecture_id": lecture.id
+    }
+    this.studentService.removeLecture(data).subscribe({
+      next: (response) => {
+        this.getLecturesOfStudent();
+        this.setAlert('success', 'Lecture was removed successfully');
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
 
   getPaymentsOfStudent($studentId) {
     this.studentPaymentsService.getStudentPayments($studentId).subscribe((response) => {
@@ -338,6 +419,12 @@ export class ViewStudentComponent implements OnInit {
         }
       }
     )
+  }
+
+  test() {
+    if (this.studentViewForm.valid) {
+      console.log(this.studentViewForm.value.name);
+    }
   }
 
 }

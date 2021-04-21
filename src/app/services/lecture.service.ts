@@ -11,6 +11,10 @@ export class LectureService {
   rootUrl = 'http://localhost:8000/api/lectures';
   domain = 'http://localhost:8000';
 
+  getAllLectures() {
+    return this.http.get<any>(`http://localhost:8000/api/lectures`);
+  }
+
   createLecture(lecture) {
     return this.http.post<any>(`${this.rootUrl}`, lecture);
   }

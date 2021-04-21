@@ -1,0 +1,103 @@
+<div class="animated fadeIn mt-5">
+    <div class="alert alert-danger" role="alert" *ngIf="editStudentAlert.status=='error'">
+        {{ editStudentAlert.message }}
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="editStudentAlert.status=='warning'">
+        {{ editStudentAlert.message }}
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="editStudentAlert.status=='success'">
+        {{ editStudentAlert.message }}
+    </div>
+</div>
+<div class="container rounded bg-white mt-5" *ngIf="role=='Student'">
+    <div class="row">
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                    width="90"><span class="font-weight-bold">{{student.name}}</span><span
+                    class="text-black-50">{{student.email}}</span><span>{{role}}</span></div>
+        </div>
+        <div class="col-md-8">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-right">Edit Profile</h6>
+                </div>
+                <form [formGroup]="studentForm">
+                    <div class="row mt-2">
+                        <div class="col-md-6"><input type="text" disabled class="form-control"
+                                formControlName="registration_no">
+                        </div>
+                        <div class="col-md-6"><input type="text" class="form-control" formControlName="name"
+                                placeholder="Name">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Contact No."
+                                formControlName="mobile_no"></div>
+                        <div class="col-md-6"><input type="text" class="form-control" formControlName="school_name"
+                                placeholder="School Name"></div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><input type="text" class="form-control" disabled
+                                formControlName="student_type"></div>
+                        <div class="col-md-6"><input type="text" class="form-control" value="USA"
+                                formControlName="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="button"
+                            (click)="saveStudentProfile()">Save
+                            Profile</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="animated fadeIn">
+    <div class="alert alert-danger" role="alert" *ngIf="editTeacherAlert.status=='error'">
+        {{ editTeacherAlert.message }}
+    </div>
+    <div class="alert alert-warning" role="alert" *ngIf="editTeacherAlert.status=='warning'">
+        {{ editTeacherAlert.message }}
+    </div>
+    <div class="alert alert-success" role="alert" *ngIf="editTeacherAlert.status=='success'">
+        {{ editTeacherAlert.message }}
+    </div>
+</div>
+<div class="container rounded bg-white mt-5" *ngIf="role=='Teacher'">
+    <div class="row">
+        <div class="col-md-4 border-right">
+            <div class="d-flex flex-column align-items-center text-center p-3 py-5"><img class="rounded-circle mt-5"
+                    width="90"><span class="font-weight-bold">{{teacher.name}}</span><span
+                    class="text-black-50">{{teacher.email}}</span><span>{{role}}</span></div>
+        </div>
+        <div class="col-md-8">
+            <div class="p-3 py-5">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <h6 class="text-right">Edit Profile</h6>
+                </div>
+
+                <form [formGroup]="teacherEditForm">
+                    <div class="row mt-2">
+                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Name"
+                                formControlName="name">
+                        </div>
+                        <div class="col-md-6"><input type="text" class="form-control" formControlName="mobile_no"
+                                placeholder="Contact No.">
+                        </div>
+                    </div>
+                    <div class="row mt-3">
+                        <div class="col-md-6"><input type="text" class="form-control" placeholder="Email"
+                                formControlName="email"></div>
+                        <div class="col-md-6"><input type="text" class="form-control" formControlName="address"
+                                placeholder="Address"></div>
+                    </div>
+                    <div class="mt-5 text-right"><button class="btn btn-primary profile-button" type="button"
+                            (click)="saveTeacherProfile()">Save
+                            Profile</button></div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

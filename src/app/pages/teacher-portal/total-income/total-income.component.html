@@ -4,50 +4,84 @@
             <div class="col-sm-5">
                 Total Income From All Classes
             </div>
-            <div class="col-sm-7">
-                <!-- <nb-select placeholder="Select Lecture" (selectedChange)="selectRemuneration($event)">
-                    <nb-option *ngFor="let lecture of lecturesOfTeacher" value={{lecture.student_payment.id}}>
-                        {{lecture.name}}
-                    </nb-option>
-                </nb-select> -->
-            </div>
         </div>
     </nb-card-header>
     <nb-card-body>
         <div class="col-12">
-            <nb-card size="flexible">
-                <nb-tabset fullWidth>
-                    <nb-tab tabTitle="Payables">
-                        <!-- <div class="table-responsive">
-                            <br>
-                            <table class="table table-bordered table-striped">
-                                <thead>
-                                    <tr>
-                                        <th>Payment Month</th>
-                                        <th>Payment Amount</th>
-                                        <th>Due Date</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let payable of activePayables">
-                                        <td>{{payable.year}} {{payable.month}}</td>
-                                        <td>{{payable.amount}}</td>
-                                        <td>{{payable.due_date}}</td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div> -->
-                    </nb-tab>
+            <nb-tabset fullWidth>
+                <nb-tab tabTitle="View Total Income From Each Class">
+                    <nb-card>
+                        <nb-card-header>
+                            <div class="row">
+                                <div class="col-sm-2">
+                                    Select Lectures
+                                </div>
+                                <div class="col-sm-4">
+                                    <nb-select placeholder="Please Select A Lecture"
+                                        (selectedChange)="getTotalMonthlyIncomeForLecture($event)">
+                                        <nb-option *ngFor="let lecture of lecturesOfTeacher" value={{lecture.id}}>
+                                            {{lecture.name}}
+                                        </nb-option>
+                                    </nb-select>
+                                </div>
+                            </div>
+                        </nb-card-header>
+                        <nb-card-body>
+                            <div class="table-responsive" *ngIf="totalMonthlyIncomeForLectures.length!=0">
+                                <br>
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Year</th>
+                                            <th>Month</th>
+                                            <th>Total Amount</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr *ngFor="let income of totalMonthlyIncomeForLectures">
+                                            <td>{{income.year}}</td>
+                                            <td>{{income.month}}</td>
+                                            <td>Rs.{{income.total_amount}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2" align="center"><strong>Total</strong>
+                                            </td>
+                                            <td>Rs.{{totalAmountReceivedForLecture}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </nb-card-body>
+                    </nb-card>
+                </nb-tab>
 
-                    <nb-tab tabTitle="Due Payments">
-
-                    </nb-tab>
-
-                    <nb-tab tabTitle="Payment History">
-
-                    </nb-tab>
-                </nb-tabset>
-            </nb-card>
+                <nb-tab tabTitle="View Complete Total Income">
+                    <div class="table-responsive">
+                        <br>
+                        <table class="table table-bordered" *ngIf="totalMonthlyIncome.length!=0">
+                            <thead>
+                                <tr>
+                                    <th>Year</th>
+                                    <th>Month</th>
+                                    <th>Total Amount</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let income of totalMonthlyIncome">
+                                    <td>{{income.year}}</td>
+                                    <td>{{income.month}}</td>
+                                    <td>Rs.{{income.total_amount}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="2" align="center"><strong>Total</strong>
+                                    </td>
+                                    <td>Rs.{{totalAmountReceived}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </nb-tab>
+            </nb-tabset>
         </div>
     </nb-card-body>
 </nb-card>

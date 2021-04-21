@@ -41,5 +41,18 @@ export class UserService {
     return this.http.get<any>(`http://localhost:8000/api/users/status/${status}/${userId}`);
   }
 
+  mailCode(username) {
+    return this.http.get<any>(`http://localhost:8000/api/users/reset_password/mail_code/${username}`);
+  }
+
+  submitCode(data) {
+    return this.http.post<any>(`http://localhost:8000/api/users/reset_password/code`, data);
+  }
+
+  submitPassword(data) {
+    return this.http.post<any>(`http://localhost:8000/api/users/reset_password/reset`, data);
+  }
+
+
 
 }

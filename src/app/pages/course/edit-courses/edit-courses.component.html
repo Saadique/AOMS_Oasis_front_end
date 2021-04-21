@@ -12,6 +12,7 @@
                 <!-- <th>Number Of Students</th> -->
                 <th>Course Mediums</th>
                 <th>Edit</th>
+                <th>Status</th>
                 <th *ngIf="role=='Admin'">Delete</th>
               </tr>
             </thead>
@@ -24,9 +25,14 @@
                     <li>{{courseM.name}}</li>
                   </ul>
                 </td>
-                <td><button nbButton status="success" (click)="editClickCourse(course)">Edit</button>
+                <td *ngIf="course.course.status=='active'"><span class="badge badge-success">Active</span></td>
+                <td *ngIf="course.course.status=='deleted'"><span class="badge badge-warning">Deleted</span></td>
+                <td><button nbButton status="info" (click)="editClickCourse(course.course,courseEdit)">Edit</button>
                 </td>
-                <td *ngIf="role=='Admin'"><button nbButton status="warning">Delete</button></td>
+                <td *ngIf="role=='Admin' && course.course.status=='active'"><button nbButton status="warning"
+                    (click)="deleteClickCourse(course.course, deleteConfirmation)">Delete</button></td>
+                <td *ngIf="role=='Admin' && course.course.status=='deleted'"><button nbButton status="success"
+                    (click)="activateCourse(course.course)">Activate</button></td>
               </tr>
             </tbody>
             <div *ngIf="allCourses.length==0">
@@ -53,6 +59,7 @@
               <tr>
                 <th>Course Name</th>
                 <!-- <th>Number Of Students</th> -->
+                <th>Status</th>
                 <th>Delete</th>
               </tr>
             </thead>
@@ -60,7 +67,14 @@
               <tr *ngFor="let courseM of courseMediums">
                 <td>{{courseM.name}}</td>
                 <!-- <td>{{courseM.no_of_students}}</td> -->
-                <td><button nbButton status="warning" (click)="deleteClickCourseMedium(courseM)">Delete</button></td>
+                <td *ngIf="courseM.status=='active'"><span class="badge badge-success">Delete</span></td>
+                <td *ngIf="courseM.status=='deleted'"><span class="badge badge-warning">Activate</span></td>
+
+                <td *ngIf="role=='Admin' && courseM.status=='active'"><button nbButton status="warning"
+                    (click)="deleteCourseMedium(courseM)">Delete</button></td>
+
+                <td *ngIf="role=='Admin' && courseM.status=='deleted'"><button nbButton status="success"
+                    (click)="activateCourseMedium(courseM)">Activate</button></td>
               </tr>
             </tbody>
             <div *ngIf="courseMediums.length==0">
@@ -74,67 +88,62 @@
   </nb-card-body>
 </nb-card>
 
-<!-- <ng-template #super_course_edit let-data let-refEdit="dialogRef">
-    <nb-card id="modal">
-        <nb-card-header>Edit Course</nb-card-header>
-        <nb-card-body>
-            <br>
-            <form class="form-horizontal" (ngSubmit)="editCourse(refEdit)" [formGroup]="createForm">
-                <div class="form-group row">
-                  <label for="courseName" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter Course
-                    Name</label>
-                  <div class="col-sm-9">
-                    <input type="text" formControlName="name" nbInput fullWidth id="courseName" style="font-size: 12.75px;"
-                      placeholder="Course Name">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
-                    Course Cordinator</label>
-                  <div class="col-sm-9">
-                    <input type="text" formControlName="coordinator" nbInput fullWidth id="courseCordinator"
-                      placeholder="Course Cordinator">
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
-                    Course Description</label>
-                  <div class="col-sm-9">
-                    <textarea rows="5" formControlName="description" nbInput fullWidth
-                      placeholder="Course Description"></textarea>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <label for="course_type" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Course
-                    Type</label>
-                  <div class="col-sm-9">
-                    <nb-select formControlName="course_type" placeholder="Select Course Type">
-                      <nb-option value="advance_level">Advance Level</nb-option>
-                      <nb-option value="ordinary_level">Ordinary Level</nb-option>
-                    </nb-select>
-                  </div>
-                </div>
-                <br><br>
-                <div class="form-group row">
-                  <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Select
-                    mediums for course</label>
-                  <div class="col-sm-9">
-                    <div class="checkbox" *ngFor="let medium of availableMediums">
-                      <nb-checkbox (change)="addMedium(medium.id, $event.target.checked)">
-                        {{medium.name}}</nb-checkbox>
-                    </div>
-                  </div>
-                </div>
-                <div class="form-group row">
-                  <div class="offset-sm-3 col-sm-9">
-                    <button type="submit" nbButton status="primary" (click)="testL()">Create New Course</button>
-                  </div>
-                </div>
-              </form>
-        </nb-card-body>
-        <nb-card-footer>
-            <button nbButton (click)="refMEdit.close()">Back</button>
-            <button nbButton id="submitButton" (click)="addNewRole(ref, data)">Submit</button>&nbsp;
-        </nb-card-footer>
-    </nb-card>
-</ng-template> -->
+<ng-template #courseEdit let-data let-ref="dialogRef">
+  <nb-card id="modal">
+    <nb-card-header>Edit Course</nb-card-header>
+    <nb-card-header>
+      <div class="animated fadeIn">
+        <div class="alert alert-danger" role="alert" *ngIf="editCourseAlert.status=='error'">
+          {{ editCourseAlert.message }}
+        </div>
+        <div class="alert alert-warning" role="alert" *ngIf="editCourseAlert.status=='warning'">
+          {{ editCourseAlert.message }}
+        </div>
+        <div class="alert alert-success" role="alert" *ngIf="editCourseAlert.status=='success'">
+          {{ editCourseAlert.message }}
+        </div>
+      </div>
+    </nb-card-header>
+    <nb-card-body>
+      <br>
+      <form class="form-horizontal" [formGroup]="editCourseForm">
+        <div class="form-group row">
+          <label for="courseName" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter Course
+            Name</label>
+          <div class="col-sm-9">
+            <input type="text" formControlName="name" nbInput id="name" style="font-size: 12.75px;"
+              placeholder="Course Name">
+          </div>
+        </div>
+
+        <br><br>
+        <div class="form-group row">
+          <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Add
+            Medium</label>
+          <div class="col-sm-9">
+            <nb-select formControlName="medium" placeholder="Please Select Medium">
+              <nb-option *ngFor="let medium of availableMediums" value={{medium.id}}>
+                {{medium.name}}
+              </nb-option>
+            </nb-select>
+          </div>
+        </div>
+      </form>
+    </nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="ref.close()">Back</button>
+      <button nbButton id="submitButton" (click)="editCourse(ref, data)">Submit</button>&nbsp;
+    </nb-card-footer>
+  </nb-card>
+</ng-template>
+
+<ng-template #deleteConfirmation let-data let-refDelete="dialogRef">
+  <nb-card>
+    <nb-card-header>Delete Confimation</nb-card-header>
+    <nb-card-body>Are you sure you want to delete this medium?</nb-card-body>
+    <nb-card-footer>
+      <button nbButton (click)="onDeleteConfirmationCourse(refDelete)">Yes</button>&nbsp;
+      <button nbButton (click)="refDelete.close()">Cancel</button>
+    </nb-card-footer>
+  </nb-card>
+</ng-template>

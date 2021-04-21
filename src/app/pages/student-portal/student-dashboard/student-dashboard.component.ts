@@ -10,7 +10,7 @@ import { StudentService } from '../../../services/student.service';
 export class StudentDashboardComponent implements OnInit {
 
   student;
-  notifications;
+  notifications = [];
 
   constructor(private localStorageService: LocalStorageService,
     private studentService: StudentService) { }

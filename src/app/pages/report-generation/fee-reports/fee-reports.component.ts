@@ -8,6 +8,9 @@ import jsPDF from 'jspdf';
 import 'jspdf-autotable';
 import autoTable from 'jspdf-autotable'
 import { Alert } from '../../course/create-course/create-course.component';
+import { TeacherService } from '../../../services/teacher.service';
+import { LectureService } from '../../../services/lecture.service';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'ngx-fee-reports',
@@ -81,17 +84,23 @@ export class FeeReportsComponent implements OnInit {
   timeSpan: string;
 
   studentFeeReportAlert = new Alert();
+  teachers;
+  lectures;
 
   constructor(
     private router: Router,
     private dialogBoxService: NbDialogService,
     private reportService: ReportService,
-    private courseService: CourseService
+    private courseService: CourseService,
+    private teacherService: TeacherService,
+    private lectureService: LectureService
   ) { }
 
   ngOnInit(): void {
     this.loadInitialData();
     this.getAllCourses();
+    this.getAllTeachers();
+    this.getAllLectures();
   }
 
   initData(data) {
@@ -113,6 +122,30 @@ export class FeeReportsComponent implements OnInit {
       },
       error: (err) => {
         console.log(err);
+      }
+    })
+  }
+
+  getAllTeachers() {
+    this.teacherService.getAllTeachers().subscribe({
+      next: (response) => {
+        this.teachers = response;
+        console.log(this.teachers);
+      },
+      error: (error) => {
+
+      }
+    })
+  }
+
+  getAllLectures() {
+    this.lectureService.getAllLectures().subscribe({
+      next: (response) => {
+        this.lectures = response.data;
+        console.log(this.lectures);
+      },
+      error: (error) => {
+
       }
     })
   }
@@ -143,6 +176,7 @@ export class FeeReportsComponent implements OnInit {
   loadInitialData() {
     this.reportService.getAllStudentFeeRecords().subscribe({
       next: (response) => {
+        console.log(response);
         this.initData(response.records);
       },
       error: (error) => {
@@ -253,14 +287,33 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-
+          this.reportService.getAllStudentFeeRecordsByMonth(this.filter.by_month.year, this.filter.by_month.month).subscribe({
+            next: (response) => {
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+          break;
         } else {
           this.setAlert('error', 'Please Select An Year And A Month');
         }
         break;
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
-
+          this.reportService.getAllStudentFeeRecordsByDate(this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+            next: (response) => {
+              console.log(response);
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+          break;
         } else {
           this.setAlert('error', 'Please Select A Date Frame');
         }
@@ -283,18 +336,138 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-
+          this.reportService.getAllStudentFeeRecordForCourseByMonth(this.filter.courseId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+            next: (response) => {
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+          break;
         } else {
           this.setAlert('error', 'Please Select An Year And A Month');
         }
         break;
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+          if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+            this.reportService.getAllStudentFeeRecordForCourseByMonth(this.filter.courseId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+              next: (response) => {
+                this.initData(response.records);
+                modal.close();
+              },
+              error: (error) => {
+                console.log(error);
+              }
+            })
+            break;
+          } else {
+            this.setAlert('error', 'Please Select A Date Frame');
+          }
+        }
+    }
+  }
 
+
+  getRecordsByTeacher(modal) {
+    switch (this.filter.reportTimeSpan) {
+      case 'all_time':
+        this.reportService.getAllStudentFeeRecordByTeacher(this.filter.courseId).subscribe({
+          next: (response) => {
+            this.initData(response.records);
+            modal.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+        break;
+      case 'by_month':
+        if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+          this.reportService.getAllStudentFeeRecordForTeacherByMonth(this.filter.teacherId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+            next: (response) => {
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+          break;
+        } else {
+          this.setAlert('error', 'Please Select An Year And A Month');
+        }
+        break;
+      case 'by_range':
+        if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+          if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+            this.reportService.getAllStudentFeeRecordForTeacherByMonth(this.filter.teacherId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+              next: (response) => {
+                this.initData(response.records);
+                modal.close();
+              },
+              error: (error) => {
+                console.log(error);
+              }
+            })
+            break;
+          } else {
+            this.setAlert('error', 'Please Select A Date Frame');
+          }
+        }
+    }
+  }
+
+  getRecordsByLecture(modal) {
+    switch (this.filter.reportTimeSpan) {
+      case 'all_time':
+        this.reportService.getAllStudentFeeRecordByLecture(this.filter.courseId).subscribe({
+          next: (response) => {
+            this.initData(response.records);
+            modal.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+        break;
+      case 'by_month':
+        if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+          this.reportService.getAllStudentFeeRecordForLectureByMonth(this.filter.lectureId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+            next: (response) => {
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+        } else {
+          this.setAlert('error', 'Please Select An Year And A Month');
+        }
+        break;
+      case 'by_range':
+        if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+          this.reportService.getAllStudentFeeRecordForLectureByMonth(this.filter.lectureId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+            next: (response) => {
+              this.initData(response.records);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
         } else {
           this.setAlert('error', 'Please Select A Date Frame');
         }
     }
+
   }
+
+
+
+
 
 }
