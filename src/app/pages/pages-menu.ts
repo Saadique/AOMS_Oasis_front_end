@@ -662,7 +662,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
   {
     title: 'Dashboard',
     icon: 'bar-chart',
-    link: '/pages/admin/dashboard',
+    link: '/pages/admin/dashboard_admin_staff',
   },
   {
     title: 'Course Management',

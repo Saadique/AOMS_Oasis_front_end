@@ -38,41 +38,48 @@ export class CourseService {
   }
 
   createMedium(data) {
-    return this.http.post<any>(`${this.domain}/api/mediums`, data, this.httpOptions).pipe(
-      catchError(this.handleError)
-    );
+    this.initHttpOptions();
+    return this.http.post<any>(`${this.domain}/api/mediums`, data, this.httpOptions);
   }
 
   updateMedium(data, mediumId) {
-    return this.http.put<any>(`${this.domain}/api/mediums/${mediumId}`, data);
+    this.initHttpOptions();
+    return this.http.put<any>(`${this.domain}/api/mediums/${mediumId}`, data, this.httpOptions);
   }
 
   getMediums() {
-    return this.http.get<any>(`${this.domain}/api/mediums/all/mediums`);
+    this.initHttpOptions();
+    return this.http.get<any>(`${this.domain}/api/mediums/all/mediums`, this.httpOptions);
   }
 
   getCourses() {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/courses/all/courses`);
   }
 
   deleteMedium(mediumId) {
-    return this.http.delete<any>(`${this.domain}/api/mediums/${mediumId}`);
+    this.initHttpOptions();
+    return this.http.delete<any>(`${this.domain}/api/mediums/${mediumId}`, this.httpOptions);
   }
 
   activateMedium(mediumId) {
-    return this.http.get<any>(`${this.domain}/api/mediums/status/activate/${mediumId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`${this.domain}/api/mediums/status/activate/${mediumId}`, this.httpOptions);
   }
 
   getAllCourses() {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/courses`);
   }
 
   getAllCourseByType(courseType) {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/courses/type/${courseType}`);
   }
 
   getAllMediums() {
-    return this.http.get<any>(`${this.domain}/api/mediums`)
+    this.initHttpOptions();
+    return this.http.get<any>(`${this.domain}/api/mediums`, this.httpOptions)
   }
 
   createCourse(course) {
@@ -81,35 +88,43 @@ export class CourseService {
   }
 
   updateCourse(courseId, data) {
+    this.initHttpOptions();
     return this.http.put<any>(`http://localhost:8000/api/courses/${courseId}`, data, this.httpOptions);
   }
 
   changeDeleteStatusCourse(courseId, status) {
+    this.initHttpOptions();
     return this.http.get<any>(`http://localhost:8000/api/courses/status/${status}/${courseId}`, this.httpOptions);
   }
 
   changeDeleteStatusCourseMedium(courseId, status) {
+    this.initHttpOptions();
     return this.http.get<any>(`http://localhost:8000/api/course_mediums/status/${status}/${courseId}`, this.httpOptions);
   }
 
   getOneCourse(courseId) {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/courses/${courseId}`);
   }
 
   getCoursesWithMediums(courseId) {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/course/course_mediums/${courseId}`);
   }
   // http://localhost:8000/api/course/medium/all
 
   getAllCoursesWithMediums() {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/course/medium/all`);
   }
 
   getAllCourseMediums() {
+    this.initHttpOptions();
     return this.http.get<any>(`${this.domain}/api/course_mediums`);
   }
 
   getOneCourseMedium(courseMediumId) {
+    this.initHttpOptions();
     return this.http.get(`http://localhost:8000/api/course_mediums/${courseMediumId}`);
   }
 

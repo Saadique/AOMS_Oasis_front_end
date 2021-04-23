@@ -1,6 +1,83 @@
+<nb-card class="card">
+    <nb-card-header>
+        Teacher Renumeration Reports
+    </nb-card-header>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <button nbButton fullWidth shape="round" (click)="addFilters(dialog)">Add Filters</button>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+    </nb-card-header>
+    <nb-card-header>
+        <div class="row">
+            <div class="col-sm-3">
+                <div class="form-outline">
+                    <input type="search" id="form1" class="form-control" placeholder="All Search" aria-label="Search" />
+                </div>
+            </div>
+            <div class="col-sm-2">
+
+            </div>
+            <div class="col-sm-3">
+                <button nbButton outline (click)="printReport()">
+                    <nb-icon icon="printer-outline" [options]="{ animation: { type: 'zoom' } }"></nb-icon>Print Report
+                </button>
+            </div>
+            <div class="col-sm-4">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <label>Export To</label>
+                    </div>
+                    <div class="col-sm-8">
+                        <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" (click)="makePDF()" class="btn btn-outline-secondary">PDF</button>
+                            <button type="button" class="btn btn-outline-secondary">Excel</button>
+                            <button type="button" class="btn btn-outline-secondary">CSV</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nb-card-header>
+
+    <nb-card-body>
+        <br>
+        <div class="col-12">
+            <nb-card size="flexible">
+                <nb-tabset fullWidth>
+                    <nb-tab tabTitle="Report Data">
+                        <ng2-smart-table [settings]="settings" [source]="source">
+                        </ng2-smart-table>
+                    </nb-tab>
+
+                    <nb-tab tabTitle="Report Summary">
+
+                    </nb-tab>
+                </nb-tabset>
+            </nb-card>
+        </div>
+    </nb-card-body>
+</nb-card>
+
 <ng-template #dialog let-data let-ref="dialogRef">
     <nb-card id="addNewForm">
         <nb-card-header>Select Filter Options</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="remunAlert.status=='error'">
+                    {{ remunAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="remunAlert.status=='warning'">
+                    {{ remunAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="remunAlert.status=='success'">
+                    {{ remunAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <div class="card">
                 <ul class="list-group list-group-flush">
@@ -10,14 +87,15 @@
                                 <label>Filter By</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Select Filter Option">
-                                    <nb-option value="subject">None(All Records)</nb-option>
-                                    <nb-option value="subject">Course Level</nb-option>
-                                    <nb-option value="subject">Course</nb-option>
-                                    <nb-option value="subject">Subject</nb-option>
-                                    <nb-option value="subject">Lecture/Class</nb-option>
-                                    <nb-option value="subject">Teacher</nb-option>
-                                    <nb-option value="subject">Lecture Type</nb-option>
+                                <nb-select placeholder="Select Filter Option"
+                                    (selectedChange)="selectFilterOption($event)" [(ngModel)]="filter.filterOption">
+                                    <nb-option value="all">None(All Records)</nb-option>
+                                    <!-- <nb-option value="subject">Course Level</nb-option> -->
+                                    <nb-option value="course">Course</nb-option>
+                                    <!-- <nb-option value="subject">Subject</nb-option> -->
+                                    <nb-option value="lecture">Lecture/Class</nb-option>
+                                    <nb-option value="teacher">Teacher</nb-option>
+                                    <!-- <nb-option value="subject">Lecture Type</nb-option> -->
                                 </nb-select>
                             </div>
                         </div>
@@ -25,7 +103,63 @@
                 </ul>
             </div><br>
 
-            <div class="card">
+            <div class="card" *ngIf="filterOption=='course'">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Course</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <nb-select placeholder="Choose Course" [(ngModel)]="filter.courseId">
+                                    <nb-option *ngFor="let course of courses" value={{course.id}}>{{course.name}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div><br>
+
+            <div class="card" *ngIf="filterOption=='teacher'">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Teacher</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <nb-select placeholder="Choose Teacher" [(ngModel)]="filter.teacherId">
+                                    <nb-option *ngFor="let teacher of teachers" value={{teacher.id}}>
+                                        {{teacher.name}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div><br>
+
+            <div class="card" *ngIf="filterOption=='lecture'">
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <label>Lecture</label>
+                            </div>
+                            <div class="col-sm-8">
+                                <nb-select placeholder="Choose Lecture" [(ngModel)]="filter.lectureId">
+                                    <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
+                                        {{lecture.name}}
+                                    </nb-option>
+                                </nb-select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div><br>
+
+            <!-- <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -43,7 +177,7 @@
                         </div>
                     </li>
                 </ul>
-            </div><br>
+            </div><br> -->
 
             <!-- <div class="card">
                 <ul class="list-group list-group-flush">
@@ -66,7 +200,7 @@
                 </ul>
             </div><br> -->
 
-            <div class="card">
+            <!-- <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -83,9 +217,9 @@
                         </div>
                     </li>
                 </ul>
-            </div><br>
+            </div><br> -->
 
-            <div class="card">
+            <!-- <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -123,7 +257,7 @@
                         </div>
                     </li>
                 </ul>
-            </div><br>
+            </div><br> -->
 
             <!-- <div class="card">
                 <ul class="list-group list-group-flush">
@@ -152,71 +286,7 @@
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="submitButton" (click)="submitFilter(ref, data)">Submit</button>&nbsp;
+            <button nbButton id="submitButton" (click)="submitFilter(ref)">Submit</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>
-
-<nb-card class="card">
-    <nb-card-header>
-        Teacher Renumeration Reports
-    </nb-card-header>
-    <nb-card-header>
-        <div class="row">
-            <div class="col-sm-3"></div>
-            <div class="col-sm-6">
-                <button nbButton fullWidth shape="round" (click)="addFilters(dialog)">Add Filters</button>
-            </div>
-            <div class="col-sm-3"></div>
-        </div>
-    </nb-card-header>
-    <nb-card-header>
-        <div class="row">
-            <div class="col-sm-3">
-                <div class="form-outline">
-                    <input type="search" id="form1" class="form-control" placeholder="All Search" aria-label="Search" />
-                </div>
-            </div>
-            <div class="col-sm-2">
-
-            </div>
-            <div class="col-sm-3">
-                <button nbButton outline>
-                    <nb-icon icon="printer-outline" [options]="{ animation: { type: 'zoom' } }"></nb-icon>Print Report
-                </button>
-            </div>
-            <div class="col-sm-4">
-                <div class="row">
-                    <div class="col-sm-4">
-                        <label>Export To</label>
-                    </div>
-                    <div class="col-sm-8">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <button type="button" class="btn btn-outline-secondary">PDF</button>
-                            <button type="button" class="btn btn-outline-secondary">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary">CSV</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </nb-card-header>
-
-    <nb-card-body>
-        <br>
-        <div class="col-12">
-            <nb-card size="flexible">
-                <nb-tabset fullWidth>
-                    <nb-tab tabTitle="Report Data">
-                        <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="navigate($event)">
-                        </ng2-smart-table>
-                    </nb-tab>
-
-                    <nb-tab tabTitle="Report Summary">
-
-                    </nb-tab>
-                </nb-tabset>
-            </nb-card>
-        </div>
-    </nb-card-body>
-</nb-card>

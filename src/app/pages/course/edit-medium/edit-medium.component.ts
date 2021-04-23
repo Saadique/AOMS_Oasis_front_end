@@ -31,7 +31,7 @@ export class EditMediumComponent implements OnInit {
       .pipe(
         pluck('data')
       )
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.availableMediums = response;
       })
   }

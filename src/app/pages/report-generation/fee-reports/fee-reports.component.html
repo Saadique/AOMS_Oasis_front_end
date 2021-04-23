@@ -22,7 +22,7 @@
 
             </div>
             <div class="col-sm-3">
-                <button nbButton outline>
+                <button nbButton outline (click)="printReport()">
                     <nb-icon icon="printer-outline" [options]="{ animation: { type: 'zoom' } }"></nb-icon>Print Report
                 </button>
             </div>
@@ -34,8 +34,8 @@
                     <div class="col-sm-8">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" (click)="makePDF()" class="btn btn-outline-secondary">PDF</button>
-                            <button type="button" class="btn btn-outline-secondary">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary">CSV</button>
+                            <!-- <button type="button" (click)="makeExcel()"class="btn btn-outline-secondary">Excel</button> -->
+
                         </div>
                     </div>
                 </div>
@@ -48,12 +48,12 @@
             <nb-card size="flexible">
                 <nb-tabset fullWidth>
                     <nb-tab tabTitle="Report Data">
-                        <ng2-smart-table [settings]="settings" [source]="source" (deleteConfirm)="navigate($event)">
+                        <ng2-smart-table [settings]="settings" [source]="source">
                         </ng2-smart-table>
                     </nb-tab>
 
                     <nb-tab tabTitle="Report Summary">
-
+                        {{summaryMessage}}
                     </nb-tab>
                 </nb-tabset>
             </nb-card>
@@ -110,8 +110,7 @@
                                 <label>Course</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select placeholder="Choose Course" (selectedChange)="selectCourse($event)"
-                                    [(ngModel)]="filter.courseId">
+                                <nb-select placeholder="Choose Course" [(ngModel)]="filter.courseId">
                                     <nb-option *ngFor="let course of courses" value={{course.id}}>{{course.name}}
                                     </nb-option>
                                 </nb-select>

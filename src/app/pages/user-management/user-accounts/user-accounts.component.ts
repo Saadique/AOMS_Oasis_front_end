@@ -31,6 +31,7 @@ export class UserAccountsComponent implements OnInit {
     private userService: UserService) { }
 
   userAlert = new Alert;
+  commonAlert = new Alert;
 
   ngOnInit(): void {
     this.initAdminForm();
@@ -103,8 +104,15 @@ export class UserAccountsComponent implements OnInit {
     setTimeout(() => { this.userAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
+  //alert set
+  setCommonAlert(alertStatus, alertMessage): void {
+    this.commonAlert.status = alertStatus;
+    this.commonAlert.message = alertMessage;
+    setTimeout(() => { this.commonAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
   open(dialog: TemplateRef<any>) {
-    this.dialogBoxService.open(dialog, { context: 'Are you sure you want to delete this schedule?' });
+    this.dialogBoxService.open(dialog);
   }
 
   onAddClick(dialog: TemplateRef<any>) {
@@ -131,6 +139,7 @@ export class UserAccountsComponent implements OnInit {
             next: (response) => {
               console.log(response);
               modal.close();
+              this.roleSelection(this.selectedRole);
               this.setAlert('success', 'Admin User Created Succesfully');
             },
             error: (err) => {
@@ -145,6 +154,7 @@ export class UserAccountsComponent implements OnInit {
             next: (response) => {
               console.log(response);
               modal.close();
+              this.roleSelection(this.selectedRole);
               this.setAlert('success', 'Admin Staff User Created Succesfully');
             },
             error: (err) => {
@@ -210,7 +220,9 @@ export class UserAccountsComponent implements OnInit {
 
   }
 
-  deleteUserAdminStaff() { }
+  deleteUserAdminStaff() {
+
+  }
 
 
   editClickAdminStaff(admin_staff) {
@@ -224,8 +236,11 @@ export class UserAccountsComponent implements OnInit {
         console.log(user);
         this.roleSelection(this.selectedRole);
       },
-      error: (error) => {
-        console.log(error);
+      error: (err) => {
+        console.log(err);
+        if (err.status == 400) {
+          this.setCommonAlert("Error", err.error.message)
+        }
       }
     })
   }

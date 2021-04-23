@@ -112,7 +112,7 @@ export class LoginComponent implements OnInit {
             case 4:
               response.userViews = ADMINISTRATION_STAFF_MENU_ITEMS;
               this.localStorageService.setData(response);
-              return this.router.navigateByUrl('/pages/admin/dashboard');
+              return this.router.navigateByUrl('/pages/admin/dashboard_admin_staff');
           }
           // this.studentPaymentService.changeDueStatus().subscribe(
           //   (response) => {

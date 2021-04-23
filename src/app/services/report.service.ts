@@ -9,6 +9,8 @@ export class ReportService {
   constructor(private http: HttpClient) { }
 
 
+  //============================Student Fee Reports================================//
+
   //all time
   getAllStudentFeeRecords() {
     return this.http.get<any>(`http://localhost:8000/api/reports/student_fee/all`);
@@ -71,6 +73,24 @@ export class ReportService {
 
 
 
+  //============================Teacher Remuneration Reports================================//
+
+
+  getAllRemunerationsPaidForTeachers() {
+    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/all`)
+  }
+
+  getAllRemunerationsPaidForTeachersByTeacher(teacherId) {
+    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/teacher/${teacherId}`)
+  }
+
+  getAllRemunerationsPaidForTeachersByLecture(lectureId) {
+    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/lecture/${lectureId}`)
+  }
+
+  getAllRemunerationsPaidForTeachersByCourse(courseId) {
+    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/course/${courseId}`)
+  }
 
 
 }

@@ -10,7 +10,7 @@ import autoTable from 'jspdf-autotable'
 import { Alert } from '../../course/create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
 import { LectureService } from '../../../services/lecture.service';
-import { filter } from 'rxjs/operators';
+import * as XLSX from "xlsx";
 
 @Component({
   selector: 'ngx-fee-reports',
@@ -62,6 +62,8 @@ export class FeeReportsComponent implements OnInit {
   courses: [];
 
   records;
+  summaryMessage;
+  totalAmount;
 
   filter = {
     'filterOption': '',
@@ -178,6 +180,7 @@ export class FeeReportsComponent implements OnInit {
       next: (response) => {
         console.log(response);
         this.initData(response.records);
+        this.summaryMessage = `This Reports Consists Of All Student Payments`;
       },
       error: (error) => {
         console.log(error);
@@ -188,6 +191,7 @@ export class FeeReportsComponent implements OnInit {
   selectCourse(courseId) {
 
   }
+
 
 
   makePDF() {
@@ -211,6 +215,40 @@ export class FeeReportsComponent implements OnInit {
       body: recordsArray,
     })
     pdf.save();
+  }
+
+  // makeExcel() {
+  //   var wb = XLSX.utils.book_new();
+  //   var ws = XLSX.utils.json_to_sheet(this.records);
+  //   let xl2 = XLSX.utils.book_append_sheet(wb, ws, 'something');
+  //   let xl = XLSX.writeFile(wb, `ssss.xlsx`);
+  // }
+
+
+
+  printReport() {
+    let recordsArray: any[] = [];
+    for (let i = 0; i < this.records.length; i++) {
+      let dataArray: any[] = [];
+      const record = this.records[i];
+      dataArray.push(record.registration_no);
+      dataArray.push(record.student_name);
+      dataArray.push(record.mode);
+      dataArray.push(record.payment_name);
+      dataArray.push(record.amount);
+      dataArray.push(record.month);
+      dataArray.push(record.date);
+      recordsArray.push(dataArray);
+    }
+
+    const pdf = new jsPDF();
+    autoTable(pdf, {
+      head: [['STD Reg No.', 'STD Name', 'Payment Mode', 'Payment Name', 'Fee Amount', 'Month', 'Payment Date']],
+      body: recordsArray,
+    })
+
+    pdf.autoPrint();
+    pdf.output('dataurlnewwindow');
   }
 
   submitFilter(modal, data) {
@@ -275,6 +313,7 @@ export class FeeReportsComponent implements OnInit {
   getAllStudentFeeRecords(modal) {
     switch (this.filter.reportTimeSpan) {
       case 'all_time':
+        this.summaryMessage = `This Reports Consists Of All Student Payments`;
         this.reportService.getAllStudentFeeRecords().subscribe({
           next: (response) => {
             this.initData(response.records);
@@ -287,6 +326,7 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
+          this.summaryMessage = `This Report Consists Of All Student Payments in Year ${this.filter.by_month.year}, Month ${this.filter.by_month.month}`;
           this.reportService.getAllStudentFeeRecordsByMonth(this.filter.by_month.year, this.filter.by_month.month).subscribe({
             next: (response) => {
               this.initData(response.records);
@@ -303,6 +343,7 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
+          this.summaryMessage = `This Report Consists Of All Student Payments from ${this.filter.by_range.from_date} to ${this.filter.by_range.to_date}`;
           this.reportService.getAllStudentFeeRecordsByDate(this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
             next: (response) => {
               console.log(response);
@@ -471,3 +512,6 @@ export class FeeReportsComponent implements OnInit {
 
 
 }
+
+
+

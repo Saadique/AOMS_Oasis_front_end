@@ -53,6 +53,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
     if (this.role == "Teacher") {
       this.name = this.loggedInUser.teacher.name;
     }
+    if (this.role == "Administrative Staff") {
+      this.name = this.loggedInUser.administrative_staff.first_name;
+    }
   }
 
   initUserMenu() {

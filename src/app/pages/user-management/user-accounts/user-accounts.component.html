@@ -1,5 +1,18 @@
 <nb-card>
     <nb-card-header>
+        <div class="animated fadeIn">
+            <div class="alert alert-danger" role="alert" *ngIf="commonAlert.status=='Error'">
+                {{ commonAlert.message }}
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="commonAlert.status=='warning'">
+                {{ commonAlert.message }}
+            </div>
+            <div class="alert alert-success" role="alert" *ngIf="commonAlert.status=='success'">
+                {{ commonAlert.message }}
+            </div>
+        </div>
+    </nb-card-header>
+    <nb-card-header>
         <div class="row">
             <div class="col-sm-6">
                 <div class="row">
@@ -28,7 +41,7 @@
             User</button>
         <ng-template #disabledButton>
             <button id="add-new" outline nbButton shape="semi-round" status="info" disabled>Add new
-                role</button>
+                User</button>
         </ng-template>
     </nb-card-header>
     <nb-card-body>
@@ -97,7 +110,7 @@
                     <td>{{admin_staff.last_name}}</td>
                     <td>{{admin_staff.user.username}}</td>
                     <td>{{admin_staff.email}}</td>
-                    <td>{{admin_staff.contact_nubmer}}</td>
+                    <td>{{admin_staff.contact_number}}</td>
                     <td>{{admin_staff.nic}}</td>
 
                     <td *ngIf="admin_staff.user.status=='active'">

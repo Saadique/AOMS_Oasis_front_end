@@ -2,6 +2,14 @@ import { Component, OnInit, TemplateRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { LocalDataSource } from 'ng2-smart-table';
+import { Alert } from '../../course/create-course/create-course.component';
+import { CourseService } from '../../../services/course.service';
+import { LectureService } from '../../../services/lecture.service';
+import { TeacherService } from '../../../services/teacher.service';
+import { ReportService } from '../../../services/report.service';
+import jsPDF from 'jspdf';
+import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable'
 
 @Component({
   selector: 'ngx-teacher-remuneration-reports',
@@ -10,114 +18,152 @@ import { LocalDataSource } from 'ng2-smart-table';
 })
 export class TeacherRemunerationReportsComponent implements OnInit {
 
-  data = [
-    {
-      staff_no: 'ST12',
-      name: 'Keerthi Kaariyavasam',
-      remuneration_no: 'R109',
-      amount: 45500,
-      month: 'December',
-      date: '2021-01-04',
-      lecture_name: 'GRD-13-Chemistry-E-P',
-      no_of_students: 65
-    },
-    {
-      staff_no: 'ST15',
-      name: 'Naiomi Ekanaayaka',
-      remuneration_no: 'R113',
-      amount: 30800,
-      month: 'December',
-      date: '2021-01-04',
-      lecture_name: 'GRD-13-ACCOUNTING-E-P',
-      no_of_students: 44
-    },
-    {
-      staff_no: 'ST15',
-      name: 'Naiomi Ekanaayaka',
-      remuneration_no: 'R114',
-      amount: 16800,
-      month: 'December',
-      date: '2021-01-04',
-      lecture_name: 'GRD-13-BS-E-P',
-      no_of_students: 24
-    },
-    {
-      staff_no: 'ST16',
-      name: 'Muzain Mubarak',
-      remuneration_no: 'R121',
-      amount: 37800,
-      month: 'December',
-      date: '2021-01-04',
-      lecture_name: 'GRD-13-ICT-E-P',
-      no_of_students: 54
-    },
-  ];
+
 
   settings = {
     actions: {
       add: false,
       edit: false,
-    },
-    delete: {
-      deleteButtonContent: '<i class="fas fa-info-circle"></i>',
-      confirmDelete: true,
+      delete: false
     },
     columns: {
-      staff_no: {
-        title: 'Staff No.',
-        type: 'string',
-      },
-      name: {
+      teacher_name: {
         title: 'Teacher Name',
-        type: 'string',
-      },
-      remuneration_no: {
-        title: 'Remuneration No.',
-        type: 'string',
-      },
-      amount: {
-        title: 'Remuneration Amount',
-        type: 'number',
-      },
-      month: {
-        title: 'Payment Month',
-        type: 'string',
-      },
-      date: {
-        title: 'Payed Date',
         type: 'string',
       },
       lecture_name: {
         title: 'Lecture Name',
         type: 'string',
       },
-      no_of_students: {
-        title: 'No. of Students',
+      course_name: {
+        title: 'Course Name',
         type: 'string',
       },
+      total_remun: {
+        title: 'Remuneration Amount',
+        type: 'number',
+      },
+      no_of_student_payments: {
+        title: 'Total No. Of Student Payments',
+        type: 'string',
+      }
     }
   };
 
   source: LocalDataSource = new LocalDataSource();
   students: any[] = [];
   courses: [];
-  courseMediums: [];
+  teachers;
+  lectures;
 
   filterParam: string;
 
+  remunAlert = new Alert();
+
+  records;
+
+  filterOption;
+
+  filter = {
+    'filterOption': '',
+    'courseId': '',
+    'lectureId': '',
+    'teacherId': '',
+    'level': '',
+    'reportTimeSpan': '',
+    'by_month': {
+      'year': '',
+      'month': '',
+    },
+    'by_range': {
+      'from_date': '',
+      'to_date': ''
+    }
+  }
+
   constructor(
     private router: Router,
-    private dialogBoxService: NbDialogService
+    private dialogBoxService: NbDialogService,
+    private courseService: CourseService,
+    private lectureService: LectureService,
+    private teacherService: TeacherService,
+    private reportService: ReportService
   ) {
 
   }
 
   ngOnInit(): void {
-    this.source.load(this.data);
+    this.loadInitialData();
+    this.getAllCourses();
+    this.getAllTeachers();
+    this.getAllLectures();
   }
 
-  submitFilter(ref, data) {
+  initData(data) {
+    console.log(data);
+    this.records = data;
+    this.source.load(this.records);
+  }
 
+  loadInitialData() {
+    this.reportService.getAllRemunerationsPaidForTeachers().subscribe({
+      next: (response) => {
+        console.log(response);
+        this.initData(response.records);
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
+  }
+
+
+  getAllCourses() {
+    this.courseService.getAllCourseMediums().subscribe({
+      next: (response) => {
+        this.courses = response.data;
+      },
+      error: (err) => {
+        console.log(err);
+      }
+    })
+  }
+
+  getAllTeachers() {
+    this.teacherService.getAllTeachers().subscribe({
+      next: (response) => {
+        this.teachers = response;
+        console.log(this.teachers);
+      },
+      error: (error) => {
+
+      }
+    })
+  }
+
+  getAllLectures() {
+    this.lectureService.getAllLectures().subscribe({
+      next: (response) => {
+        this.lectures = response.data;
+        console.log(this.lectures);
+      },
+      error: (error) => {
+
+      }
+    })
+  }
+
+  //alert set
+  setAlert(alertStatus, alertMessage): void {
+    this.remunAlert.status = alertStatus;
+    this.remunAlert.message = alertMessage;
+    setTimeout(() => { this.remunAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+
+  selectFilterOption(filterOption) {
+    console.log(this.filter);
+    this.filterOption = filterOption;
   }
 
   open(dialog: TemplateRef<any>) {
@@ -128,9 +174,156 @@ export class TeacherRemunerationReportsComponent implements OnInit {
     this.open(dialog);
   }
 
-  navigate(event): void {
-    let studentId = event.data.id;
-    this.router.navigateByUrl(`/pages/student/view/${studentId}`);
+  makePDF() {
+    let recordsArray: any[] = [];
+    for (let i = 0; i < this.records.length; i++) {
+      let dataArray: any[] = [];
+      const record = this.records[i];
+      dataArray.push(record.teacher_name);
+      dataArray.push(record.lecture_name);
+      dataArray.push(record.course_name);
+      dataArray.push(record.total_remun);
+      dataArray.push(record.no_of_student_payments);
+      recordsArray.push(dataArray);
+    }
+
+    const pdf = new jsPDF();
+    autoTable(pdf, {
+      head: [['Teacher Name', 'Lecture Name', 'Course Name', 'Remuneration Amount', 'Total No. Of Student Payments']],
+      body: recordsArray,
+    })
+    pdf.save();
+  }
+
+  printReport() {
+    let recordsArray: any[] = [];
+    for (let i = 0; i < this.records.length; i++) {
+      let dataArray: any[] = [];
+      const record = this.records[i];
+      dataArray.push(record.teacher_name);
+      dataArray.push(record.lecture_name);
+      dataArray.push(record.course_name);
+      dataArray.push(record.total_remun);
+      dataArray.push(record.no_of_student_payments);
+      recordsArray.push(dataArray);
+    }
+
+    const pdf = new jsPDF();
+    autoTable(pdf, {
+      head: [['Teacher Name', 'Lecture Name', 'Course Name', 'Remuneration Amount', 'Total No. Of Student Payments']],
+      body: recordsArray,
+    })
+
+    pdf.autoPrint();
+    pdf.output('dataurlnewwindow');
+  }
+
+  submitFilter(modal) {
+    if (this.filter.filterOption != '') {
+      switch (this.filter.filterOption) {
+        case 'all':
+          // if (this.filter.reportTimeSpan != '') {
+          this.getAllRemunerationsPaidForTeachers(modal);
+          // } else {
+          //   this.setAlert('error', 'Please Select Report Time Span');
+          // }
+          break;
+        case 'course':
+          if (this.filter.courseId != '') {
+            // if (this.filter.reportTimeSpan != '') {
+            this.getAllRemunerationsPaidForTeachersByCourse(modal);
+            // } else {
+            //   this.setAlert('error', 'Please Select Report Time Span');
+            // }
+          } else {
+            this.setAlert('error', 'Please Select A Course');
+          }
+          break;
+        case 'lecture':
+          if (this.filter.lectureId != '') {
+            // if (this.filter.reportTimeSpan != '') {
+            console.log(this.filter.lectureId);
+            this.getAllRemunerationsPaidForTeachersByLecture(modal);
+            // } else {
+            //   this.setAlert('error', 'Please Select Report Time Span');
+            // }
+          } else {
+            this.setAlert('error', 'Please Select A Lecture');
+          }
+          break;
+        case 'teacher':
+          if (this.filter.teacherId != '') {
+            // if (this.filter.reportTimeSpan != '') {
+            this.getAllRemunerationsPaidForTeachersByTeacher(modal);
+            // } else {
+            //   this.setAlert('error', 'Please Select Report Time Span');
+            // }
+          } else {
+            this.setAlert('error', 'Please Select A Teacher');
+          }
+          break;
+        // case 'level':
+        //   if (this.filter.level != '') {
+        //     if (this.filter.reportTimeSpan != '') {
+        //       this.getAllStudentFeeRecords(modal);
+        //     } else {
+        //       this.setAlert('error', 'Please Select Report Time Span');
+        //     }
+        //   } else {
+        //     this.setAlert('error', 'Please Select A Level');
+        //   }
+      }
+    } else {
+      this.setAlert('error', 'Please Select A Filter Option');
+    }
+  }
+
+  getAllRemunerationsPaidForTeachers(modal) {
+    this.reportService.getAllRemunerationsPaidForTeachers().subscribe({
+      next: (reponse) => {
+        this.initData(reponse.records);
+        modal.close();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  getAllRemunerationsPaidForTeachersByTeacher(modal) {
+    this.reportService.getAllRemunerationsPaidForTeachersByTeacher(this.filter.teacherId).subscribe({
+      next: (reponse) => {
+        this.initData(reponse.records);
+        modal.close();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  getAllRemunerationsPaidForTeachersByLecture(modal) {
+    this.reportService.getAllRemunerationsPaidForTeachersByLecture(this.filter.lectureId).subscribe({
+      next: (reponse) => {
+        this.initData(reponse.records);
+        modal.close();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
+  }
+
+  getAllRemunerationsPaidForTeachersByCourse(modal) {
+    this.reportService.getAllRemunerationsPaidForTeachersByCourse(this.filter.courseId).subscribe({
+      next: (reponse) => {
+        this.initData(reponse.records);
+        modal.close();
+      },
+      error: (err) => {
+        console.log(err)
+      }
+    })
   }
 
 }
