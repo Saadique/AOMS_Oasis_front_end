@@ -11,13 +11,15 @@ import { Alert } from '../../course/create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
 import { LectureService } from '../../../services/lecture.service';
 import * as XLSX from "xlsx";
+// import CanvasJS from 'canvasjs';
+import * as CanvasJS from 'assets/js/canvasjs.min';
 
 @Component({
-  selector: 'ngx-fee-reports',
-  templateUrl: './fee-reports.component.html',
-  styleUrls: ['./fee-reports.component.scss']
+  selector: 'ngx-teacher-institute-share-reports',
+  templateUrl: './teacher-institute-share-reports.component.html',
+  styleUrls: ['./teacher-institute-share-reports.component.scss']
 })
-export class FeeReportsComponent implements OnInit {
+export class TeacherInstituteShareReportsComponent implements OnInit {
 
   settings = {
     actions: {
@@ -34,16 +36,28 @@ export class FeeReportsComponent implements OnInit {
         title: 'STD Name',
         type: 'string',
       },
-      mode: {
-        title: 'Payment Mode',
-        type: 'number',
-      },
       payment_name: {
         title: 'Payment Name',
         type: 'string'
       },
+      teacher_name: {
+        title: 'Teacher Name',
+        type: 'string'
+      },
       amount: {
         title: 'Fee Amount',
+        type: 'string',
+      },
+      teacher_amount: {
+        title: 'Teacher Share Amount(Rs)',
+        type: 'string',
+      },
+      institute_amount: {
+        title: 'Institute Share Amount(Rs)',
+        type: 'string',
+      },
+      fixed_institute_amount: {
+        title: 'Fixed Instiute Share Amount(Rs)',
         type: 'string',
       },
       month: {
@@ -56,6 +70,7 @@ export class FeeReportsComponent implements OnInit {
       }
     }
   };
+
 
   source: LocalDataSource = new LocalDataSource();
   students: any[] = [];
@@ -89,6 +104,9 @@ export class FeeReportsComponent implements OnInit {
   teachers;
   lectures;
 
+  summary;
+  countSummary;
+
   constructor(
     private router: Router,
     private dialogBoxService: NbDialogService,
@@ -110,9 +128,14 @@ export class FeeReportsComponent implements OnInit {
     this.source.load(this.records);
   }
 
-  initTotalAmount(totalAmount) {
-    this.totalAmount = totalAmount;
+  initTotalAmount(summary) {
+    this.summary = summary;
   }
+
+  initCounts(countSummary) {
+    this.countSummary = countSummary;
+  }
+
 
   //alert set
   setAlert(alertStatus, alertMessage): void {
@@ -180,12 +203,14 @@ export class FeeReportsComponent implements OnInit {
   }
 
   loadInitialData() {
-    this.reportService.getAllStudentFeeRecords().subscribe({
+    this.reportService.getAllShareRecords().subscribe({
       next: (response: any) => {
         console.log(response);
         this.initData(response.records);
-        this.initTotalAmount(response.total_amount);
+        this.initCounts(response.count);
+        this.initTotalAmount(response.summary);
         this.summaryMessage = `This Reports Consists Of All Student Payments`;
+        this.generateBarGraph();
       },
       error: (error) => {
         console.log(error);
@@ -195,6 +220,13 @@ export class FeeReportsComponent implements OnInit {
 
   selectCourse(courseId) {
 
+  }
+
+  onChangeTab(value) {
+    this.generateBarGraph();
+    if (value == "Graphical Reports") {
+      this.generateBarGraph();
+    }
   }
 
   allSearch(value) {
@@ -215,28 +247,7 @@ export class FeeReportsComponent implements OnInit {
   }
 
 
-  makePDF() {
-    let recordsArray: any[] = [];
-    for (let i = 0; i < this.records.length; i++) {
-      let dataArray: any[] = [];
-      const record = this.records[i];
-      dataArray.push(record.registration_no);
-      dataArray.push(record.student_name);
-      dataArray.push(record.mode);
-      dataArray.push(record.payment_name);
-      dataArray.push(record.amount);
-      dataArray.push(record.month);
-      dataArray.push(record.date);
-      recordsArray.push(dataArray);
-    }
 
-    const pdf = new jsPDF();
-    autoTable(pdf, {
-      head: [['STD Reg No.', 'STD Name', 'Payment Mode', 'Payment Name', 'Fee Amount', 'Month', 'Payment Date']],
-      body: recordsArray,
-    })
-    pdf.save();
-  }
 
   // makeExcel() {
   //   var wb = XLSX.utils.book_new();
@@ -244,6 +255,45 @@ export class FeeReportsComponent implements OnInit {
   //   let xl2 = XLSX.utils.book_append_sheet(wb, ws, 'something');
   //   let xl = XLSX.writeFile(wb, `ssss.xlsx`);
   // }
+
+
+  makePDF() {
+    let recordsArray: any[] = [];
+    for (let i = 0; i < this.records.length; i++) {
+      let dataArray: any[] = [];
+      const record = this.records[i];
+      dataArray.push(record.registration_no);
+      dataArray.push(record.student_name);
+      dataArray.push(record.payment_name);
+      dataArray.push(record.teacher_name);
+      dataArray.push(record.amount);
+      dataArray.push(record.teacher_amount);
+      dataArray.push(record.institute_amount);
+      dataArray.push(record.fixed_institute_amount);
+      dataArray.push(record.month);
+      dataArray.push(record.date);
+      recordsArray.push(dataArray);
+    }
+
+    const pdf = new jsPDF();
+    autoTable(pdf, {
+      head: [['STD Reg No.', 'STD Name', 'Payment Name', 'Fee Amount', 'Teacher Share Amount(Rs)', 'Institute Share Amount(Rs)', 'Fixed Instiute Share Amount(Rs)', 'Month', 'Payment Date']],
+      body: recordsArray,
+    })
+
+    autoTable(pdf, {
+      head: [['Student Fee Amount', 'Total Teacher Amount', 'Total Institute Share Amount', 'Total Fixed Institute Amount',
+        'Total Institute Revenue(Total Institute Amount + Total Fixed Institute Amount)']],
+      body: [[this.summary.student_fee_amount, this.summary.total_teacher_amount, this.summary.total_institute_amount, this.summary.total_fixed_institute_amount,
+      `Rs.${this.summary.total_institute_amount} + Rs.${this.summary.total_fixed_institute_amount} = Rs.${this.summary.final_total_institute_amount}`]],
+      styles: { fillColor: "#43a047" },
+    })
+    pdf.save();
+  }
+
+  seeBarGraph(modal) {
+    this.open(modal);
+  }
 
 
 
@@ -254,9 +304,12 @@ export class FeeReportsComponent implements OnInit {
       const record = this.records[i];
       dataArray.push(record.registration_no);
       dataArray.push(record.student_name);
-      dataArray.push(record.mode);
       dataArray.push(record.payment_name);
+      dataArray.push(record.teacher_name);
       dataArray.push(record.amount);
+      dataArray.push(record.teacher_amount);
+      dataArray.push(record.institute_amount);
+      dataArray.push(record.fixed_institute_amount);
       dataArray.push(record.month);
       dataArray.push(record.date);
       recordsArray.push(dataArray);
@@ -264,7 +317,7 @@ export class FeeReportsComponent implements OnInit {
 
     const pdf = new jsPDF();
     autoTable(pdf, {
-      head: [['STD Reg No.', 'STD Name', 'Payment Mode', 'Payment Name', 'Fee Amount', 'Month', 'Payment Date']],
+      head: [['STD Reg No.', 'STD Name', 'Payment Name', 'Fee Amount', 'Teacher Share Amount(Rs)', 'Institute Share Amount(Rs)', 'Fixed Instiute Share Amount(Rs)', 'Month', 'Payment Date']],
       body: recordsArray,
     })
 
@@ -277,7 +330,7 @@ export class FeeReportsComponent implements OnInit {
       switch (this.filter.filterOption) {
         case 'all':
           if (this.filter.reportTimeSpan != '') {
-            this.getAllStudentFeeRecords(modal);
+            this.getAllShareRecords(modal);
           } else {
             this.setAlert('error', 'Please Select Report Time Span');
           }
@@ -318,7 +371,7 @@ export class FeeReportsComponent implements OnInit {
         case 'level':
           if (this.filter.level != '') {
             if (this.filter.reportTimeSpan != '') {
-              this.getAllStudentFeeRecords(modal);
+              this.getAllShareRecords(modal);
             } else {
               this.setAlert('error', 'Please Select Report Time Span');
             }
@@ -326,19 +379,22 @@ export class FeeReportsComponent implements OnInit {
             this.setAlert('error', 'Please Select A Level');
           }
       }
+
+      this.generateBarGraph();
     } else {
       this.setAlert('error', 'Please Select A Filter Option');
     }
   }
 
-  getAllStudentFeeRecords(modal) {
+  getAllShareRecords(modal) {
     switch (this.filter.reportTimeSpan) {
       case 'all_time':
         this.summaryMessage = `This Reports Consists Of All Student Payments`;
-        this.reportService.getAllStudentFeeRecords().subscribe({
+        this.reportService.getAllShareRecords().subscribe({
           next: (response: any) => {
             this.initData(response.records);
-            this.initTotalAmount(response.total_amount);
+            this.initTotalAmount(response.summary);
+            this.initCounts(response.count);
             modal.close();
           },
           error: (error) => {
@@ -349,9 +405,11 @@ export class FeeReportsComponent implements OnInit {
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
           this.summaryMessage = `This Report Consists Of All Student Payments in Year ${this.filter.by_month.year}, Month ${this.filter.by_month.month}`;
-          this.reportService.getAllStudentFeeRecordsByMonth(this.filter.by_month.year, this.filter.by_month.month).subscribe({
+          this.reportService.getAllShareRecordsByMonth(this.filter.by_month.year, this.filter.by_month.month).subscribe({
             next: (response: any) => {
               this.initData(response.records);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -366,11 +424,12 @@ export class FeeReportsComponent implements OnInit {
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
           this.summaryMessage = `This Report Consists Of All Student Payments from ${this.filter.by_range.from_date} to ${this.filter.by_range.to_date}`;
-          this.reportService.getAllStudentFeeRecordsByDate(this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+          this.reportService.getAllShareRecordsByDate(this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
             next: (response: any) => {
               console.log(response);
               this.initData(response.records);
-              this.initTotalAmount(response.total_amount);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -388,10 +447,11 @@ export class FeeReportsComponent implements OnInit {
   getRecordsByCourse(modal) {
     switch (this.filter.reportTimeSpan) {
       case 'all_time':
-        this.reportService.getAllStudentFeeRecordsByCourse(this.filter.courseId).subscribe({
+        this.reportService.getAllShareRecordsByCourse(this.filter.courseId).subscribe({
           next: (response: any) => {
             this.initData(response.records);
-            this.initTotalAmount(response.total_amount);
+            this.initTotalAmount(response.summary);
+            this.initCounts(response.count);
             modal.close();
           },
           error: (error) => {
@@ -401,10 +461,11 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-          this.reportService.getAllStudentFeeRecordForCourseByMonth(this.filter.courseId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+          this.reportService.getAllShareRecordsForCourseByMonth(this.filter.courseId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
             next: (response: any) => {
               this.initData(response.records);
-              this.initTotalAmount(response.total_amount);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -419,10 +480,11 @@ export class FeeReportsComponent implements OnInit {
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
           if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-            this.reportService.getAllStudentFeeRecordForCourseByMonth(this.filter.courseId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+            this.reportService.getAllShareRecordsForCourseByDate(this.filter.courseId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
               next: (response: any) => {
                 this.initData(response.records);
-                this.initTotalAmount(response.total_amount);
+                this.initTotalAmount(response.summary);
+                this.initCounts(response.count);
                 modal.close();
               },
               error: (error) => {
@@ -441,10 +503,11 @@ export class FeeReportsComponent implements OnInit {
   getRecordsByTeacher(modal) {
     switch (this.filter.reportTimeSpan) {
       case 'all_time':
-        this.reportService.getAllStudentFeeRecordByTeacher(this.filter.courseId).subscribe({
+        this.reportService.getAllShareRecordsByTeacher(this.filter.courseId).subscribe({
           next: (response: any) => {
             this.initData(response.records);
-            this.initTotalAmount(response.total_amount);
+            this.initTotalAmount(response.summary);
+            this.initCounts(response.count);
             modal.close();
           },
           error: (error) => {
@@ -454,10 +517,11 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-          this.reportService.getAllStudentFeeRecordForTeacherByMonth(this.filter.teacherId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+          this.reportService.getAllShareRecordsForTeacherByMonth(this.filter.teacherId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
             next: (response: any) => {
               this.initData(response.records);
-              this.initTotalAmount(response.total_amount);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -472,10 +536,11 @@ export class FeeReportsComponent implements OnInit {
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
           if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-            this.reportService.getAllStudentFeeRecordForTeacherByDate(this.filter.teacherId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+            this.reportService.getAllShareRecordsForTeacherByDate(this.filter.teacherId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
               next: (response: any) => {
                 this.initData(response.records);
-                this.initTotalAmount(response.total_amount);
+                this.initTotalAmount(response.summary);
+                this.initCounts(response.count);
                 modal.close();
               },
               error: (error) => {
@@ -493,10 +558,11 @@ export class FeeReportsComponent implements OnInit {
   getRecordsByLecture(modal) {
     switch (this.filter.reportTimeSpan) {
       case 'all_time':
-        this.reportService.getAllStudentFeeRecordByLecture(this.filter.lectureId).subscribe({
+        this.reportService.getAllShareRecordsByLecture(this.filter.lectureId).subscribe({
           next: (response: any) => {
             this.initData(response.records);
-            this.initTotalAmount(response.total_amount);
+            this.initTotalAmount(response.summary);
+            this.initCounts(response.count);
             modal.close();
           },
           error: (error) => {
@@ -507,10 +573,11 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_month':
         if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-          this.reportService.getAllStudentFeeRecordForLectureByMonth(this.filter.lectureId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
+          this.reportService.getAllShareRecordsForLectureByMonth(this.filter.lectureId, this.filter.by_month.year, this.filter.by_month.month).subscribe({
             next: (response: any) => {
               this.initData(response.records);
-              this.initTotalAmount(response.total_amount);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -523,10 +590,11 @@ export class FeeReportsComponent implements OnInit {
         break;
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
-          this.reportService.getAllStudentFeeRecordForLectureByDate(this.filter.lectureId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+          this.reportService.getAllShareRecordsForLectureByDate(this.filter.lectureId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
             next: (response: any) => {
               this.initData(response.records);
-              this.initTotalAmount(response.total_amount);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
               modal.close();
             },
             error: (error) => {
@@ -540,11 +608,58 @@ export class FeeReportsComponent implements OnInit {
 
   }
 
+  generateBarGraph() {
+    let chartData = [];
+    for (let i = 0; i < this.countSummary.length; i++) {
+      const element = this.countSummary[i];
+      let obj = {
+        y: element.no_of_payments,
+        label: element.payment_name
+      }
+      chartData.push(obj);
+    }
+    let chart = new CanvasJS.Chart("chartContainer", {
+      animationEnabled: true,
+      exportEnabled: true,
+      title: {
+        text: "Payments Of Students"
+      },
+      data: [{
+        type: "column",
+        dataPoints: chartData
+      }]
+    });
+    chart.render();
 
 
+    let pieChartData = [];
+    for (let i = 0; i < this.countSummary.length; i++) {
+      const element = this.countSummary[i];
+      let obj = {
+        y: element.no_of_payments,
+        name: element.payment_name
+      }
+      pieChartData.push(obj);
+    }
+
+    let pieChart = new CanvasJS.Chart("pieChartContainer", {
+      theme: "light2",
+      animationEnabled: true,
+      exportEnabled: true,
+      title: {
+        text: "Payments Percentage"
+      },
+      data: [{
+        type: "pie",
+        showInLegend: true,
+        toolTipContent: "<b>{name}</b>: ${y} (#percent%)",
+        indexLabel: "{name} - #percent%",
+        dataPoints: pieChartData
+      }]
+    });
+
+    pieChart.render();
+  }
 
 
 }
-
-
-

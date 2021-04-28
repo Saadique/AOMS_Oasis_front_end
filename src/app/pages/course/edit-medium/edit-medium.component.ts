@@ -20,6 +20,7 @@ export class EditMediumComponent implements OnInit {
 
   constructor(private courseService: CourseService, private dialogBoxService: NbDialogService,) { }
 
+  mediumModalAlert = new Alert();
   mediumAlert = new Alert();
 
   ngOnInit(): void {
@@ -64,7 +65,7 @@ export class EditMediumComponent implements OnInit {
       {
         next: (response) => {
           console.log(response);
-          this.setAlert('success', 'Medium Activated Successfully');
+          this.setMediumEditAlert('success', 'Medium Activated Successfully');
           this.loadMediums();
         },
         error: (err) => {
@@ -84,11 +85,17 @@ export class EditMediumComponent implements OnInit {
     modal.close();
   }
 
-  //alert set
-  setAlert(alertStatus, alertMessage): void {
+  setMediumEditAlert(alertStatus, alertMessage) {
     this.mediumAlert.status = alertStatus;
     this.mediumAlert.message = alertMessage;
     setTimeout(() => { this.mediumAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+  //alert set
+  setAlert(alertStatus, alertMessage): void {
+    this.mediumModalAlert.status = alertStatus;
+    this.mediumModalAlert.message = alertMessage;
+    setTimeout(() => { this.mediumModalAlert = { "status": null, "message": null } }, 4500); // fade alert
   }
 
   editMedium(ref) {
@@ -102,7 +109,7 @@ export class EditMediumComponent implements OnInit {
         {
           next: (response) => {
             console.log(response);
-            this.setAlert('success', 'Medium Updated Successfully');
+            this.setMediumEditAlert('success', 'Medium Updated Successfully');
             this.loadMediums();
             this.editMediumFormGroup.reset();
             ref.close();
@@ -126,7 +133,7 @@ export class EditMediumComponent implements OnInit {
       {
         next: (response) => {
           console.log(response);
-          this.setAlert('success', 'Medium Deleted Successfully');
+          this.setMediumEditAlert('success', 'Medium Deleted Successfully');
           this.loadMediums();
         },
         error: (err) => {

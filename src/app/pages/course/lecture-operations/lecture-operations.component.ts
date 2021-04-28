@@ -1,4 +1,4 @@
-import { Component, OnInit, TemplateRef } from '@angular/core';
+import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
 import { LocalStorageService } from 'app/authentication/services/local-storage/local-storage.service';
@@ -8,6 +8,7 @@ import { LectureService } from '../../../services/lecture.service';
 import { ScheduleService } from '../../../services/schedule.service';
 import { SubjectService } from '../../../services/subject.service';
 import { TeacherService } from '../../../services/teacher.service';
+import { Alert } from '../create-course/create-course.component';
 
 @Component({
   selector: 'ngx-lecture-operations',
@@ -38,6 +39,9 @@ export class LectureOperationsComponent implements OnInit {
   selectedPayment;
   selectedSchedule;
 
+
+  lectureSelectBoxValue;
+
   selectSubject = true;
 
   constructor(
@@ -50,6 +54,8 @@ export class LectureOperationsComponent implements OnInit {
     private fb: FormBuilder,
     private localStorageService: LocalStorageService
   ) { }
+
+  @ViewChild("selectBox") selectBox;
 
   loggedInUser;
   role;
@@ -65,7 +71,7 @@ export class LectureOperationsComponent implements OnInit {
 
   getAllCourses() {
     this.courseService.getAllCourseMediums().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.courses = response.data;
       },
       error: (err) => {
@@ -95,7 +101,7 @@ export class LectureOperationsComponent implements OnInit {
 
   lectureSelection(lectureId) {
     this.lectureService.getLectureById(lectureId).subscribe(
-      (response) => {
+      (response: any) => {
         this.selectedLecture = response.data;
         this.subjectIdSring = this.selectedLecture.subject_id.toString();
         this.teacherIdString = this.selectedLecture.teacher_id.toString();
@@ -185,6 +191,16 @@ export class LectureOperationsComponent implements OnInit {
     }
   }
 
+  selectTeacherEdit(value) {
+    console.log(value);
+    this.selectedTeacherId = value;
+  }
+
+  selectSubjectEdit(value) {
+    console.log(value);
+    this.selectedSubjectId = value;
+  }
+
   editClickLecture(lecture, modal) {
     this.getAllActiveTeachers();
     this.initLectureForm(lecture);
@@ -195,9 +211,56 @@ export class LectureOperationsComponent implements OnInit {
 
   }
 
+
+  paymentAlert = new Alert();
+  //alert set
+  setPaymentAlert(alertStatus, alertMessage): void {
+    this.paymentAlert.status = alertStatus;
+    this.paymentAlert.message = alertMessage;
+    setTimeout(() => { this.paymentAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+  lectureAlert = new Alert();
+  setLectureAlert(alertStatus, alertMessage): void {
+    this.lectureAlert.status = alertStatus;
+    this.lectureAlert.message = alertMessage;
+    setTimeout(() => { this.lectureAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
   editClickPayment(modal) {
     this.initPaymentForm(this.selectedPayment);
     this.open(modal);
+  }
+
+  validateFixedInstituteAmount(fixedInstituteAmount) {
+    if (this.paymentForm.value.student_fee != '') {
+      if (fixedInstituteAmount > this.paymentForm.value.student_fee) {
+        this.paymentForm.controls['student_fee'].setErrors({ 'incorrect': true });
+        this.setPaymentAlert('warning', "Fixed Institue Amount Cannot be greater that Student Fee");
+      } else {
+        this.paymentForm.controls['student_fee'].setErrors(null);
+      }
+    }
+  }
+
+  validateStudentFeeAmount(studentFeeAmount) {
+    if (this.paymentForm.value.fixed_institute_amount != '') {
+      if (studentFeeAmount < this.paymentForm.value.fixed_institute_amount) {
+        this.paymentForm.controls['fixed_institute_amount'].setErrors({ 'incorrect': true });
+        this.setPaymentAlert('warning', "Student Fee Cannot be Less that Fixed Institute Amount");
+      } else {
+        this.paymentForm.controls['fixed_institute_amount'].setErrors(null);
+      }
+    }
+  }
+
+  validatePercentage(value) {
+    if (value < 0) {
+      this.paymentForm.controls['teacher_percentage'].setErrors({ 'incorrect': true });
+      this.setPaymentAlert('warning', "Percentage Cannot be less than 0");
+    } else {
+      this.paymentForm.controls['teacher_percentage'].setErrors(null);
+    }
   }
 
   updatePayment(modal) {
@@ -248,7 +311,9 @@ export class LectureOperationsComponent implements OnInit {
       "type": this.lectureForm.value.type,
       "subject_id": this.selectedSubjectId,
       "teacher_id": this.selectedTeacherId,
+      "course_medium_id": this.selectedLecture.course_medium_id
     };
+    console.log(data);
     this.lectureService.updateLecture(this.selectedLecture.id, data).subscribe({
       next: (response) => {
         console.log(response);
@@ -257,6 +322,9 @@ export class LectureOperationsComponent implements OnInit {
       },
       error: (error) => {
         console.log(error);
+        if (error.status == 400) {
+          this.setLectureAlert('Error', error.error.message)
+        }
       }
     })
   }

@@ -72,7 +72,7 @@
     <nb-card-header align="center">View All Schedules On Date - 22nd Of October Wednesday</nb-card-header>
     <nb-card-body>
         <div class="row">
-            <div class="col-sm-3" *ngFor="let room of rooms">
+            <div class="col-sm-4" *ngFor="let room of rooms">
                 <nb-card>
                     <nb-card-header>{{room.name}}</nb-card-header>
                     <nb-card-body>
@@ -81,7 +81,7 @@
                                 <hr>
                                 <span
                                     class="bg-sky padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16 xs-font-size13">{{
-                                    schedule.lecture.name }}</span> <br><br>
+                                    schedule.lecture.name }} BY {{schedule.lecture.teacher.name}}</span> <br><br>
                                 <span
                                     class="bg-green padding-5px-tb padding-15px-lr border-radius-5 margin-10px-bottom text-white font-size16  xs-font-size13">From
                                     : {{schedule.start_time_12}}</span>
@@ -113,7 +113,7 @@
         </nb-card-header>
         <nb-card-footer>
             <div class="row">
-                <div class="col-md-9 offset-md-2">
+                <div>
                     <div class="animated fadeIn">
                         <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
                             {{ viewScheduleAlert.message }}
@@ -151,12 +151,12 @@
                                 <label class="form-control-label" style="font-size: 14px;">Enter
                                     Enter Schedule Start Time</label>
                                 <br>
-                                <input class="form-control" type="time" step="2" formControlName="start_time">
+                                <input class="form-control" type="time" formControlName="start_time">
                                 <br>
                                 <label class="form-control-label" style="font-size: 14px;">Enter
                                     Enter Schedule End Time</label>
                                 <br>
-                                <input class="form-control" formControlName="end_time" type="time" step="2">
+                                <input class="form-control" formControlName="end_time" type="time">
                             </nb-card-body>
                         </nb-card>
                     </div>
@@ -198,7 +198,7 @@
         <nb-card-header>
             <div *ngIf="isCreateForm"> Create Schedule</div>
         </nb-card-header>
-        <nb-card-footer>
+        <nb-card-header>
             <div class="row">
                 <div class="col-md-9 offset-md-2">
                     <div class="animated fadeIn">
@@ -214,7 +214,7 @@
                     </div>
                 </div>
             </div>
-        </nb-card-footer>
+        </nb-card-header>
         <nb-card-body>
             <form class="form-horizontal" [formGroup]="scheduleForm">
                 <div class="form-group row" *ngIf="isCreateForm">

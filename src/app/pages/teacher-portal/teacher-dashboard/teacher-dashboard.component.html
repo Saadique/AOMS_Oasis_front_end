@@ -1,6 +1,6 @@
 <div class="container-fluid">
     <div class="row">
-        <div [ngClass]="decideClass()">
+        <div class="col-sm-8">
             <div class="container">
                 <div class="row">
                     <div class="col-lg-6 col-sm-12">
@@ -64,14 +64,14 @@
         </div>
 
         <div class="col-sm-4">
-            <nb-card size="large" *ngIf="notifications.length!=0">
+            <nb-card size="large">
                 <nb-card-header>
                     Notices
                 </nb-card-header>
                 <nb-list>
                     <nb-list-item class="noti" *ngFor="let notification of notifications">
                         <ng-container *ngIf="notification.action=='create'">
-                            <b>A New lecture for {{notification.lecture_name}} has been created at </b>><br>
+                            <b>A New lecture for {{notification.lecture_name}} has been SCHEDULED at </b>><br>
                             Room - {{notification.room_name}} on <br>
                             Date - {{notification.date}} <br>
                             From - {{notification.start_time}} <br>
@@ -79,7 +79,7 @@
                         </ng-container>
 
                         <ng-container *ngIf="notification.action=='update'">
-                            A New lecture for {{notification.lecture_name}} has been created at <br>
+                            The lecture for {{notification.lecture_name}} has been UPDATED to <br>
                             Room - {{notification.room_name}} on <br>
                             Date - {{notification.date}} <br>
                             From - {{notification.start_time}} <br>

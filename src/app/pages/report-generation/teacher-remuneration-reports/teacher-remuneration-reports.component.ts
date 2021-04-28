@@ -61,6 +61,7 @@ export class TeacherRemunerationReportsComponent implements OnInit {
   remunAlert = new Alert();
 
   records;
+  totalAmount;
 
   filterOption;
 
@@ -82,7 +83,6 @@ export class TeacherRemunerationReportsComponent implements OnInit {
   }
 
   constructor(
-    private router: Router,
     private dialogBoxService: NbDialogService,
     private courseService: CourseService,
     private lectureService: LectureService,
@@ -105,11 +105,16 @@ export class TeacherRemunerationReportsComponent implements OnInit {
     this.source.load(this.records);
   }
 
+  initTotalAmount(totalAmount) {
+    this.totalAmount = totalAmount;
+  }
+
   loadInitialData() {
     this.reportService.getAllRemunerationsPaidForTeachers().subscribe({
       next: (response) => {
         console.log(response);
         this.initData(response.records);
+        this.initTotalAmount(response.total_amount);
       },
       error: (error) => {
         console.log(error);
@@ -120,7 +125,7 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   getAllCourses() {
     this.courseService.getAllCourseMediums().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.courses = response.data;
       },
       error: (err) => {
@@ -151,6 +156,23 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
       }
     })
+  }
+
+  allSearch(value) {
+    if (value != '') {
+      var newList = this.records.filter(element => {
+        for (var property in element) {
+          if (element.hasOwnProperty(property)) {
+            if (element[property] == value) {
+              return true;
+            }
+          }
+        }
+      });
+      this.initData(newList);
+    } else {
+      this.loadInitialData();
+    }
   }
 
   //alert set
@@ -192,6 +214,14 @@ export class TeacherRemunerationReportsComponent implements OnInit {
       head: [['Teacher Name', 'Lecture Name', 'Course Name', 'Remuneration Amount', 'Total No. Of Student Payments']],
       body: recordsArray,
     })
+
+
+    autoTable(pdf, {
+      head: [['Total Amount']],
+      body: [[this.totalAmount]],
+      styles: { fillColor: "#43a047" },
+    })
+
     pdf.save();
   }
 
@@ -211,7 +241,7 @@ export class TeacherRemunerationReportsComponent implements OnInit {
     const pdf = new jsPDF();
     autoTable(pdf, {
       head: [['Teacher Name', 'Lecture Name', 'Course Name', 'Remuneration Amount', 'Total No. Of Student Payments']],
-      body: recordsArray,
+      body: recordsArray
     })
 
     pdf.autoPrint();
@@ -280,8 +310,9 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   getAllRemunerationsPaidForTeachers(modal) {
     this.reportService.getAllRemunerationsPaidForTeachers().subscribe({
-      next: (reponse) => {
-        this.initData(reponse.records);
+      next: (response: any) => {
+        this.initData(response.records);
+        this.initTotalAmount(response.total_amount);
         modal.close();
       },
       error: (err) => {
@@ -292,8 +323,9 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   getAllRemunerationsPaidForTeachersByTeacher(modal) {
     this.reportService.getAllRemunerationsPaidForTeachersByTeacher(this.filter.teacherId).subscribe({
-      next: (reponse) => {
-        this.initData(reponse.records);
+      next: (response: any) => {
+        this.initData(response.records);
+        this.initTotalAmount(response.total_amount);
         modal.close();
       },
       error: (err) => {
@@ -304,8 +336,9 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   getAllRemunerationsPaidForTeachersByLecture(modal) {
     this.reportService.getAllRemunerationsPaidForTeachersByLecture(this.filter.lectureId).subscribe({
-      next: (reponse) => {
-        this.initData(reponse.records);
+      next: (response: any) => {
+        this.initData(response.records);
+        this.initTotalAmount(response.total_amount);
         modal.close();
       },
       error: (err) => {
@@ -316,8 +349,9 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   getAllRemunerationsPaidForTeachersByCourse(modal) {
     this.reportService.getAllRemunerationsPaidForTeachersByCourse(this.filter.courseId).subscribe({
-      next: (reponse) => {
-        this.initData(reponse.records);
+      next: (response: any) => {
+        this.initData(response.records);
+        this.initTotalAmount(response.total_amount);
         modal.close();
       },
       error: (err) => {
@@ -325,5 +359,7 @@ export class TeacherRemunerationReportsComponent implements OnInit {
       }
     })
   }
+
+
 
 }

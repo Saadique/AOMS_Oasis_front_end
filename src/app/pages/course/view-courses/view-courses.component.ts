@@ -43,7 +43,7 @@ export class ViewCoursesComponent implements OnInit {
 
   getAllCourses() {
     this.courseService.getAllCoursesWithMediums()
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.allCourses = response;
         console.log(this.allCourses);
         this.loadNbList();

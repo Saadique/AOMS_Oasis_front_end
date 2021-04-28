@@ -37,13 +37,13 @@ export class RegisterStudentComponent implements OnInit {
   paymentScheme;
   normalPayments: [];
 
+  nextStep = false;
+
   // normalPaymentStartDate: string = '';
   // schemePaymentStartDate: string = '';
   // schemePaymentEndDate: string = '';
 
   // paymentStepperValidation: FormGroup;
-
-  studentAlert = new Alert();
 
 
   constructor(
@@ -67,10 +67,13 @@ export class RegisterStudentComponent implements OnInit {
     this.studentForm = this.fb.group({
       name: ['', null],
       mobileNo: ['', null],
-      parentContact: ['', null],
       schoolName: ['', null],
       student_type: ['', Validators.required],
-      email: ['', Validators.required]
+      email: ['', Validators.required],
+      super_course: ['', Validators.required],
+      course: ['', Validators.required],
+      subject: ['', Validators.required],
+      lecture: ['', null],
     });
   }
 
@@ -88,6 +91,11 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   courseTypeSelection(courseType) {
+    this.selectedLectures = [];
+    this.studentForm.controls['super_course'].setValue('');
+    this.studentForm.controls['course'].setValue('');
+    this.studentForm.controls['subject'].setValue('');
+    this.studentForm.controls['lecture'].setValue('');
     this.courseService.getAllCourseByType(courseType)
       .subscribe((response) => {
         this.courses = response;
@@ -119,10 +127,14 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   superCourseSelection(courseId) {
+    this.selectedLectures = [];
+    this.studentForm.controls['course'].setValue('');
+    this.studentForm.controls['subject'].setValue('');
+    this.studentForm.controls['lecture'].setValue('');
     this.courseService.getCoursesWithMediums(courseId)
       .pipe(
         pluck('data')
-      ).subscribe((response) => {
+      ).subscribe((response: any) => {
         this.courseMediums = response;
         console.log(this.courseMediums);
       })
@@ -131,6 +143,8 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   courseSelection(courseMediumId) {
+    this.studentForm.controls['subject'].setValue('');
+    this.studentForm.controls['lecture'].setValue('');
     this.subjectService.getAllSubjectsByCourseMeidum(courseMediumId)
       .pipe(
         pluck('data')
@@ -141,40 +155,60 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   subjectSelection(subjectId) {
+    // this.studentForm.controls['lecture'].setValue('');
     this.lectureService.getAllLecturesBySubject(subjectId)
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.lectures = response;
         console.log(this.lectures);
       })
   }
 
-  setAlert($rere, $rerer) { };
+  alert = new Alert();
+  //alert set
+  setAlert(alertStatus, alertMessage): void {
+    this.alert.status = alertStatus;
+    this.alert.message = alertMessage;
+    setTimeout(() => { this.alert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+  // studLecForSubmission() {
+  //   if (this.studLecturesForm.valid) {
+
+  //   } else {
+  //     console.log(this.selectedLectures);
+  //     this.setAlert('warning', 'Course, Course Medium, Subject AND At least 1 Lecture Should Be Selected');
+  //   }
+  // }
 
   addLectureToDisplayList() {
-    let lecture_id = this.studLecturesForm.value.lecture;
-    this.lectureService.getLectureById(lecture_id)
-      .pipe(
-        pluck('data')
-      ).subscribe((response) => {
-        this.selectedLecture = response;
-        if (this.selectedLectures.length != 0) {
-          let found = false;
-          for (var i = 0; i < this.selectedLectures.length; i++) {
-            if (this.selectedLectures[i].id == this.selectedLecture.id) {
-              this.setAlert('warning', 'This Lecture is already added to the list.');
-              found = true;
-              break;
+    let lecture_id = this.studentForm.value.lecture;
+    if (lecture_id != '') {
+      this.lectureService.getLectureById(lecture_id)
+        .pipe(
+          pluck('data')
+        ).subscribe((response) => {
+          this.selectedLecture = response;
+          if (this.selectedLectures.length != 0) {
+            let found = false;
+            for (var i = 0; i < this.selectedLectures.length; i++) {
+              if (this.selectedLectures[i].id == this.selectedLecture.id) {
+                this.setAlert('warning', 'This Lecture is already added to the list.');
+                found = true;
+                break;
+              }
             }
-          }
-          if (found != true) {
+            if (found != true) {
+              this.selectedLectures.push(this.selectedLecture);
+              this.checkArrayEmpty();
+            }
+          } else {
             this.selectedLectures.push(this.selectedLecture);
             this.checkArrayEmpty();
           }
-        } else {
-          this.selectedLectures.push(this.selectedLecture);
-          this.checkArrayEmpty();
-        }
-      });
+        });
+    } else {
+      this.setAlert("warning", "Please Select A Lecture")
+    }
   }
 
   removeLecture(lectureId) {
@@ -193,13 +227,11 @@ export class RegisterStudentComponent implements OnInit {
     }
   }
 
-
+  isStudentCreated = false;
   addStudent() {
     this.selectedLectureIds = [];
     this.takeLectureIdsOfSelectedLectures();
-
     if (this.studentForm.valid) {
-      // if ((this.isNormalMode && this.normalPaymentStartDate != '') || ((this.isSchemeMode) && (this.schemePaymentStartDate != '' && this.schemePaymentEndDate != ''))) {
       let data = {
         'name': this.studentForm.value.name,
         'school_name': this.studentForm.value.schoolName,
@@ -214,18 +246,19 @@ export class RegisterStudentComponent implements OnInit {
         {
           next: (response) => {
             console.log(response);
+            this.isStudentCreated = true;
             this.createStudentPaymentData(response.id);
           },
           error: (err) => {
             console.log(err);
+            if (err.status == 400) {
+              this.setAlert("warning", err.error)
+            }
           }
         }
       )
-      // } else {
-      //   console.log("Fill required Date Fileds in Payments");
-      // }
     } else {
-      // this.setAlert('warning', 'Please fill all required fields');
+      this.setAlert('warning', 'Please fill all required fields');
     }
   }
 
@@ -266,25 +299,25 @@ export class RegisterStudentComponent implements OnInit {
 
 
   createStudentPaymentData(studentId) {
-    if (this.paymentScheme != null) {
-      let data1 = {
-        "student_id": studentId,
-        "payment_type": "scheme",
-        "payment_scheme_id": this.paymentScheme.id,
-        "payment_amount": this.paymentScheme.student_fee,
-        "payment_start_date": this.schemePaymentDateForm.value.schemePaymentStartDate,
-        "payment_end_date": this.schemePaymentDateForm.value.schemePaymentEndDate,
-      }
+    // if (this.paymentScheme != null) {
+    //   let data1 = {
+    //     "student_id": studentId,
+    //     "payment_type": "scheme",
+    //     "payment_scheme_id": this.paymentScheme.id,
+    //     "payment_amount": this.paymentScheme.student_fee,
+    //     "payment_start_date": this.schemePaymentDateForm.value.schemePaymentStartDate,
+    //     "payment_end_date": this.schemePaymentDateForm.value.schemePaymentEndDate,
+    //   }
 
-      this.studentPaymentsService.storeStudentPayments(data1).subscribe(
-        {
-          next: (response) => {
-            console.log(response);
-            this.storeStudentSchemeLecture(studentId, this.paymentScheme.id, response.id);
-          }
-        }
-      )
-    }
+    //   this.studentPaymentsService.storeStudentPayments(data1).subscribe(
+    //     {
+    //       next: (response) => {
+    //         console.log(response);
+    //         this.storeStudentSchemeLecture(studentId, this.paymentScheme.id, response.id);
+    //       }
+    //     }
+    //   )
+    // }
 
     if (this.normalPayments.length != 0) {
       for (let i = 0; i < this.normalPayments.length; i++) {
@@ -307,6 +340,11 @@ export class RegisterStudentComponent implements OnInit {
           }
         )
       }
+      this.studentForm.reset();
+      this.setAlert("success", "Student Registered Successfully!")
+      this.nextStep = false;
+      this.selectedLectures = [];
+      this.normalPayments = [];
     }
   }
 
@@ -333,21 +371,33 @@ export class RegisterStudentComponent implements OnInit {
 
 
   decideClass() {
-    if (this.isArrayEmpty == true) {
-      return 'col-sm';
+    if (this.selectedLectures.length == 0 || this.nextStep) {
+      return 'col-md-8 offset-md-2';
     }
     return 'col-md-9 col-lg-9 offset-md-0';
   }
 
   onFirstSubmit() {
     this.studentForm.markAsDirty();
-    console.log(this.studentForm);
   }
 
+
   onSecondSubmit() {
-    this.studLecturesForm.markAsDirty();
-    this.getRelevantPaymentModes();
-    console.log(this.studLecturesForm)
+    if (this.studentForm.valid) {
+      if (this.selectedLectures.length != 0) {
+        this.nextStep = true;
+        this.getRelevantPaymentModes();
+      } else {
+        this.setAlert('warning', 'At least to One Lecture Should be added to the Student');
+      }
+    } else {
+      this.setAlert('warning', 'Please Fill All Required Fields');
+    }
+
+  }
+
+  backClick() {
+    this.nextStep = false;
   }
 
   onThirdSubmit() {

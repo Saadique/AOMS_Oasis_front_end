@@ -16,6 +16,10 @@ export class RoomService {
     return this.http.get<any>(`http://localhost:8000/api/rooms`);
   }
 
+  getAllActiveRooms() {
+    return this.http.get<any>(`http://localhost:8000/api/rooms/all/rooms`);
+  }
+
   updateRoom(data, roomId) {
     return this.http.put<any>(`http://localhost:8000/api/rooms/${roomId}`, data);
   }

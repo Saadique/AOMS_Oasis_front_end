@@ -37,6 +37,7 @@ export class CreateCourseComponent implements OnInit {
   selectedMediums: any[] = [];
   test: string;
 
+  checkBoxValues;
 
 
   //If a course name already exists
@@ -52,7 +53,7 @@ export class CreateCourseComponent implements OnInit {
   private initForm() {
     this.createForm = new FormGroup({
       'name': new FormControl(null, Validators.required),
-      'description': new FormControl(null, Validators.required),
+      'description': new FormControl(null),
       'course_type': new FormControl(null, Validators.required),
       'formMediums': new FormControl(null)
     });
@@ -92,6 +93,7 @@ export class CreateCourseComponent implements OnInit {
             console.log(response);
             this.setAlert('success', 'Course Created Successfully');
             this.createForm.reset();
+            this.selectedMediums = null;
           },
           error: (err) => {
             if (err.error.code == 400) {
@@ -109,17 +111,12 @@ export class CreateCourseComponent implements OnInit {
     }
   }
 
-  testL() {
-    console.log(this.loginService.isLoginSuccess());
-  }
-
-
   loadMediums() {
     this.courseService.getAllMediums()
       .pipe(
         pluck('data')
       )
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.availableMediums = response;
       })
   }

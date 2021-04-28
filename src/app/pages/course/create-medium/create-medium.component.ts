@@ -27,7 +27,7 @@ export class CreateMediumComponent implements OnInit {
     this.createForm = new FormGroup({
       'name': new FormControl(null, Validators.required),
       'short_name': new FormControl(null, Validators.required),
-      'description': new FormControl(null, Validators.required)
+      'description': new FormControl(null)
     });
   }
 

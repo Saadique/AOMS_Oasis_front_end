@@ -104,28 +104,28 @@ export class CourseService {
 
   getOneCourse(courseId) {
     this.initHttpOptions();
-    return this.http.get<any>(`${this.domain}/api/courses/${courseId}`);
+    return this.http.get<any>(`${this.domain}/api/courses/${courseId}`, this.httpOptions);
   }
 
   getCoursesWithMediums(courseId) {
     this.initHttpOptions();
-    return this.http.get<any>(`${this.domain}/api/course/course_mediums/${courseId}`);
+    return this.http.get<any>(`${this.domain}/api/course/course_mediums/${courseId}`, this.httpOptions);
   }
   // http://localhost:8000/api/course/medium/all
 
   getAllCoursesWithMediums() {
     this.initHttpOptions();
-    return this.http.get<any>(`${this.domain}/api/course/medium/all`);
+    return this.http.get<any>(`${this.domain}/api/course/medium/all`, this.httpOptions);
   }
 
   getAllCourseMediums() {
     this.initHttpOptions();
-    return this.http.get<any>(`${this.domain}/api/course_mediums`);
+    return this.http.get<any>(`${this.domain}/api/course_mediums`, this.httpOptions);
   }
 
   getOneCourseMedium(courseMediumId) {
     this.initHttpOptions();
-    return this.http.get(`http://localhost:8000/api/course_mediums/${courseMediumId}`);
+    return this.http.get(`http://localhost:8000/api/course_mediums/${courseMediumId}`, this.httpOptions);
   }
 
 }

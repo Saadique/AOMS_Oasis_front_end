@@ -110,19 +110,40 @@ export class ViewSchedulesComponent implements OnInit {
   initScheduleEditForm(schedule) {
     console.log(schedule);
     this.scheduleForm = this.fb.group({
-      start_time: [schedule.start_time, Validators.required],
-      end_time: [schedule.end_time, Validators.required],
+      start_time: [schedule.start_time.slice(0, -3), Validators.required],
+      end_time: [schedule.end_time.slice(0, -3), Validators.required],
       date: [schedule.date, Validators.required],
       room_id: [schedule.room_id, Validators.required]
     });
   }
 
+
+  todaysDate;
+  getTodaysDate() {
+    var today: any = new Date();
+    var dd: any = today.getDate();
+    var mm: any = today.getMonth() + 1; //January is 0!
+    var yyyy: any = today.getFullYear();
+    if (dd < 10) {
+      dd = '0' + dd
+    }
+    if (mm < 10) {
+      mm = '0' + mm
+    }
+
+    this.todaysDate = yyyy + '-' + mm + '-' + dd;
+  }
   onCreateClick(modal) {
-    this.openForm(modal);
-    this.displayScheduleForm = true;
-    this.isCreateForm = true;
-    this.isEditForm = false;
-    this.initScheduleCreateForm();
+    this.getTodaysDate();
+    if (this.todaysDate <= this.dateSelectionForm.value.date) {
+      this.openForm(modal);
+      this.displayScheduleForm = true;
+      this.isCreateForm = true;
+      this.isEditForm = false;
+      this.initScheduleCreateForm();
+    } else {
+      this.setDeleteAlert('warning', 'Schedules Can Only Be Created In PRESENT/FUTURE DATES');
+    }
   }
 
   openForm(dialog: TemplateRef<any>) {
@@ -137,20 +158,30 @@ export class ViewSchedulesComponent implements OnInit {
   // }
 
   onEditClick(schedule, modal) {
-    this.openForm(modal);
-    this.isEditForm = true;
-    this.isCreateForm = false;
-    this.displayScheduleForm = true;
-    this.initScheduleEditForm(schedule);
-    this.initSchedule(schedule);
+    this.getTodaysDate();
+    if (this.todaysDate <= schedule.date) {
+      this.openForm(modal);
+      this.isEditForm = true;
+      this.isCreateForm = false;
+      this.displayScheduleForm = true;
+      this.initScheduleEditForm(schedule);
+      this.initSchedule(schedule);
+    } else {
+      this.setDeleteAlert('warning', 'Cannot Edit Completed Schedules');
+    }
   }
 
   onDeleteClick(schedule, dialog: TemplateRef<any>) {
-    this.displayScheduleForm = false;
-    console.log(schedule);
-    this.isDeleteClick = true;
-    this.open(dialog);
-    this.deleteScheduleId = schedule.id;
+    this.getTodaysDate();
+    if (this.todaysDate < schedule.date) {
+      this.displayScheduleForm = false;
+      console.log(schedule);
+      this.isDeleteClick = true;
+      this.open(dialog);
+      this.deleteScheduleId = schedule.id;
+    } else {
+      this.setDeleteAlert('warning', 'Cannot Delete Completed Schedules');
+    }
   }
 
   open(dialog: TemplateRef<any>) {
@@ -170,7 +201,7 @@ export class ViewSchedulesComponent implements OnInit {
       {
         next: (response) => {
           console.log(response.data);
-          this.setDeleteAlert('success', `${response.data.lecture_id} Schedule was deleted successfully`);
+          this.setDeleteAlert('success', `Schedule was deleted successfully`);
           this.getAllSchedulesByDate(this.dateSelectionForm.value.date);
         },
         error: (err) => {
@@ -185,8 +216,8 @@ export class ViewSchedulesComponent implements OnInit {
     if (this.scheduleForm.valid) {
       let data = {
         'date': this.scheduleForm.value.date,
-        'start_time': this.scheduleForm.value.start_time,
-        'end_time': this.scheduleForm.value.end_time,
+        'start_time': this.scheduleForm.value.start_time + ":00",
+        'end_time': this.scheduleForm.value.end_time + ":00",
         'room_id': this.scheduleForm.value.room_id,
         'lecture_id': this.schedule.lecture.id
       }
@@ -204,7 +235,7 @@ export class ViewSchedulesComponent implements OnInit {
             // this.alreadyExists = true;
             // this.setAlert('Error', err.error.message);
             if (err.error.code == 400) {
-              this.setAlert('Error', 'This time slot is not free');
+              this.setAlert('Error', err.error.message);
             }
             console.log(err);
           }
@@ -238,7 +269,7 @@ export class ViewSchedulesComponent implements OnInit {
           error: (err) => {
             console.log(err);
             if (err.error.code == 400) {
-              this.setAlert('Error', 'This time slot is not free');
+              this.setAlert('Error', err.error.message);
             }
           }
         }
@@ -295,7 +326,7 @@ export class ViewSchedulesComponent implements OnInit {
   getAllCourseMediums() {
     this.courseService.getAllCourseMediums().subscribe(
       {
-        next: (response) => {
+        next: (response: any) => {
           this.courses = response.data;
           console.log(this.courses);
         },
@@ -323,7 +354,7 @@ export class ViewSchedulesComponent implements OnInit {
 
   courseSelection(courseMediumId) {
     this.lectureService.getAllLecturesByCourseMedium(courseMediumId)
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         console.log(response);
         this.lectures = response;
       })

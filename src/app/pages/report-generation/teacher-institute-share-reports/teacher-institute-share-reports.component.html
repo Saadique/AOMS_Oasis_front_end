@@ -1,6 +1,6 @@
 <nb-card class="card">
     <nb-card-header>
-        Teacher Renumeration Reports
+        Student Fee Reports.
     </nb-card-header>
     <nb-card-header>
         <div class="row">
@@ -15,8 +15,8 @@
         <div class="row">
             <div class="col-sm-3">
                 <div class="form-outline">
-                    <input type="search" id="form1" class="form-control" (change)="allSearch($event.target.value)"
-                        placeholder="All Search" aria-label="Search" />
+                    <input type="search" id="form1" (change)="allSearch($event.target.value)" class="form-control"
+                        placeholder="Filter Manually" aria-label="Search" />
                 </div>
             </div>
             <div class="col-sm-2">
@@ -35,42 +35,70 @@
                     <div class="col-sm-8">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" (click)="makePDF()" class="btn btn-outline-secondary">PDF</button>
-                            <button type="button" class="btn btn-outline-secondary">Excel</button>
-                            <button type="button" class="btn btn-outline-secondary">CSV</button>
+                            <!-- <button type="button" (click)="makeExcel()"class="btn btn-outline-secondary">Excel</button> -->
+
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </nb-card-header>
-
     <nb-card-body>
         <br>
         <div class="col-12">
             <nb-card size="flexible">
-                <nb-tabset fullWidth>
+                <nb-tabset fullWidth (changeTab)="onChangeTab($event.tabTitle)">
                     <nb-tab tabTitle="Report Data">
                         <ng2-smart-table [settings]="settings" [source]="source">
                         </ng2-smart-table>
                     </nb-tab>
 
                     <nb-tab tabTitle="Report Summary">
-                        <table class="table table-bordered" *ngIf="totalAmount!=null">
+                        <table class="table table-bordered" *ngIf="summary.total_teacher_amount!=null">
                             <thead>
                                 <tr>
-                                    <th>Total Amount</th>
-                                    <th>{{totalAmount}}</th>
+                                    <th>Student Fee Amount</th>
+                                    <th>Total Teacher Amount</th>
+                                    <th>Total Institute Share Amount</th>
+                                    <th>Total Fixed Institute Amount</th>
+                                    <th>Total Institute Revenue<br>
+                                        (Total Institute Amount + Total Fixed Institute Amount)</th>
                                 </tr>
                             </thead>
-                            <!-- <tbody>
+                            <tbody>
                                 <tr>
-                                    <td>{{totalAmount}}</td>
+                                    <td>Rs.{{summary.student_fee_amount}}</td>
+                                    <td>Rs.{{summary.total_teacher_amount}}</td>
+                                    <td>Rs.{{summary.total_institute_amount}}</td>
+                                    <td>Rs.{{summary.total_fixed_institute_amount}}</td>
+                                    <td>Rs.{{summary.total_institute_amount}} +
+                                        Rs.{{summary.total_fixed_institute_amount}} =
+                                        Rs.{{summary.final_total_institute_amount}}</td>
                                 </tr>
-                            </tbody> -->
-                            <div *ngIf="totalAmount==null">
-                                No Records
-                            </div>
+                            </tbody>
                         </table>
+                    </nb-tab>
+
+
+                    <nb-tab tabTitle="Graphical Reports">
+                        <nb-card>
+                            <nb-card-header>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <section id="chartContainer" style="height: 400px; width: 500px;"></section>
+                                    </div>
+                                    <div class="col-sm-1">
+
+                                    </div>
+                                    <div class="col-sm-5">
+                                        <section id="pieChartContainer"
+                                            style="height: 370px; width: 100%; margin-left:auto;margin-right:auto;">
+                                        </section>
+                                    </div>
+                                </div>
+
+                            </nb-card-header>
+                        </nb-card>
                     </nb-tab>
                 </nb-tabset>
             </nb-card>
@@ -83,18 +111,19 @@
         <nb-card-header>Select Filter Options</nb-card-header>
         <nb-card-header>
             <div class="animated fadeIn">
-                <div class="alert alert-danger" role="alert" *ngIf="remunAlert.status=='error'">
-                    {{ remunAlert.message }}
+                <div class="alert alert-danger" role="alert" *ngIf="studentFeeReportAlert.status=='error'">
+                    {{ studentFeeReportAlert.message }}
                 </div>
-                <div class="alert alert-warning" role="alert" *ngIf="remunAlert.status=='warning'">
-                    {{ remunAlert.message }}
+                <div class="alert alert-warning" role="alert" *ngIf="studentFeeReportAlert.status=='warning'">
+                    {{ studentFeeReportAlert.message }}
                 </div>
-                <div class="alert alert-success" role="alert" *ngIf="remunAlert.status=='success'">
-                    {{ remunAlert.message }}
+                <div class="alert alert-success" role="alert" *ngIf="studentFeeReportAlert.status=='success'">
+                    {{ studentFeeReportAlert.message }}
                 </div>
             </div>
         </nb-card-header>
         <nb-card-body>
+
             <div class="card">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
@@ -106,18 +135,17 @@
                                 <nb-select placeholder="Select Filter Option"
                                     (selectedChange)="selectFilterOption($event)" [(ngModel)]="filter.filterOption">
                                     <nb-option value="all">None(All Records)</nb-option>
-                                    <!-- <nb-option value="subject">Course Level</nb-option> -->
                                     <nb-option value="course">Course</nb-option>
-                                    <!-- <nb-option value="subject">Subject</nb-option> -->
                                     <nb-option value="lecture">Lecture/Class</nb-option>
                                     <nb-option value="teacher">Teacher</nb-option>
-                                    <!-- <nb-option value="subject">Lecture Type</nb-option> -->
+                                    <!-- <nb-option value="level">Course Level</nb-option> -->
                                 </nb-select>
                             </div>
                         </div>
                     </li>
                 </ul>
             </div><br>
+
 
             <div class="card" *ngIf="filterOption=='course'">
                 <ul class="list-group list-group-flush">
@@ -164,7 +192,8 @@
                                 <label>Lecture</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select placeholder="Choose Lecture" [(ngModel)]="filter.lectureId">
+                                <nb-select placeholder="Choose Lecture" [(ngModel)]="filter.teacherId"
+                                    [(ngModel)]="filter.lectureId">
                                     <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
                                         {{lecture.name}}
                                     </nb-option>
@@ -175,48 +204,7 @@
                 </ul>
             </div><br>
 
-            <!-- <div class="card">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label>Lecture Type</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Choose Lecture Type">
-                                    <nb-option value="advance_level">Normal</nb-option>
-                                    <nb-option value="ordinary_level">Revision Class</nb-option>
-                                    <nb-option value="ordinary_level">Paper Class</nb-option>
-                                    <nb-option value="ordinary_level">Catch Up Class</nb-option>
-                                </nb-select>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div><br> -->
-
-            <!-- <div class="card">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <label>Teacher</label>
-                            </div>
-                            <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Choose Teacher">
-                                    <nb-option value="advance_level">Keerthi Kaariyavasam</nb-option>
-                                    <nb-option value="ordinary_level">Muzain Mubarak</nb-option>
-                                    <nb-option value="ordinary_level">Naiomi Ekanaayaka</nb-option>
-                                    <nb-option value="ordinary_level">Leelarathna</nb-option>
-                                    <nb-option value="ordinary_level">Isham Mohammed</nb-option>
-                                </nb-select>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </div><br> -->
-
-            <!-- <div class="card">
+            <div class="card" *ngIf="filterOption!=null">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -224,18 +212,19 @@
                                 <label>Report Timespan</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Choose Timespan of report">
-                                    <nb-option value="advance_level">Select By Month</nb-option>
-                                    <nb-option value="ordinary_level">Select By Date Range</nb-option>
-                                    <nb-option value="ordinary_level">All Time</nb-option>
+                                <nb-select placeholder="Choose Timespan of report"
+                                    (selectedChange)="selectTimeSpan($event)" [(ngModel)]="filter.reportTimeSpan">
+                                    <nb-option value="by_month">Select By Month</nb-option>
+                                    <nb-option value="by_range">Select By Date Range</nb-option>
+                                    <nb-option value="all_time" selected>All Time</nb-option>
                                 </nb-select>
                             </div>
                         </div>
                     </li>
                 </ul>
-            </div><br> -->
+            </div><br>
 
-            <!-- <div class="card">
+            <div class="card" *ngIf="timeSpan=='by_month'">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -243,9 +232,9 @@
                                 <label>Select Year</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Year">
-                                    <nb-option value="advance_level">2020</nb-option>
-                                    <nb-option value="ordinary_level">2021</nb-option>
+                                <nb-select placeholder="Year" [(ngModel)]="filter.by_month.year">
+                                    <nb-option value="2020">2020</nb-option>
+                                    <nb-option value="2021">2021</nb-option>
                                 </nb-select>
                             </div>
                         </div><br>
@@ -255,27 +244,27 @@
                                 <label>Select Month</label>
                             </div>
                             <div class="col-sm-8">
-                                <nb-select formControlName="course_type" placeholder="Month">
-                                    <nb-option value="advance_level">January</nb-option>
-                                    <nb-option value="advance_level">February</nb-option>
-                                    <nb-option value="advance_level">March</nb-option>
-                                    <nb-option value="advance_level">April</nb-option>
-                                    <nb-option value="advance_level">May</nb-option>
-                                    <nb-option value="advance_level">June</nb-option>
-                                    <nb-option value="advance_level">July</nb-option>
-                                    <nb-option value="advance_level">August</nb-option>
-                                    <nb-option value="advance_level">September</nb-option>
-                                    <nb-option value="advance_level">October</nb-option>
-                                    <nb-option value="advance_level">November</nb-option>
-                                    <nb-option value="advance_level">December</nb-option>
+                                <nb-select placeholder="Month" [(ngModel)]="filter.by_month.month">
+                                    <nb-option value="January">January</nb-option>
+                                    <nb-option value="February">February</nb-option>
+                                    <nb-option value="March">March</nb-option>
+                                    <nb-option value="April">April</nb-option>
+                                    <nb-option value="May">May</nb-option>
+                                    <nb-option value="June">June</nb-option>
+                                    <nb-option value="July">July</nb-option>
+                                    <nb-option value="August">August</nb-option>
+                                    <nb-option value="September">September</nb-option>
+                                    <nb-option value="October">October</nb-option>
+                                    <nb-option value="November">November</nb-option>
+                                    <nb-option value="December">December</nb-option>
                                 </nb-select>
                             </div>
                         </div>
                     </li>
                 </ul>
-            </div><br> -->
+            </div><br>
 
-            <!-- <div class="card">
+            <div class="card" *ngIf="timeSpan=='by_range'">
                 <ul class="list-group list-group-flush">
                     <li class="list-group-item">
                         <div class="row">
@@ -283,7 +272,8 @@
                                 <label>From : </label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" min="2020-09-10">
+                                <input type="date" class="form-control" max={{filter.by_range.to_date}}
+                                    [(ngModel)]="filter.by_range.from_date">
                             </div>
                         </div><br>
 
@@ -292,17 +282,18 @@
                                 <label>To :</label>
                             </div>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" min="2020-09-10">
+                                <input type="date" class="form-control" min={{filter.by_range.from_date}}
+                                    [(ngModel)]="filter.by_range.to_date">
                             </div>
                         </div>
                     </li>
                 </ul>
-            </div> -->
+            </div>
 
         </nb-card-body>
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
-            <button nbButton id="submitButton" (click)="submitFilter(ref)">Submit</button>&nbsp;
+            <button nbButton id="submitButton" (click)="submitFilter(ref, data)">Submit</button>&nbsp;
         </nb-card-footer>
     </nb-card>
 </ng-template>

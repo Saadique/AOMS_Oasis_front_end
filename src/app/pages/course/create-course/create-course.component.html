@@ -19,25 +19,25 @@
       <nb-card-body>
         <form class="form-horizontal" (ngSubmit)="addCourse()" [formGroup]="createForm">
           <div class="form-group row">
-            <label for="courseName" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter Course
-              Name</label>
-            <div class="col-sm-9">
+            <label for="courseName" class="label col-sm-4 form-control-label" style="font-size: 12.75px;">Enter Course
+              Name<sup>*</sup></label>
+            <div class="col-sm-8">
               <input type="text" formControlName="name" nbInput fullWidth id="courseName" style="font-size: 12.75px;"
                 placeholder="Eg: Grade 11">
             </div>
           </div>
           <div class="form-group row">
-            <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Enter
+            <label for="courseCordinator" class="label col-sm-4 form-control-label" style="font-size: 12.75px;">Enter
               Course Description</label>
-            <div class="col-sm-9">
+            <div class="col-sm-8">
               <textarea rows="5" formControlName="description" nbInput fullWidth
                 placeholder="Course Description"></textarea>
             </div>
           </div>
           <div class="form-group row">
-            <label for="course_type" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Course
-              Type</label>
-            <div class="col-sm-9">
+            <label for="course_type" class="label col-sm-4 form-control-label" style="font-size: 12.75px;">Course
+              Type<sup>*</sup></label>
+            <div class="col-sm-8">
               <nb-select formControlName="course_type" placeholder="Select Course Type">
                 <nb-option value="advance_level">Advance Level</nb-option>
                 <nb-option value="ordinary_level">Ordinary Level</nb-option>
@@ -46,18 +46,19 @@
           </div>
           <br><br>
           <div class="form-group row">
-            <label for="courseCordinator" class="label col-sm-3 form-control-label" style="font-size: 12.75px;">Select
-              mediums for course</label>
-            <div class="col-sm-9">
+            <label for="courseCordinator" class="label col-sm-4 form-control-label" style="font-size: 12.75px;">Select
+              mediums for course<sup>*</sup></label>
+            <div class="col-sm-8">
               <div class="checkbox" *ngFor="let medium of availableMediums">
-                <nb-checkbox (change)="addMedium(medium.id, $event.target.checked)">
+                <nb-checkbox (change)="addMedium(medium.id, $event.target.checked)" formControlName="formMediums">
                   {{medium.name}}</nb-checkbox>
               </div>
             </div>
           </div>
           <div class="form-group row">
-            <div class="offset-sm-3 col-sm-9">
-              <button type="submit" nbButton status="primary" (click)="testL()">Create New Course</button>
+            <div class="col-sm-4"></div>
+            <div class="col-sm-8">
+              <button type="submit" nbButton status="primary">Create New Course</button>
             </div>
           </div>
         </form>

@@ -8,6 +8,7 @@ import { ScheduleService } from '../../../services/schedule.service';
 import { Alert } from '../create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
 import { RoomService } from '../../../services/room.service';
+import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -32,6 +33,8 @@ export class CreateLectureComponent implements OnInit {
   courseMediums: [];
   subjects: [];
   teachers;
+
+  displayErrorOccured = false;
 
   rooms;
 
@@ -87,45 +90,45 @@ export class CreateLectureComponent implements OnInit {
     this.todaysDate = yyyy + '-' + mm + '-' + dd;
   }
 
-  // initLectureForm() {
-  //   this.lectureForm = this.fb.group({
-  //     name: ['', [Validators.required]],
-  //     course_id: ['', Validators.required],
-  //     course_medium_id: ['', Validators.required],
-  //     type: ['', Validators.required],
-  //     class_type: ['', Validators.required],
-  //     subject_id: ['', Validators.required],
-  //     teacher_id: ['', Validators.required]
-  //   });
-  // }
-
-  // initPaymentForm() {
-  //   this.paymentForm = this.fb.group({
-  //     student_fee: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-  //     fixed_institute_amount: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
-  //     teacher_percentage: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(2)]]
-  //   });
-  // }
-
   initLectureForm() {
     this.lectureForm = this.fb.group({
-      name: ['', null],
-      course_id: ['', null],
-      course_medium_id: ['', null],
-      type: ['', null],
-      class_type: ['', null],
-      subject_id: ['', null],
-      teacher_id: ['', null]
+      name: ['', [Validators.required]],
+      course_id: ['', Validators.required],
+      course_medium_id: ['', Validators.required],
+      type: ['', Validators.required],
+      class_type: ['', Validators.required],
+      subject_id: ['', Validators.required],
+      teacher_id: ['', Validators.required]
     });
   }
 
   initPaymentForm() {
     this.paymentForm = this.fb.group({
-      student_fee: ['', null],
-      fixed_institute_amount: ['', null],
-      teacher_percentage: ['', null]
+      student_fee: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      fixed_institute_amount: ['', [Validators.required, Validators.pattern("^[0-9]*$")]],
+      teacher_percentage: ['', [Validators.required, Validators.pattern("^[0-9]*$"), Validators.maxLength(2)]]
     });
   }
+
+  // initLectureForm() {
+  //   this.lectureForm = this.fb.group({
+  //     name: ['', null],
+  //     course_id: ['', null],
+  //     course_medium_id: ['', null],
+  //     type: ['', null],
+  //     class_type: ['', null],
+  //     subject_id: ['', null],
+  //     teacher_id: ['', null]
+  //   });
+  // }
+
+  // initPaymentForm() {
+  //   this.paymentForm = this.fb.group({
+  //     student_fee: ['', Validators.required],
+  //     fixed_institute_amount: ['', Validators.required],
+  //     teacher_percentage: ['', Validators.required]
+  //   });
+  // }
 
   initScheduleForm() {
     this.scheduleForm = this.fb.group({
@@ -154,6 +157,9 @@ export class CreateLectureComponent implements OnInit {
   }
 
   courseTypeSelection(courseType) {
+    this.lectureForm.controls['course_id'].setValue('');
+    this.lectureForm.controls['course_medium_id'].setValue('');
+    this.lectureForm.controls['subject_id'].setValue('');
     this.courseService.getAllCourseByType(courseType)
       .subscribe((response) => {
         this.courses = response;
@@ -165,10 +171,12 @@ export class CreateLectureComponent implements OnInit {
   }
 
   superCourseSelection(courseId) {
+    this.lectureForm.controls['course_medium_id'].setValue('');
+    this.lectureForm.controls['subject_id'].setValue('');
     this.courseService.getCoursesWithMediums(courseId)
       .pipe(
         pluck('data')
-      ).subscribe((response) => {
+      ).subscribe((response: any) => {
         this.courseMediums = response;
         console.log(this.courseMediums);
       })
@@ -177,6 +185,7 @@ export class CreateLectureComponent implements OnInit {
   }
 
   courseSelection(courseMediumId) {
+    this.lectureForm.controls['subject_id'].setValue('');
     this.subjectService.getAllSubjectsByCourseMeidum(courseMediumId)
       .pipe(
         pluck('data')
@@ -185,8 +194,39 @@ export class CreateLectureComponent implements OnInit {
       })
   }
 
+  validateFixedInstituteAmount(fixedInstituteAmount) {
+    if (this.paymentForm.value.student_fee != '') {
+      if (fixedInstituteAmount > this.paymentForm.value.student_fee) {
+        this.paymentForm.controls['student_fee'].setErrors({ 'incorrect': true });
+        this.setAlert('warning', "Fixed Institue Amount Cannot be greater that Student Fee");
+      } else {
+        this.paymentForm.controls['student_fee'].setErrors(null);
+      }
+    }
+  }
 
-  addLecture() {
+  validateStudentFeeAmount(studentFeeAmount) {
+    if (this.paymentForm.value.fixed_institute_amount != '') {
+      if (studentFeeAmount < this.paymentForm.value.fixed_institute_amount) {
+        this.paymentForm.controls['fixed_institute_amount'].setErrors({ 'incorrect': true });
+        this.setAlert('warning', "Student Fee Cannot be less that Fixed Institute Amount");
+      } else {
+        this.paymentForm.controls['fixed_institute_amount'].setErrors(null);
+      }
+    }
+  }
+
+  validatePercentage(value) {
+    if (value < 0) {
+      this.paymentForm.controls['teacher_percentage'].setErrors({ 'incorrect': true });
+      this.setAlert('warning', "Percentage Cannot be less than 0");
+    } else {
+      this.paymentForm.controls['teacher_percentage'].setErrors(null);
+    }
+  }
+
+
+  addLecture(stepper) {
     if (this.lectureForm.valid) {
       let data = {
         'name': this.lectureForm.value.name,
@@ -205,12 +245,12 @@ export class CreateLectureComponent implements OnInit {
           next: (response) => {
             console.log(response);
             this.createdLecture = response;
-            this.addSchedule(response.id);
+            this.addSchedule(response.id, stepper);
           },
           error: (err) => {
-            if (err.error.code == 400) {
-              // this.alreadyExists = true;
-              // this.setAlert('Error', err.error.message);
+            console.log(err);
+            if (err.status = 400) {
+              this.setAlert("Error", err.error)
             }
           }
         }
@@ -220,7 +260,8 @@ export class CreateLectureComponent implements OnInit {
 
   weekdays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
 
-  addSchedule(lecture_id) {
+  createdSchedule = null;
+  addSchedule(lecture_id, stepper) {
     if (this.scheduleForm.valid) {
       let start_date = new Date(this.scheduleForm.value.schedule_start_date);
       let day = this.weekdays[start_date.getDay()];
@@ -238,13 +279,16 @@ export class CreateLectureComponent implements OnInit {
       this.scheduleService.createSchedule(data).pipe(pluck('data')).subscribe(
         {
           next: (response) => {
-            console.log(response);
-            this.createdLecture = null;
-
+            this.createdSchedule = response;
+            this.setAlert("success", "Lecture Created Successfully!")
+            stepper.reset();
+            setTimeout(() => {
+              this.createdLecture = null;
+              this.createdSchedule = null;
+            }, 4500); // fade alert
           },
           error: (err) => {
             if (err.error.code == 400) {
-              // this.alreadyExists = true;
               this.setAlert('Error', err.error.message);
             }
             console.log(err);
@@ -253,6 +297,8 @@ export class CreateLectureComponent implements OnInit {
       )
     }
   }
+
+
 
   onFirstSubmit() {
     if (!this.lectureForm.valid) {
@@ -263,36 +309,24 @@ export class CreateLectureComponent implements OnInit {
 
 
   onSecondSubmit() {
-    if (!this.paymentForm.valid) {
-      if (this.paymentForm.get('teacher_percentage').hasError('maxlength')) {
-        this.setAlert('warning', 'Percentage Should be numbered value less than 100');
-      }
-      if (this.paymentForm.get('student_fee').hasError('required')) {
-        this.setAlert('warning', 'Please fill all fields');
-      }
-      if (this.paymentForm.get('fixed_institute_amount').hasError('required')) {
-        this.setAlert('warning', 'Please fill all fields');
-      }
-      if (this.paymentForm.get('teacher_percentage').hasError('required')) {
-        this.setAlert('warning', 'Please fill all fields');
-      }
-    } else {
-
-      this.scheduleStepper = true;
-      console.log(this.scheduleStepper);
-      this.paymentForm.markAsDirty();
-    }
+    this.scheduleStepper = true;
+    console.log(this.scheduleStepper);
+    this.paymentForm.markAsDirty();
   }
 
-  onThirdSubmit() {
+  onThirdSubmit(stepper) {
+    this.displayErrorOccured = false;
     this.scheduleForm.markAsDirty();
     if (!this.scheduleForm.valid) {
       this.setAlert('warning', 'Please fill all required fields');
     } else {
+      setTimeout(() => {
+        this.displayErrorOccured = true
+      }, 2000)
       if (this.createdLecture == null) {
-        this.addLecture();
+        this.addLecture(stepper);
       } else if (this.createdLecture != null) {
-        this.addSchedule(this.createdLecture.id);
+        this.addSchedule(this.createdLecture.id, stepper);
       }
     }
   }

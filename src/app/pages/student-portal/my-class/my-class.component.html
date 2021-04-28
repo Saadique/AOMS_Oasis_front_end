@@ -3,11 +3,14 @@
         Lecture Materials
     </nb-card-header>
     <nb-card-header *ngFor="let lesson of lessons">
-        {{lesson.name}}
-        <br>
-        <ul>
+        <div id="lesson_name">{{lesson.name}}</div><br>
+        <ul style="list-style-type:none;">
             <li *ngFor="let material of lesson.materials">
-                <a [routerLink]="" (click)="downloadFile(material)">{{material.file_name}}</a>
+                <a [routerLink]="" (click)="downloadFile(material)">
+                    <nb-icon icon="download" [options]="{ animation: { type: 'pulse' } }"></nb-icon>
+                    {{material.file_name}}
+                </a>
+                <br>
             </li>
         </ul>
     </nb-card-header>

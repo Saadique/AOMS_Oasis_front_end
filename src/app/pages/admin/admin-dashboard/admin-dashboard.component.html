@@ -1,60 +1,70 @@
 <div class="container">
     <div class="row">
-        <div class="col-lg-3 col-sm-6">
-            <div class="card-box bg-blue">
-                <div class="inner">
-                    <h3>{{countData.student_count}}</h3>
-                    <p> Students </p>
+        <div class="col-sm-6">
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="card-box bg-blue">
+                        <div class="inner">
+                            <h3>{{countData.student_count}}</h3>
+                            <p> Students </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-graduation-cap" aria-hidden="true"></i>
+                        </div>
+                        <a [routerLink]="studentOpLink" class="card-box-footer">All Student Operations <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
                 </div>
-                <div class="icon">
-                    <i class="fa fa-graduation-cap" aria-hidden="true"></i>
-                </div>
-                <a [routerLink]="studentOpLink" class="card-box-footer">All Student Operations <i
-                        class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
 
-        <div class="col-lg-3 col-sm-6">
-            <div class="card-box bg-red">
-                <div class="inner">
-                    <h3> {{countData.user_count}} </h3>
-                    <p> Users </p>
+                <div class="col-lg-6 col-sm-6">
+                    <div class="card-box bg-red">
+                        <div class="inner">
+                            <h3> {{countData.user_count}} </h3>
+                            <p> Users </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <a [routerLink]="userMgtLink" class="card-box-footer">Users<i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
                 </div>
-                <div class="icon">
-                    <i class="fa fa-users"></i>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-sm-6">
+                    <div class="card-box bg-orange">
+                        <div class="inner">
+                            <h3> New Admissions </h3>
+                            <p> Create Student </p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-user-plus" aria-hidden="true"></i>
+                        </div>
+                        <a [routerLink]="createStudentLink" class="card-box-footer">Admit Student<i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
                 </div>
-                <a [routerLink]="userMgtLink" class="card-box-footer">Users<i class="fa fa-arrow-circle-right"></i></a>
+
+                <div class="col-lg-6 col-sm-6">
+                    <div class="card-box bg-red">
+                        <div class="inner">
+                            <h3>{{countData.teacher_count}}</h3>
+                            <p> Teachers</p>
+                        </div>
+                        <div class="icon">
+                            <i class="fa fa-users"></i>
+                        </div>
+                        <a [routerLink]="teacherOpLink" class="card-box-footer">All Teacher Operations <i
+                                class="fa fa-arrow-circle-right"></i></a>
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="card-box bg-orange">
-                <div class="inner">
-                    <h3> New Admissions </h3>
-                    <p> Create Student </p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-user-plus" aria-hidden="true"></i>
-                </div>
-                <a href="#" class="card-box-footer">Admit Student<i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="card-box bg-red">
-                <div class="inner">
-                    <h3>{{countData.teacher_count}}</h3>
-                    <p> Teachers</p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-users"></i>
-                </div>
-                <a [routerLink]="teacherOpLink" class="card-box-footer">All Teacher Operations <i
-                        class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
+        <div class="col-sm-6" id="chartContainer" style="height: 365px;"></div>
     </div>
-
+    <!-- <div class="row"> -->
     <div class="row">
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <div class="card-box bg-blue">
                 <div class="inner">
                     <h3> {{countData.lecture_count}} </h3>
@@ -68,7 +78,7 @@
             </div>
         </div>
 
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <div class="card-box bg-green">
                 <div class="inner">
                     <h3> Daily Schedules </h3>
@@ -81,7 +91,7 @@
                         class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
+        <div class="col-lg-4 col-sm-6">
             <div class="card-box bg-orange">
                 <div class="inner">
                     <h3> 5464 </h3>
@@ -93,17 +103,6 @@
                 <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
             </div>
         </div>
-        <div class="col-lg-3 col-sm-6">
-            <div class="card-box bg-red">
-                <div class="inner">
-                    <h3> 723 </h3>
-                    <p> Faculty Strength </p>
-                </div>
-                <div class="icon">
-                    <i class="fa fa-users"></i>
-                </div>
-                <a href="#" class="card-box-footer">View More <i class="fa fa-arrow-circle-right"></i></a>
-            </div>
-        </div>
+
     </div>
 </div>

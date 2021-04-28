@@ -62,9 +62,14 @@ export class CreateTeacherComponent implements OnInit {
           next: (response) => {
             console.log(response);
             this.teacher = response;
+            this.teacherDetailsForm.reset();
+            this.setAlert('success', "Teacher Registered Successfully");
           },
           error: (err) => {
             console.log(err);
+            if (err.status == 400) {
+              this.setAlert('Error', err.error.message);
+            }
           }
         }
       )

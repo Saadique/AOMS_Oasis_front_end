@@ -647,13 +647,18 @@ export const ADMIN_MENU_ITEMS: NbMenuItem[] = [
   },
   {
     icon: 'activity',
-    title: 'Student Fee Reports',
+    title: 'Student Monthly Fee Reports',
     link: '/pages/reports/fee'
   },
   {
     icon: 'activity',
-    title: 'Teacher Reports',
+    title: 'Teacher Remuneration Reports',
     link: '/pages/reports/teacher'
+  },
+  {
+    icon: 'activity',
+    title: 'Teacher Institute Share Reports',
+    link: '/pages/reports/teacher_institute_share'
   }
 ];
 

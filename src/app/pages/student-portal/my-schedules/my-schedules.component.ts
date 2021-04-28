@@ -139,7 +139,7 @@ export class MySchedulesComponent implements OnInit {
 
   courseSelection(courseMediumId) {
     this.lectureService.getAllLecturesByCourseMedium(courseMediumId)
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         console.log(response);
         this.lectures = response;
       })

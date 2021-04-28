@@ -18,4 +18,8 @@ export class SubjectService {
   getAllSubjectsByCourseMeidum(courseMediumId) {
     return this.http.get<any>(`${this.rootUrl}/course_medium/${courseMediumId}`)
   }
+
+  updateSubject(data, subjectId) {
+    return this.http.put<any>(`${this.rootUrl}/${subjectId}`, data);
+  }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Alert } from 'app/pages/course/create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'ngx-view-teacher',
@@ -41,6 +41,7 @@ export class ViewTeacherComponent implements OnInit {
       this.getTeacherById();
       this.getLecturesOfTeacher();
       this.getTotalMonthlyIncomeForTeacher();
+      this.initRemunForm();
     });
   }
 
@@ -49,6 +50,7 @@ export class ViewTeacherComponent implements OnInit {
       name: [this.teacher.name, Validators.required],
       email: [this.teacher.email, Validators.required],
       mobile_no: [this.teacher.mobile_no, Validators.required],
+      nic: [this.teacher.nic, Validators.required],
       address: [this.teacher.address, null]
     });
   }
@@ -58,6 +60,7 @@ export class ViewTeacherComponent implements OnInit {
       next: (response) => {
         this.teacher = response;
         this.initTeacherEditForm();
+        console.log(this.teacherEditForm);
       },
       error: (error) => {
 
@@ -80,11 +83,33 @@ export class ViewTeacherComponent implements OnInit {
     )
   }
 
-  submitTeacherEditForm() {
+  submitEdit() {
+    if (this.teacher.name != '' && this.teacher.mobile_no != '' && this.teacher.email) {
+      this.teacherService.updateTeacher(this.teacher, this.teacher.id).subscribe(
+        {
+          next: (response) => {
+            this.getTeacherById();
+          },
+          error: (err) => {
+            console.log(err)
+          }
+        }
+      )
+    }
+  }
 
+  selectRemunTimeForm: FormGroup;
+  initRemunForm() {
+    this.selectRemunTimeForm = this.fb.group({
+      lecture: ['', null],
+      year: ['', null],
+      month: ['', null]
+    })
   }
 
   selectRemunerationLec(lectureId) {
+    this.selectRemunTimeForm.controls['year'].setValue('');
+    this.selectRemunTimeForm.controls['month'].setValue('');
     this.teacherService.getLecMonths(lectureId).subscribe(
       {
         next: (response) => {
@@ -106,9 +131,11 @@ export class ViewTeacherComponent implements OnInit {
   ];
 
   selectYear(year) {
+
     let monthNumbers = this.lecYears[year];
     this.lecMonths = [];
     this.selectedMonth = null;
+    this.selectRemunTimeForm.controls['month'].setValue('');
     for (let i = 0; i < monthNumbers.length; i++) {
       this.lecMonths.push(this.monthNames[parseInt(monthNumbers[i]) - 1]);
     }

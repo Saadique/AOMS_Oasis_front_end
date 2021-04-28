@@ -4,6 +4,8 @@ import { CourseService } from '../../../services/course.service';
 import { SubjectService } from '../../../services/subject.service';
 import { LectureService } from '../../../services/lecture.service';
 import { pluck } from 'rxjs/operators';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Alert } from '../create-course/create-course.component';
 
 @Component({
   selector: 'ngx-view-course',
@@ -11,6 +13,8 @@ import { pluck } from 'rxjs/operators';
   styleUrls: ['./view-course.component.scss']
 })
 export class ViewCourseComponent implements OnInit {
+
+  subjectEditForm: FormGroup
 
   constructor(private route: ActivatedRoute,
     private courseService: CourseService,
@@ -23,11 +27,23 @@ export class ViewCourseComponent implements OnInit {
   lectures: [];
   editFormDisplay: boolean = false;
 
+  selectedEditSubject;
+
+  subjectEditAlert = new Alert();
+
   ngOnInit(): void {
     this.courseMediumId = this.route.snapshot.paramMap.get('id');
     this.loadAllSubjectsByCourse();
     this.loadAllLecturesByCourse();
     this.loadCourse();
+  }
+
+  initSubjectEditForm(subject) {
+    this.subjectEditForm = new FormGroup({
+      'name': new FormControl(subject.name, Validators.required),
+      'type': new FormControl(subject.type, Validators.required),
+      'description': new FormControl(subject.description, null)
+    })
   }
 
   loadAllSubjectsByCourse() {
@@ -41,9 +57,8 @@ export class ViewCourseComponent implements OnInit {
 
   loadAllLecturesByCourse() {
     this.lectureService.getAllLecturesByCourseMedium(this.courseMediumId)
-      .pipe(
-        pluck('data')
-      ).subscribe((response) => {
+      .subscribe((response: any) => {
+        console.log(response)
         this.lectures = response;
       })
   }
@@ -56,8 +71,40 @@ export class ViewCourseComponent implements OnInit {
       })
   }
 
-  editClick() {
+  editClick(subject) {
+    this.initSubjectEditForm(subject);
     this.editFormDisplay = true;
+    this.selectedEditSubject = subject;
+  }
+
+  setAlert(alertStatus, alertMessage): void {
+    this.subjectEditAlert.status = alertStatus;
+    this.subjectEditAlert.message = alertMessage;
+    setTimeout(() => { this.subjectEditAlert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
+
+  updateSubject() {
+    let data = {
+      "name": this.subjectEditForm.value.name,
+      "type": this.subjectEditForm.value.type,
+      "description": this.subjectEditForm.value.description,
+      "course_medium_id": this.courseMediumId
+    }
+    console.log(data);
+    this.subjectService.updateSubject(data, this.selectedEditSubject.id).subscribe({
+      next: (response) => {
+        this.setAlert("success", "Subject Updated Successfully!")
+        this.editFormDisplay = false;
+        this.loadAllSubjectsByCourse();
+      },
+      error: (error) => {
+        console.log(error);
+        if (error.status == 400) {
+          this.setAlert("Error", error.error.message)
+        }
+      }
+    })
   }
 
   cancelEditForm() {

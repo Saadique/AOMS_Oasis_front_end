@@ -97,7 +97,7 @@ export class LoginComponent implements OnInit {
                 response.userViews = tempUserViews;
                 this.localStorageService.setData(response);
                 return this.router.navigateByUrl('/pages/student-portal/dashboard');
-              }, 1000);
+              }, 2000);
               break;
             case 3:
               let tempTeacherViews = TEACHER_MENU_ITEMS;
@@ -107,7 +107,7 @@ export class LoginComponent implements OnInit {
                 response.userViews = tempTeacherViews;
                 this.localStorageService.setData(response);
                 return this.router.navigateByUrl('/pages/teacher-portal/dashboard');
-              }, 1000);
+              }, 2000);
               break;
             case 4:
               response.userViews = ADMINISTRATION_STAFF_MENU_ITEMS;

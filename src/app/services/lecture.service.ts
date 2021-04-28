@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -11,105 +11,151 @@ export class LectureService {
   rootUrl = 'http://localhost:8000/api/lectures';
   domain = 'http://localhost:8000';
 
+  httpOptions;
+  initHttpOptions() {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + window.localStorage.getItem('token-oasis')
+      })
+    };
+  }
+
   getAllLectures() {
+    this.initHttpOptions();
     return this.http.get<any>(`http://localhost:8000/api/lectures`);
   }
 
   createLecture(lecture) {
+    this.initHttpOptions();
     return this.http.post<any>(`${this.rootUrl}`, lecture);
   }
 
 
   getAllLecturesByCourseMedium(courseMediumId) {
-    return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}`, this.httpOptions);
   }
 
   getAllLecByCourseMedium(courseMediumId) {
-    return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}/all`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lectures/course_medium/${courseMediumId}/all`, this.httpOptions);
   }
 
   getAllLecturesBySubject(subjectId) {
-    return this.http.get<any>(`http://localhost:8000/api/lectures/subjects/${subjectId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lectures/subjects/${subjectId}`, this.httpOptions);
   }
 
   getLectureById(lectureId) {
-    return this.http.get<any>(`http://localhost:8000/api/lectures/${lectureId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lectures/${lectureId}`, this.httpOptions);
   }
 
   getAllLecturesByTeacher(teacherId) {
-    return this.http.get<any>(`http://localhost:8000/api/teacher/lectures/${teacherId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/teacher/lectures/${teacherId}`, this.httpOptions);
   }
 
   getAllLectureByStudent(studentId) {
-    return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`, this.httpOptions);
   }
 
   updateLecture(lectureId, data) {
-    return this.http.put<any>(`http://localhost:8000/api/lectures/${lectureId}`, data);
+    this.initHttpOptions();
+    return this.http.put<any>(`http://localhost:8000/api/lectures/${lectureId}`, data, this.httpOptions);
   }
 
   updateLecturePayment(paymentId, data) {
-    return this.http.put<any>(`http://localhost:8000/api/payments/${paymentId}`, data);
+    this.initHttpOptions();
+    return this.http.put<any>(`http://localhost:8000/api/payments/${paymentId}`, data, this.httpOptions);
   }
 
   changeLectureDeleteStatus(lectureId, status) {
-    return this.http.get<any>(`http://localhost:8000/api/lectures/status/${lectureId}/${status}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lectures/status/${lectureId}/${status}`, this.httpOptions);
   }
 
   createLesson(data) {
-    return this.http.post<any>(`http://localhost:8000/api/lessons`, data);
+    this.initHttpOptions();
+    return this.http.post<any>(`http://localhost:8000/api/lessons`, data, this.httpOptions);
   }
 
   updateLesson(lessonId, data) {
-    return this.http.put<any>(`http://localhost:8000/api/lessons/${lessonId}`, data);
+    this.initHttpOptions();
+    return this.http.put<any>(`http://localhost:8000/api/lessons/${lessonId}`, data, this.httpOptions);
   }
 
   changeLessonDeleteStatus(lessonId, status) {
-    return this.http.get<any>(`http://localhost:8000/api/lessons/status/${lessonId}/${status}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lessons/status/${lessonId}/${status}`, this.httpOptions);
   }
 
   getLessonsByLecture(lectureId) {
-    return this.http.get<any>(`http://localhost:8000/api/lessons/lecture/${lectureId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lessons/lecture/${lectureId}`, this.httpOptions);
   }
 
   storeLessonMaterial(formData) {
-    return this.http.post<any>(`http://localhost:8000/api/lessons_materials`, formData);
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + window.localStorage.getItem('token-oasis')
+      })
+    };
+
+    return this.http.post<any>(`http://localhost:8000/api/lessons_materials`, formData, this.httpOptions);
   }
 
   updateLessonMaterial(materialId, data) {
-    return this.http.post<any>(`http://localhost:8000/api/lesson_materials/material/${materialId}`, data);
+    this.initHttpOptions();
+    return this.http.post<any>(`http://localhost:8000/api/lesson_materials/material/${materialId}`, data, this.httpOptions);
   }
 
   updateLessonMaterialInfo(materialId, data) {
-    return this.http.put<any>(`http://localhost:8000/api/lesson_materials/info/${materialId}`, data);
+    this.initHttpOptions();
+    return this.http.put<any>(`http://localhost:8000/api/lesson_materials/info/${materialId}`, data, this.httpOptions);
   }
 
   deleteMaterial(materialId) {
-    return this.http.delete<any>(`http://localhost:8000/api/lessons_materials/${materialId}`);
+    this.initHttpOptions();
+    return this.http.delete<any>(`http://localhost:8000/api/lessons_materials/${materialId}`, this.httpOptions);
   }
 
   getMaterialsByLesson(lessonId) {
-    return this.http.get<any>(`http://localhost:8000/api/lessons_materials/lesson/${lessonId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lessons_materials/lesson/${lessonId}`, this.httpOptions);
   }
 
   downloadFile(data) {
-    return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data, { observe: 'response', responseType: 'arraybuffer' })
+    this.initHttpOptions();
+    return this.http.post(`http://localhost:8000/api/lessons_materials/file`, data,
+      {
+        observe: 'response',
+        responseType: 'arraybuffer'
+      })
   }
 
   getAllLessonsWithMaterials(lecture_id) {
-    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`, this.httpOptions);
   }
 
   getLecturePayment(lecture_id) {
-    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`, this.httpOptions);
   }
 
   getLectureSchedule(lecture_id) {
-    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lesson_materials/lesson/lecture/${lecture_id}`, this.httpOptions);
   }
 
   getPaymentOfLecture(lectureId) {
-    return this.http.get<any>(`http://localhost:8000/api/payment/lecture/${lectureId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/payment/lecture/${lectureId}`, this.httpOptions);
   }
 
 

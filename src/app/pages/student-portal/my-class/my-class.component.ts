@@ -27,7 +27,7 @@ export class MyClassComponent implements OnInit {
 
   getLecture(lectureId) {
     this.lectureService.getLectureById(lectureId).subscribe(
-      (response) => {
+      (response: any) => {
         this.lecture = response.data;
         console.log(this.lecture);
         // this.getLessonsByLecture();

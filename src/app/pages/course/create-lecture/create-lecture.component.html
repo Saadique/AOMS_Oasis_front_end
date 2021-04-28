@@ -1,5 +1,5 @@
 <div class="steppers-container row">
-    <div class="col-md-10 col-lg-10 col-xxxl-7 offset-md-1">
+    <div class="col-md-9 col-lg-9 col-xxxl-7 offset-md-1">
         <!-- alert message -->
         <div class="animated fadeIn">
             <div class="alert alert-danger" role="alert" *ngIf="createLectureAlert.status=='Error'">
@@ -13,7 +13,7 @@
             </div>
         </div>
     </div>
-    <div class="col-md-10 col-lg-10 col-xxxl-7 offset-md-1">
+    <div class="col-md-9 col-lg-9 col-xxxl-7 offset-md-1">
         <nb-card>
             <nb-card-body>
                 <nb-stepper #stepper>
@@ -155,8 +155,9 @@
                                 <label for="student_fee" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Student Fee Amount</label>
                                 <div class="col-sm-8">
-                                    <input type="number" formControlName="student_fee" nbInput fullWidth
-                                        id="student_fee" style="font-size: 12.75px;" placeholder="Eg: 1700">
+                                    <input type="number" (change)="validateStudentFeeAmount($event.target.value)"
+                                        formControlName="student_fee" nbInput fullWidth id="student_fee"
+                                        style="font-size: 12.75px;" placeholder="Eg: 1700">
                                 </div>
                             </div> <br>
                             <div class="form-group row">
@@ -164,15 +165,19 @@
                                     style="font-size: 12.75px;">Enter Fixed Institute Amount</label>
                                 <div class="col-sm-8">
                                     <input type="number" formControlName="fixed_institute_amount" nbInput fullWidth
-                                        id="fixed_institute_amount" style="font-size: 12.75px;" placeholder="Eg: 300">
+                                        id="fixed_institute_amount"
+                                        (change)="validateFixedInstituteAmount($event.target.value)"
+                                        style="font-size: 12.75px;" placeholder="Eg: 300">
                                 </div>
                             </div><br>
                             <div class="form-group row">
                                 <label for="teacher_percentage" class="label col-sm-4 form-control-label"
                                     style="font-size: 12.75px;">Enter Teacher Percentage</label>
                                 <div class="col-sm-8">
-                                    <input type="text" formControlName="teacher_percentage" nbInput fullWidth
-                                        id="teacher_percentage" style="font-size: 12.75px;" placeholder="Eg: 70">
+                                    <input type="number" formControlName="teacher_percentage" nbInput fullWidth
+                                        onkeypress="if(this.value.length==2) return false;"
+                                        (change)="validatePercentage($event.target.value)" id="teacher_percentage"
+                                        min="0" style="font-size: 12.75px;" placeholder="Eg: 70">
                                 </div>
                             </div>
                             <input type="hidden" formControlName="valid">
@@ -183,7 +188,7 @@
 
                     <!-- Create Schedule -->
                     <nb-step [stepControl]="scheduleForm" label="Schedule Details">
-                        <form [formGroup]="scheduleForm" (ngSubmit)="onThirdSubmit()" class="step-container">
+                        <form [formGroup]="scheduleForm" (ngSubmit)="onThirdSubmit(stepper)" class="step-container">
                             <h1><small>Fill up Lecture Schedule details</small></h1>
                             <br>
                             <div class="form-group row">
@@ -257,15 +262,25 @@
                             </div>
 
                             <button nbButton nbStepperPrevious type="button" (click)="moveOut()">prev</button>
-                            <button nbButton nbStepperNext type="button" (click)="onThirdSubmit()">Confirm</button>
+                            <button nbButton nbStepperNext type="button"
+                                (click)="onThirdSubmit(stepper)">Confirm</button>
                         </form>
                     </nb-step>
 
                     <nb-step [stepControl]="scheduleForm" [hidden]="true" label="Third step">
-                        <div class="step-container">
-                            <h3>Wizard completed!</h3>
-                            <button nbButton (click)="stepper.reset()" type="button">Try again</button>
+                        <div class="step-container"
+                            *ngIf="(createdLecture==null || createdSchedule==null) && displayErrorOccured">
+                            <h3>An Error Occured Please Move To the Relevant section and correct it <br> and submit the
+                                form
+                                again</h3>
                         </div>
+                        <!-- <ng-template #created>
+                            <div class="step-container">
+                                <h3></h3>
+                                <button nbButton (click)="stepper.reset(); resetReg()" type="button">Register Another
+                                    Student</button>
+                            </div>
+                        </ng-template> -->
                     </nb-step>
                 </nb-stepper>
             </nb-card-body>

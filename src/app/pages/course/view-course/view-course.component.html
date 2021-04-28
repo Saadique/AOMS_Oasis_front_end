@@ -23,7 +23,18 @@
             </nb-tab>
 
             <nb-tab tabTitle="Subjects">
-                <br><br>
+                <div class="animated fadeIn">
+                    <div class="alert alert-danger" role="alert" *ngIf="subjectEditAlert.status=='Error'">
+                        {{ subjectEditAlert.message }}
+                    </div>
+                    <div class="alert alert-warning" role="alert" *ngIf="subjectEditAlert.status=='warning'">
+                        {{ subjectEditAlert.message }}
+                    </div>
+                    <div class="alert alert-success" role="alert" *ngIf="subjectEditAlert.status=='success'">
+                        {{ subjectEditAlert.message }}
+                    </div>
+                </div>
+                <br>
                 <table class="table table-bordered table-hover">
                     <thead>
                         <tr>
@@ -39,7 +50,7 @@
                             <td>{{subject.name}}</td>
                             <td>{{subject.type}}</td>
                             <td>{{subject.description}}</td>
-                            <td><button class="btn btn-primary" (click)="editClick()">Edit</button></td>
+                            <td><button class="btn btn-primary" (click)="editClick(subject)">Edit</button></td>
                             <td><button class="btn btn-warning">Delete</button></td>
                         </tr>
                     </tbody>
@@ -48,48 +59,11 @@
 
                 <div class="row" *ngIf="editFormDisplay">
                     <div class="col-md-9 offset-md-1">
-
-                        <!-- alert message -->
-                        <!-- <div class="animated fadeIn">
-                            <div class="alert alert-danger" role="alert" *ngIf="alertSub.status=='Error'">
-                                {{ alertSub.message }}
-                            </div>
-                            <div class="alert alert-warning" role="alert" *ngIf="alertSub.status=='warning'">
-                                {{ alertSub.message }}
-                            </div>
-                        </div> -->
-
                         <nb-card>
                             <nb-card-header>Edit Subject</nb-card-header>
                             <nb-card-body>
-                                <form class="form-horizontal">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <div class="form-group row">
-                                                <label for="subjectName" class="label col-sm-6 form-control-label"
-                                                    style="font-size: 12.75px;">Super Course</label>
-
-                                                <div class="col-sm-6">
-                                                    <nb-select formControlName="type" placeholder="Select Subject Type">
-                                                        <nb-option value="compulsory">Compulsory</nb-option>
-                                                    </nb-select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6">
-                                            <div class="form-group row">
-                                                <label for="subjectName" class="label col-sm-6 form-control-label"
-                                                    style="font-size: 12.75px;">Select Course </label>
-
-                                                <div class="col-sm-6">
-                                                    <nb-select formControlName="type" placeholder="Select Subject Type">
-                                                        <nb-option value="compulsory">Compulsory</nb-option>
-                                                    </nb-select>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br><br><br>
+                                <form class="form-horizontal" [formGroup]="subjectEditForm">
+                                    <br><br>
                                     <div class="form-group row">
                                         <label for="subjectName" class="label col-sm-3 form-control-label"
                                             style="font-size: 12.75px;">Enter Subject
@@ -121,7 +95,8 @@
                                     </div>
                                     <div class="form-group row">
                                         <div class="offset-sm-3 col-sm-9">
-                                            <button type="submit" nbButton status="success">Update Subject</button>
+                                            <button type="submit" nbButton status="success"
+                                                (click)="updateSubject()">Update Subject</button>
                                             &nbsp;&nbsp;
                                             <button type="submit" nbButton status="info"
                                                 (click)="cancelEditForm()">Cancel</button>
@@ -142,17 +117,12 @@
                         <tr>
                             <th>Lecture Name</th>
                             <th>Lecture Type</th>
-                            <th>Teacher Name</th>
-                            <th>Subject</th>
-                            <th>Fee Amount</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let subject of subjects">
-                            <td>{{subject.name}}</td>
-                            <td>{{subject.type}}</td>
-                            <td>{{subject.description}}</td>
-                            <td><button class="btn btn-primary">More</button></td>
+                        <tr *ngFor="let lecture of lectures">
+                            <td>{{lecture.name}}</td>
+                            <td>{{lecture.type}}</td>
                         </tr>
                     </tbody>
                 </table>

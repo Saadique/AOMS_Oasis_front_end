@@ -29,9 +29,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FeeReportsComponent } from './fee-reports/fee-reports.component';
 import { TeacherRemunerationReportsComponent } from './teacher-remuneration-reports/teacher-remuneration-reports.component';
+import { TeacherInstituteShareReportsComponent } from './teacher-institute-share-reports/teacher-institute-share-reports.component';
 
 @NgModule({
-  declarations: [ReportGenerationComponent, FeeReportsComponent, TeacherRemunerationReportsComponent],
+  declarations: [ReportGenerationComponent, FeeReportsComponent, TeacherRemunerationReportsComponent, TeacherInstituteShareReportsComponent],
   imports: [
     CommonModule,
     ReportGenerationRoutingModule,

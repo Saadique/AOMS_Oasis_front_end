@@ -45,7 +45,7 @@ export class MyClassComponent implements OnInit {
 
   getLecture(lectureId) {
     this.lectureService.getLectureById(lectureId).subscribe(
-      (response) => {
+      (response: any) => {
         this.lecture = response.data;
         this.getLessonsByLecture();
       }
@@ -162,7 +162,7 @@ export class MyClassComponent implements OnInit {
 
   getMaterialsByLesson() {
     this.lectureService.getMaterialsByLesson(this.selectedLessonId).subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.lessonMaterials = response;
       },
       error: (err) => {

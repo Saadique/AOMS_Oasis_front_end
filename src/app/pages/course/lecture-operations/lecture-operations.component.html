@@ -11,7 +11,8 @@
             </div>
             <div class="col-sm-6">
                 <label>Lecture</label><br>
-                <nb-select placeholder="Select Lecture" (selectedChange)="lectureSelection($event)">
+                <nb-select placeholder="Select Lecture" [(ngModel)]="lectureSelectBoxValue"
+                    (selectedChange)="lectureSelection($event)" id="selectBox">
                     <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
                         {{lecture.name}}
                     </nb-option>
@@ -145,6 +146,19 @@
 <ng-template #lectureEdit let-data let-refLEdit="dialogRef">
     <nb-card id="modal">
         <nb-card-header>Edit Lecture</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="lectureAlert.status=='error'">
+                    {{ lectureAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="lectureAlert.status=='warning'">
+                    {{ lectureAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="lectureAlert.status=='success'">
+                    {{ lectureAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <br>
             <form class="form-horizontal" [formGroup]="lectureForm">
@@ -163,7 +177,7 @@
 
                     <div class="col-sm-9">
                         <nb-select placeholder="Select Lecture Subject" [(selected)]="subjectIdSring"
-                            [(ngModel)]="selectedSubjectId">
+                            (selectedChange)="selectSubjectEdit($event)" name="subject_id">
                             <nb-option *ngFor="let subject of subjects" value={{subject.id}}>
                                 {{subject.name}}</nb-option>
                         </nb-select>
@@ -189,7 +203,7 @@
 
                     <div class="col-sm-9">
                         <nb-select placeholder="Select Teacher" [(selected)]="teacherIdString"
-                            [(ngModel)]="selectedTeacherId">
+                            (selectedChange)="selectTeacherEdit($event)" name="teacher_id">
                             <nb-option *ngFor="let teacher of teachers" value={{teacher.id}}>
                                 {{teacher.name}}</nb-option>
                         </nb-select>
@@ -211,6 +225,19 @@
 <ng-template #paymentEditModal let-data let-refLEdit="dialogRef">
     <nb-card id="modalPayment">
         <nb-card-header>Edit Lecture</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="paymentAlert.status=='error'">
+                    {{ paymentAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="paymentAlert.status=='warning'">
+                    {{ paymentAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="paymentAlert.status=='success'">
+                    {{ paymentAlert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <br>
             <form [formGroup]="paymentForm" class="step-container">
@@ -218,24 +245,27 @@
                     <label for="student_fee" class="label col-sm-5 form-control-label" style="font-size: 12.75px;">Enter
                         Student Fee Amount</label>
                     <div class="col-sm-7">
-                        <input type="number" formControlName="student_fee" nbInput fullWidth id="student_fee"
-                            style="font-size: 12.75px;" placeholder="Eg: 1700">
+                        <input type="number" (change)="validateStudentFeeAmount($event.target.value)"
+                            formControlName="student_fee" nbInput fullWidth id="student_fee" style="font-size: 12.75px;"
+                            placeholder="Eg: 1700">
                     </div>
                 </div> <br>
                 <div class="form-group row">
                     <label for="fixed_institute_amount" class="label col-sm-5 form-control-label"
                         style="font-size: 12.75px;">Enter Fixed Institute Amount</label>
                     <div class="col-sm-7">
-                        <input type="number" formControlName="fixed_institute_amount" nbInput fullWidth
-                            id="fixed_institute_amount" style="font-size: 12.75px;" placeholder="Eg: 300">
+                        <input type="number" (change)="validateFixedInstituteAmount($event.target.value)"
+                            formControlName="fixed_institute_amount" nbInput fullWidth id="fixed_institute_amount"
+                            style="font-size: 12.75px;" placeholder="Eg: 300">
                     </div>
                 </div><br>
                 <div class="form-group row">
                     <label for="teacher_percentage" class="label col-sm-5 form-control-label"
                         style="font-size: 12.75px;">Enter Teacher Percentage</label>
                     <div class="col-sm-7">
-                        <input type="text" formControlName="teacher_percentage" nbInput fullWidth
-                            id="teacher_percentage" style="font-size: 12.75px;" placeholder="Eg: 70">
+                        <input type="text" onkeypress="if(this.value.length==2) return false;"
+                            (change)="validatePercentage($event.target.value)" formControlName="teacher_percentage"
+                            nbInput fullWidth id="teacher_percentage" style="font-size: 12.75px;" placeholder="Eg: 70">
                     </div>
                 </div>
             </form>

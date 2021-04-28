@@ -122,7 +122,7 @@ export class ViewStudentsComponent implements OnInit {
       .pipe(
         pluck('data')
       )
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.courseMediums = response;
         console.log(this.courseMediums);
       })

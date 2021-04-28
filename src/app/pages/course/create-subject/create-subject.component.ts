@@ -85,10 +85,11 @@ export class CreateSubjectComponent implements OnInit {
   }
 
   superCourseSelection(courseId) {
+    this.createForm.controls['course_medium_id'].setValue('');
     this.courseService.getCoursesWithMediums(courseId)
       .pipe(
         pluck('data')
-      ).subscribe((response) => {
+      ).subscribe((response: any) => {
         this.courseMediums = response;
         console.log(this.courseMediums);
       })

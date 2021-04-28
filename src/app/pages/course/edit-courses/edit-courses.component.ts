@@ -56,7 +56,7 @@ export class EditCoursesComponent implements OnInit {
 
   getAllCourses() {
     this.courseService.getAllCoursesWithMediums()
-      .subscribe((response) => {
+      .subscribe((response: any) => {
         this.allCourses = response;
         console.log(this.allCourses);
       })
@@ -68,7 +68,7 @@ export class EditCoursesComponent implements OnInit {
     this.courseService.getCoursesWithMediums(courseId)
       .pipe(
         pluck('data')
-      ).subscribe((response) => {
+      ).subscribe((response: any) => {
         this.courseMediums = response;
         console.log(this.courseMediums);
       })

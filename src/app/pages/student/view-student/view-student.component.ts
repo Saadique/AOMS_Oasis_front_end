@@ -180,7 +180,7 @@ export class ViewStudentComponent implements OnInit {
 
 
   getLecturesOfStudent() {
-    this.lectureService.getAllLectureByStudent(this.student.id).subscribe((response) => {
+    this.lectureService.getAllLectureByStudent(this.student.id).subscribe((response: any) => {
       console.log(response);
       this.lecturesOfStudent = response;
       this.loadCourses();

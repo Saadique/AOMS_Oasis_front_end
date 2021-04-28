@@ -1,5 +1,17 @@
 <nb-card>
     <nb-card-header>
+        <!-- alert message -->
+        <div class="animated fadeIn">
+            <div class="alert alert-danger" role="alert" *ngIf="mediumAlert.status=='Error'">
+                {{ mediumAlert.message }}
+            </div>
+            <div class="alert alert-warning" role="alert" *ngIf="mediumAlert.status=='warning'">
+                {{ mediumAlert.message }}
+            </div>
+            <div class="alert alert-success" role="alert" *ngIf="mediumAlert.status=='success'">
+                {{ mediumAlert.message }}
+            </div>
+        </div>
     </nb-card-header>
     <nb-card-body>
         <table class="table table-bordered" *ngIf="availableMediums.length>0">
@@ -45,14 +57,14 @@
         <nb-card-header>
             <!-- alert message -->
             <div class="animated fadeIn">
-                <div class="alert alert-danger" role="alert" *ngIf="mediumAlert.status=='Error'">
-                    {{ mediumAlert.message }}
+                <div class="alert alert-danger" role="alert" *ngIf="mediumModalAlert.status=='Error'">
+                    {{ mediumModalAlert.message }}
                 </div>
-                <div class="alert alert-warning" role="alert" *ngIf="mediumAlert.status=='warning'">
-                    {{ mediumAlert.message }}
+                <div class="alert alert-warning" role="alert" *ngIf="mediumModalAlert.status=='warning'">
+                    {{ mediumModalAlert.message }}
                 </div>
-                <div class="alert alert-success" role="alert" *ngIf="mediumAlert.status=='success'">
-                    {{ mediumAlert.message }}
+                <div class="alert alert-success" role="alert" *ngIf="mediumModalAlert.status=='success'">
+                    {{ mediumModalAlert.message }}
                 </div>
             </div>
         </nb-card-header>
