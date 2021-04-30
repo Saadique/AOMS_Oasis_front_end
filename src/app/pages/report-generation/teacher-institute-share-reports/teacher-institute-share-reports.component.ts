@@ -169,7 +169,7 @@ export class TeacherInstituteShareReportsComponent implements OnInit {
 
   getAllLectures() {
     this.lectureService.getAllLectures().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.lectures = response.data;
         console.log(this.lectures);
       },
@@ -479,23 +479,22 @@ export class TeacherInstituteShareReportsComponent implements OnInit {
         break;
       case 'by_range':
         if (this.filter.by_range.from_date != '' && this.filter.by_range.to_date != '') {
-          if (this.filter.by_month.month != '' && this.filter.by_month.year != '') {
-            this.reportService.getAllShareRecordsForCourseByDate(this.filter.courseId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
-              next: (response: any) => {
-                this.initData(response.records);
-                this.initTotalAmount(response.summary);
-                this.initCounts(response.count);
-                modal.close();
-              },
-              error: (error) => {
-                console.log(error);
-              }
-            })
-            break;
-          } else {
-            this.setAlert('error', 'Please Select A Date Frame');
-          }
+          this.reportService.getAllShareRecordsForCourseByDate(this.filter.courseId, this.filter.by_range.from_date, this.filter.by_range.to_date).subscribe({
+            next: (response: any) => {
+              this.initData(response.records);
+              this.initTotalAmount(response.summary);
+              this.initCounts(response.count);
+              modal.close();
+            },
+            error: (error) => {
+              console.log(error);
+            }
+          })
+          break;
+        } else {
+          this.setAlert('error', 'Please Select A Date Frame');
         }
+
     }
   }
 

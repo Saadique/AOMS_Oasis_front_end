@@ -19,7 +19,15 @@ export class SubjectService {
     return this.http.get<any>(`${this.rootUrl}/course_medium/${courseMediumId}`)
   }
 
+  getAllSubjectsByCourseMediumALL(courseMediumId) {
+    return this.http.get<any>(`${this.rootUrl}/all/course_medium/${courseMediumId}`)
+  }
+
   updateSubject(data, subjectId) {
     return this.http.put<any>(`${this.rootUrl}/${subjectId}`, data);
+  }
+
+  changeDeleteStatus(subjectId, status) {
+    return this.http.get<any>(`${this.rootUrl}/status/${subjectId}/${status}`);
   }
 }

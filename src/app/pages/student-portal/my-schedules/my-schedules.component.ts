@@ -106,7 +106,7 @@ export class MySchedulesComponent implements OnInit {
   getAllSchedulesByDate(date) {
     this.scheduleService.getStudentSchedules(date, this.student.id).subscribe(
       {
-        next: (response) => {
+        next: (response: any) => {
           this.schedules = response;
           console.log(response)
         },

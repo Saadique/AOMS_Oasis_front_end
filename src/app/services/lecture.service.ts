@@ -24,12 +24,12 @@ export class LectureService {
 
   getAllLectures() {
     this.initHttpOptions();
-    return this.http.get<any>(`http://localhost:8000/api/lectures`);
+    return this.http.get<any>(`http://localhost:8000/api/lectures`, this.httpOptions);
   }
 
   createLecture(lecture) {
     this.initHttpOptions();
-    return this.http.post<any>(`${this.rootUrl}`, lecture);
+    return this.http.post<any>(`${this.rootUrl}`, lecture, this.httpOptions);
   }
 
 
@@ -62,6 +62,8 @@ export class LectureService {
     this.initHttpOptions();
     return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`, this.httpOptions);
   }
+
+
 
   updateLecture(lectureId, data) {
     this.initHttpOptions();

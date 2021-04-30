@@ -48,8 +48,9 @@
                         <label for="mobile_no" class="label col-sm-4 form-control-label"
                             style="font-size: 12.75px;">Enter Contact Number<sup>*</sup></label>
                         <div class="col-sm-8">
-                            <input type="number" formControlName="mobile_no" nbInput fullWidth id="mobile_no"
-                                style="font-size: 12.75px;" placeholder="Contact Number">
+                            <input type="number" onkeypress="if(this.value.length==10) return false;"
+                                formControlName="mobile_no" nbInput fullWidth id="mobile_no" style="font-size: 12.75px;"
+                                placeholder="Contact Number">
                         </div>
                     </div>
 

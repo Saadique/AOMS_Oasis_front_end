@@ -15,6 +15,7 @@ export class AdminStaffDashboardComponent implements OnInit {
   roomOpLink;
   addNewLec;
   dailyScheduleOpLink;
+  createStudentLink;
 
 
   constructor(
@@ -24,6 +25,7 @@ export class AdminStaffDashboardComponent implements OnInit {
   ngOnInit(): void {
     this.getDashboardData();
     this.studentOpLink = "/pages/student/view";
+    this.createStudentLink = "/pages/student/register";
     this.addNewLec = "/pages/course/lecture/create";
     this.userMgtLink = "/pages/user-management/accounts";
     this.teacherOpLink = "/pages/teachers/view";
@@ -34,7 +36,7 @@ export class AdminStaffDashboardComponent implements OnInit {
   getDashboardData() {
     this.userService.getAdminDashboardData().subscribe({
       next: (response) => {
-        this.countData = response;
+        this.countData = response.counts;
       },
       error: (err) => {
 

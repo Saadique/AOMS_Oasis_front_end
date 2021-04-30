@@ -4,6 +4,7 @@ import { StudentService } from '../../../services/student.service';
 import { CourseService } from '../../../services/course.service';
 import { pluck } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { LectureService } from '../../../services/lecture.service';
 
 @Component({
   selector: 'ngx-view-students',
@@ -11,29 +12,6 @@ import { Router } from '@angular/router';
   styleUrls: ['./view-students.component.scss']
 })
 export class ViewStudentsComponent implements OnInit {
-
-  data = [
-    {
-      id: 1,
-      name: 'Leanne Graham',
-      username: 'Bret'
-    },
-    {
-      id: 2,
-      name: 'Ervin Howell',
-      username: 'Antonette'
-    },
-    {
-      id: 3,
-      name: 'Clementine Bauch',
-      username: 'Samantha'
-    },
-    {
-      id: 4,
-      name: 'Patricia Lebsack',
-      username: 'Karianne'
-    },
-  ];
 
   settings = {
     actions: {
@@ -72,12 +50,14 @@ export class ViewStudentsComponent implements OnInit {
   students: any[] = [];
   courses: [];
   courseMediums: [];
+  lectures;
 
   filterParam: string;
 
   constructor(
     private studentService: StudentService,
     private courseService: CourseService,
+    private lectureService: LectureService,
     private router: Router
   ) {
 
@@ -87,6 +67,12 @@ export class ViewStudentsComponent implements OnInit {
     this.getAllStudents();
     this.loadAllCourse();
     this.loadAllCourseMediums();
+    this.loadAllLectures();
+  }
+
+  initData(data) {
+    this.students = data;
+    this.source.load(this.students)
   }
 
   getAllStudents() {
@@ -128,6 +114,18 @@ export class ViewStudentsComponent implements OnInit {
       })
   }
 
+  loadAllLectures() {
+    this.lectureService.getAllLectures().subscribe({
+      next: (response: any) => {
+        console.log(response);
+        this.lectures = response.data;
+      },
+      error: (error: any) => {
+        console.log(error)
+      }
+    })
+  }
+
   filterByCourse(courseId) {
     console.log(courseId);
   }
@@ -136,8 +134,31 @@ export class ViewStudentsComponent implements OnInit {
     console.log(courseMediumId);
   }
 
+  filterByLecture(lectureId) {
+    this.studentService.getAllStudentsByLecture(lectureId).subscribe({
+      next: (response: any) => {
+        this.initData(response);
+      },
+      error: (error: any) => {
+
+      }
+    })
+  }
+
+  filterByLevel(level) {
+    this.studentService.getAllStudentsByLevel(level).subscribe({
+      next: (response: any) => {
+        this.initData(response);
+      },
+      error: (response: any) => {
+
+      }
+    })
+  }
+
   navigate(event): void {
     let studentId = event.data.id;
     this.router.navigateByUrl(`/pages/student/view/${studentId}`);
   }
+
 }

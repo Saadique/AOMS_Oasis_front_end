@@ -33,6 +33,7 @@ export class EditCoursesComponent implements OnInit {
   getUserRoleId() {
     this.loggedInUser = this.localStorageService.getData();
     this.role = this.loggedInUser.userRole;
+    console.log(this.role);
   }
 
   ngOnInit(): void {

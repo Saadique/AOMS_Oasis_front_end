@@ -4,6 +4,7 @@ import { pluck } from 'rxjs/operators';
 import { Alert } from '../create-course/create-course.component';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { NbDialogService } from '@nebular/theme';
+import { LocalStorageService } from '../../../authentication/services/local-storage/local-storage.service';
 
 @Component({
   selector: 'ngx-edit-medium',
@@ -18,13 +19,24 @@ export class EditMediumComponent implements OnInit {
   editMediumId;
   deleteMediumId;
 
-  constructor(private courseService: CourseService, private dialogBoxService: NbDialogService,) { }
+  constructor(private courseService: CourseService,
+    private dialogBoxService: NbDialogService,
+    private localStorageService: LocalStorageService) { }
 
   mediumModalAlert = new Alert();
   mediumAlert = new Alert();
 
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+    console.log(this.role)
+  }
+
   ngOnInit(): void {
     this.loadMediums();
+    this.getUserRoleId()
   }
 
   loadMediums() {

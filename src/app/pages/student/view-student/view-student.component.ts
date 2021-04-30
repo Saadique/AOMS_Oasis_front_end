@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { LectureService } from '../../../services/lecture.service';
 import { StudentService } from '../../../services/student.service';
 import { CourseService } from '../../../services/course.service';
@@ -23,6 +23,7 @@ export class ViewStudentComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
+    private router: Router,
     private lectureService: LectureService,
     private studentService: StudentService,
     private studentPaymentsService: StudentPaymentsService,
@@ -335,7 +336,7 @@ export class ViewStudentComponent implements OnInit {
       console.log(date);
       let data = {
         "monthlyPaymentId": this.monthlyPaymentForm.value.month,
-        "status": "payed",
+        "status": "paid",
         "payment_date": today
       }
       this.studentPaymentsService.payFee(data.monthlyPaymentId, data).subscribe((response) => {
@@ -371,7 +372,7 @@ export class ViewStudentComponent implements OnInit {
   getDailySchedulesByDate(date, lecture, studentId) {
     this.scheduleService.getScheduleByDateAndLecture(date, lecture, studentId).subscribe(
       {
-        next: (response) => {
+        next: (response: any) => {
           if (response.length != 0) {
             this.dailySchedulesByLec = response;
           } else {
@@ -419,6 +420,23 @@ export class ViewStudentComponent implements OnInit {
         }
       }
     )
+  }
+
+
+  deactivateClick(modal) {
+    this.open(modal);
+  }
+
+  deactivateStudent(modal) {
+    this.studentService.deactivateStudent(this.studentId).subscribe({
+      next: (response) => {
+        modal.close();
+        this.router.navigateByUrl('/pages/student/view');
+      },
+      error: (error) => {
+        console.log(error);
+      }
+    })
   }
 
   test() {

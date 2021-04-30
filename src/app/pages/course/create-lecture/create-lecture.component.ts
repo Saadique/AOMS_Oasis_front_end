@@ -8,7 +8,6 @@ import { ScheduleService } from '../../../services/schedule.service';
 import { Alert } from '../create-course/create-course.component';
 import { TeacherService } from '../../../services/teacher.service';
 import { RoomService } from '../../../services/room.service';
-import { Console } from 'console';
 
 @Injectable({
   providedIn: 'root'
@@ -242,7 +241,7 @@ export class CreateLectureComponent implements OnInit {
       console.log(data);
       this.lectureService.createLecture(data).pipe(pluck('data')).subscribe(
         {
-          next: (response) => {
+          next: (response: any) => {
             console.log(response);
             this.createdLecture = response;
             this.addSchedule(response.id, stepper);

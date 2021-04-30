@@ -258,8 +258,9 @@
                         <label for="contact_number" class="label form-control-label" style="font-size: 12.75px;">Enter
                             Contact Number</label><br>
                         <div>
-                            <input type="text" nbInput id="contact_number" formControlName="contact_number"
-                                style="font-size: 12.75px;" placeholder="Contact Number"><br><br>
+                            <input type="number" onkeypress="if(this.value.length==10) return false;" nbInput
+                                id="contact_number" formControlName="contact_number" style="font-size: 12.75px;"
+                                placeholder="Contact Number"><br><br>
                         </div>
                     </div><br>
                 </div>
@@ -371,8 +372,9 @@
                         <label for="contact_number" class="label form-control-label" style="font-size: 12.75px;">Enter
                             Contact Number</label><br>
                         <div>
-                            <input type="text" nbInput id="contact_number" formControlName="contact_number"
-                                style="font-size: 12.75px;" placeholder="Contact Number"><br><br>
+                            <input type="number" onkeypress="if(this.value.length==2) return false;" nbInput
+                                id="contact_number" formControlName="contact_number" style="font-size: 12.75px;"
+                                placeholder="Contact Number"><br><br>
                         </div>
                     </div><br>
                 </div>

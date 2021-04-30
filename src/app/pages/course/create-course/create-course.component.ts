@@ -93,7 +93,7 @@ export class CreateCourseComponent implements OnInit {
             console.log(response);
             this.setAlert('success', 'Course Created Successfully');
             this.createForm.reset();
-            this.selectedMediums = null;
+            this.selectedMediums = [];
           },
           error: (err) => {
             if (err.error.code == 400) {

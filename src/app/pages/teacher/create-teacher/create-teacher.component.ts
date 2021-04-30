@@ -34,7 +34,7 @@ export class CreateTeacherComponent implements OnInit {
   initTeacherDetailsForm() {
     this.teacherDetailsForm = this.fb.group({
       name: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       nic: ['', Validators.required],
       mobile_no: ['', Validators.required],
       address: ['', null]
@@ -75,6 +75,9 @@ export class CreateTeacherComponent implements OnInit {
       )
     } else {
       this.setAlert('warning', 'Please fill all required fields');
+      if (this.teacherDetailsForm.controls['email'].errors.email) {
+        this.setAlert('warning', 'Please Enter A Valid Email Address');
+      }
     }
   }
 

@@ -21,6 +21,7 @@ export class AdminDashboardComponent implements OnInit {
   addNewLec;
   dailyScheduleOpLink;
   createStudentLink;
+  reportsLink;
 
 
   constructor(
@@ -36,6 +37,7 @@ export class AdminDashboardComponent implements OnInit {
     this.roomOpLink = "/pages/course/rooms";
     this.createStudentLink = "/pages/student/register";
     this.dailyScheduleOpLink = "/pages/course/schedule/view";
+    this.reportsLink = "/pages/reports/fee";
   }
 
   getDashboardData() {

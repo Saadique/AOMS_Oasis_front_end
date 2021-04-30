@@ -173,7 +173,7 @@ export class ViewSchedulesComponent implements OnInit {
 
   onDeleteClick(schedule, dialog: TemplateRef<any>) {
     this.getTodaysDate();
-    if (this.todaysDate < schedule.date) {
+    if (this.todaysDate <= schedule.date) {
       this.displayScheduleForm = false;
       console.log(schedule);
       this.isDeleteClick = true;
@@ -199,7 +199,7 @@ export class ViewSchedulesComponent implements OnInit {
   deleteSchedule() {
     this.scheduleService.deleteDailySchedule(this.deleteScheduleId).subscribe(
       {
-        next: (response) => {
+        next: (response: any) => {
           console.log(response.data);
           this.setDeleteAlert('success', `Schedule was deleted successfully`);
           this.getAllSchedulesByDate(this.dateSelectionForm.value.date);
@@ -309,7 +309,7 @@ export class ViewSchedulesComponent implements OnInit {
   getAllSchedulesByDate(date) {
     this.scheduleService.getSchedulesByDate(date).subscribe(
       {
-        next: (response) => {
+        next: (response: any) => {
           this.schedules = response;
           console.log(this.schedules);
         },

@@ -7,10 +7,10 @@
                     <br>
                     <div>
                         <nb-select placeholder="Select Filter Parameter" (selectedChange)="change($event)">
-                            <nb-option value="super_course">Super Course</nb-option>
-                            <nb-option value="course">Course</nb-option>
+                            <!-- <nb-option value="super_course">Super Course</nb-option>
+                            <nb-option value="course">Course</nb-option> -->
+                            <nb-option value="class_level">Level</nb-option>
                             <nb-option value="lecture">Lecture</nb-option>
-                            <nb-option value="teacher">Teacher</nb-option>
                         </nb-select>
                     </div>
                 </div>
@@ -34,6 +34,30 @@
                         <nb-select placeholder="Select Course" (selectedChange)="filterByCourseMedium($event)">
                             <nb-option *ngFor="let courseMedium of courseMediums" value={{courseMedium.id}}>
                                 {{courseMedium.name}}</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" *ngIf="filterParam=='lecture'">
+                <div>
+                    <label for="subjectName" style="font-size: 14px;">Select All Students With Lecture: </label>
+                    <br>
+                    <div>
+                        <nb-select placeholder="Filter Students By Lecture" (selectedChange)="filterByLecture($event)">
+                            <nb-option *ngFor="let lecture of lectures" value={{lecture.id}}>
+                                {{lecture.name}}</nb-option>
+                        </nb-select>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-6" *ngIf="filterParam=='class_level'">
+                <div>
+                    <label for="subjectName" style="font-size: 14px;">Select All Students By Level: </label>
+                    <br>
+                    <div>
+                        <nb-select placeholder="Filter Students By Level" (selectedChange)="filterByLevel($event)">
+                            <nb-option value="advance_level">Advance Level</nb-option>
+                            <nb-option value="ordinary_level">Ordinary Level</nb-option>
                         </nb-select>
                     </div>
                 </div>

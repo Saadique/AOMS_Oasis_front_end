@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 @Injectable({
@@ -7,6 +7,17 @@ import { Injectable } from '@angular/core';
 export class StudentService {
 
   constructor(private http: HttpClient) { }
+
+  httpOptions;
+  initHttpOptions() {
+    this.httpOptions = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Access-Control-Allow-Origin': '*',
+        'Authorization': 'Bearer ' + window.localStorage.getItem('token-oasis')
+      })
+    };
+  }
 
   createStudent(student) {
     return this.http.post<any>(`http://localhost:8000/api/students`, student);
@@ -38,6 +49,21 @@ export class StudentService {
 
   getAllLecturesOfStudent(studentId) {
     return this.http.get<any>(`http://localhost:8000/api/student/lectures/${studentId}`);
+  }
+
+  getAllStudentsByLecture(lectureId) {
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/lecture/${lectureId}/students`, this.httpOptions);
+  }
+
+  getAllStudentsByLevel(level) {
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/students/level/${level}`, this.httpOptions);
+  }
+
+  deactivateStudent(studentId) {
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/students/${studentId}/deactivate`, this.httpOptions);
   }
 
 }

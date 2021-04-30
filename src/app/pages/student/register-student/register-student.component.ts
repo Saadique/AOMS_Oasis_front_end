@@ -69,7 +69,7 @@ export class RegisterStudentComponent implements OnInit {
       mobileNo: ['', null],
       schoolName: ['', null],
       student_type: ['', Validators.required],
-      email: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
       super_course: ['', Validators.required],
       course: ['', Validators.required],
       subject: ['', Validators.required],
@@ -383,6 +383,7 @@ export class RegisterStudentComponent implements OnInit {
 
 
   onSecondSubmit() {
+    let emailAlert = false;
     if (this.studentForm.valid) {
       if (this.selectedLectures.length != 0) {
         this.nextStep = true;
@@ -392,8 +393,11 @@ export class RegisterStudentComponent implements OnInit {
       }
     } else {
       this.setAlert('warning', 'Please Fill All Required Fields');
+      if (this.studentForm.controls['email'].errors.email) {
+        console.log("pop");
+        this.setAlert('warning', 'Please Enter A Valid Email Address');
+      }
     }
-
   }
 
   backClick() {

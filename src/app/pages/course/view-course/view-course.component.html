@@ -1,7 +1,7 @@
 <div class="col-12">
     <nb-card size="flexible">
         <nb-tabset fullWidth>
-            <nb-tab tabTitle="Course Details" tabIcon="person-outline">
+            <nb-tab tabTitle="Course Details">
                 <br>
                 <table class="table table-user-information">
                     <tbody>
@@ -41,8 +41,9 @@
                             <th>Subject Name</th>
                             <th>Subject Type</th>
                             <th>Description</th>
+                            <th>Status</th>
                             <th>Edit Subject</th>
-                            <th>Delete Subject</th>
+                            <th *ngIf="role=='Admin'">Delete Subject</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -50,8 +51,17 @@
                             <td>{{subject.name}}</td>
                             <td>{{subject.type}}</td>
                             <td>{{subject.description}}</td>
+                            <td *ngIf="subject.status=='active'">
+                                <span class="badge badge-success">Active</span>
+                            </td>
+                            <td *ngIf="subject.status=='deleted'">
+                                <span class="badge badge-warning">Deleted</span>
+                            </td>
                             <td><button class="btn btn-primary" (click)="editClick(subject)">Edit</button></td>
-                            <td><button class="btn btn-warning">Delete</button></td>
+                            <td *ngIf="subject.status=='active' && role=='Admin'"><button nbButton status="warning"
+                                    (click)="deleteClick(subject) && role=='Admin'">Delete &nbsp;&nbsp;</button></td>
+                            <td *ngIf="subject.status=='deleted'"><button nbButton status="success"
+                                    (click)="activateClick(subject)">Activate</button></td>
                         </tr>
                     </tbody>
                 </table>
@@ -117,19 +127,19 @@
                         <tr>
                             <th>Lecture Name</th>
                             <th>Lecture Type</th>
+                            <th>Teacher Name</th>
+                            <th>Subject Name</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let lecture of lectures">
                             <td>{{lecture.name}}</td>
                             <td>{{lecture.type}}</td>
+                            <td>{{lecture.subject.name}}</td>
+                            <td>{{lecture.teacher.name}}</td>
                         </tr>
                     </tbody>
                 </table>
-            </nb-tab>
-
-            <nb-tab tabTitle="Student Details">
-                <span>Content #4</span>
             </nb-tab>
 
         </nb-tabset>

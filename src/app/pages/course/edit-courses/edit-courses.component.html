@@ -47,7 +47,7 @@
             style="font-size: 12.75px;">Select
             Course</label>
           <nb-select class="col-sm-4" (selectedChange)="superCourseSelection($event)"
-            placeholder="Please Select Lesson">
+            placeholder="Please Select Course">
             <nb-option *ngFor="let course of allCourses" value={{course.course.id}}>{{course.course.name}}
             </nb-option>
           </nb-select>
@@ -60,7 +60,7 @@
                 <th>Course Name</th>
                 <!-- <th>Number Of Students</th> -->
                 <th>Status</th>
-                <th>Delete</th>
+                <th *ngIf="role=='Admin'">Delete</th>
               </tr>
             </thead>
             <tbody>

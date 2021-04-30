@@ -4,7 +4,8 @@
             <nb-tab tabTitle="Student">
                 <nb-card size="flexible" class="col-md-8 offset-md-2">
                     <nb-card-header>
-                        Student Details
+                        Student Details &nbsp; <p *ngIf="student.status=='deleted'" style="color: red;">(Deleted
+                            Student)</p>
                     </nb-card-header>
                     <nb-card-header *ngIf="editAlert!=null">
                         <div class="animated fadeIn">
@@ -66,8 +67,12 @@
                                     <input type="text" name="email" [(ngModel)]="student.email" nbInput fullWidth
                                         id="schoolName" style="font-size: 12.75px;">
                                 </div>
+
                             </div>
-                            <button nbButton style="float: right;" type="submit" (click)="editStudent()">Edit</button>
+                            <button *ngIf="student.status=='active'" nbButton outline status="warning"
+                                style="float: right;" type="submit"
+                                (click)="deactivateClick(deleteConfirmation)">Deactivate Student</button>
+                            <button nbButton style="float: left;" type="submit" (click)="editStudent()">Update</button>
                         </form>
                     </nb-card-body>
                 </nb-card>
@@ -159,7 +164,7 @@
                         </table>
                         <span #noDue>There are no any due payments for this student at the moment</span>
                     </nb-tab>
-                    <nb-tab tabTitle="Pay Fee ">
+                    <nb-tab tabTitle="Pay Fee" *ngIf="student.status=='active'">
                         <br>
                         <div class="table-responsive">
                             <table class="table table-bordered table-striped">
@@ -216,7 +221,7 @@
                 </nb-tabset>
             </nb-tab>
 
-            <nb-tab tabTitle="Attendence">
+            <nb-tab tabTitle="Attendence" *ngIf="student.status=='active'">
                 <br>
                 <nb-card>
                     <nb-card-header>
@@ -341,7 +346,7 @@
                 </nb-card>
             </nb-tab>
 
-            <nb-tab tabTitle="Lecture Details">
+            <nb-tab tabTitle="Lecture Details" *ngIf="student.status=='active'">
                 <div class="animated fadeIn">
                     <div class="alert alert-danger" role="alert" *ngIf="lecAlert.status=='error'">
                         {{ lecAlert.message }}
@@ -513,6 +518,20 @@
             <button nbButton type="submit" id="addLecBtn" (click)="payMonthlyFee(ref)">Pay Fee</button>&nbsp;
             <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
                 Payment</button>&nbsp;&nbsp;
+        </nb-card-footer>
+    </nb-card>
+</ng-template>
+
+<ng-template #deleteConfirmation let-data let-ref="dialogRef">
+    <nb-card>
+        <nb-card-header>Delete Confimation</nb-card-header>
+        <nb-card-body>Deactivating Student Will Suspend his/her portal ACCOUNT, <br>Dissociate from enrolled LECTURES
+            and<br> Will
+            only be able to Pay due PAYMENTS<br><br>
+            Are You Sure To Delete This Student?</nb-card-body>
+        <nb-card-footer>
+            <button nbButton (click)="deactivateStudent(ref)">Yes</button>&nbsp;
+            <button nbButton (click)="ref.close()">Cancel</button>
         </nb-card-footer>
     </nb-card>
 </ng-template>

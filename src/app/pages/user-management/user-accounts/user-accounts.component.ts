@@ -44,7 +44,7 @@ export class UserAccountsComponent implements OnInit {
       'user_name': new FormControl(null, Validators.required),
       'contact_number': new FormControl(null),
       'nic': new FormControl(null, Validators.required),
-      'email': new FormControl(null, Validators.required),
+      'email': new FormControl(null, [Validators.required, Validators.email]),
       'password': new FormControl(null, Validators.required),
       'confirm_password': new FormControl(null, Validators.required),
     });
@@ -57,7 +57,7 @@ export class UserAccountsComponent implements OnInit {
       'username': new FormControl(admin.user.username),
       'contact_number': new FormControl(admin.contact_number),
       'nic': new FormControl(admin.nic, Validators.required),
-      'email': new FormControl(admin.email, Validators.required),
+      'email': new FormControl(admin.email, [Validators.required, Validators.email]),
     });
   }
 
@@ -169,43 +169,55 @@ export class UserAccountsComponent implements OnInit {
       }
     } else {
       this.setAlert('warning', 'Please fill all required fields');
+      if (this.createAdminForm.controls['email'].errors.email) {
+        console.log("pop");
+        this.setAlert('warning', 'Please Enter A Valid Email Address');
+      }
     }
 
   }
 
   updateAdmin(ref) {
-    let data = {
-      "first_name": this.editAdminForm.value.first_name,
-      "last_name": this.editAdminForm.value.last_name,
-      "contact_number": this.editAdminForm.value.contact_number,
-      "nic": this.editAdminForm.value.nic,
-      "email": this.editAdminForm.value.email
-    }
+    if (this.editAdminForm.valid) {
+      let data = {
+        "first_name": this.editAdminForm.value.first_name,
+        "last_name": this.editAdminForm.value.last_name,
+        "contact_number": this.editAdminForm.value.contact_number,
+        "nic": this.editAdminForm.value.nic,
+        "email": this.editAdminForm.value.email
+      }
 
-    if (this.selectedRole == 'admin') {
-      this.userService.updateAdmin(this.selectedUpdate.id, data).subscribe({
-        next: (reponse) => {
-          console.log(reponse);
-          this.roleSelection(this.selectedRole);
-          ref.close();
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
-    }
+      if (this.selectedRole == 'admin') {
+        this.userService.updateAdmin(this.selectedUpdate.id, data).subscribe({
+          next: (reponse) => {
+            console.log(reponse);
+            this.roleSelection(this.selectedRole);
+            ref.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+      }
 
-    if (this.selectedRole == 'admin_staff') {
-      this.userService.updateAdministrativeStaff(this.selectedUpdate.id, data).subscribe({
-        next: (reponse) => {
-          console.log(reponse);
-          this.roleSelection(this.selectedRole);
-          ref.close();
-        },
-        error: (error) => {
-          console.log(error);
-        }
-      })
+      if (this.selectedRole == 'admin_staff') {
+        this.userService.updateAdministrativeStaff(this.selectedUpdate.id, data).subscribe({
+          next: (reponse) => {
+            console.log(reponse);
+            this.roleSelection(this.selectedRole);
+            ref.close();
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        })
+      }
+    } else {
+      this.setAlert('warning', 'Please fill all required fields');
+      if (this.editAdminForm.controls['email'].errors.email) {
+        console.log("pop");
+        this.setAlert('warning', 'Please Enter A Valid Email Address');
+      }
     }
   }
 

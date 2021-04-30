@@ -680,6 +680,10 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create Medium',
         link: '/pages/course/medium/create'
+      },
+      {
+        title: 'View Mediums',
+        link: '/pages/course/medium/edit'
       }
     ]
   },
@@ -690,6 +694,10 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
       {
         title: 'Create New Course',
         link: '/pages/course/create'
+      },
+      {
+        title: 'View And Edit Courses',
+        link: '/pages/course/edit'
       },
       {
         title: 'View All Course',

@@ -103,8 +103,21 @@
 </nb-card>
 
 <ng-template #lessonFormModal let-data let-ref="dialogRef">
-    <nb-card id="addNewForm">
+    <nb-card id="modal">
         <nb-card-header>Create New Lesson for {{lecture.name}}</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="alert.status=='Error'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="alert.status=='warning'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="alert.status=='success'">
+                    {{ alert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <br>
             <form class="form-horizontal" [formGroup]="createForm">
@@ -135,8 +148,21 @@
 </ng-template>
 
 <ng-template #lessonEditFormModal let-data let-ref="dialogRef">
-    <nb-card id="addNewForm">
+    <nb-card id="modal">
         <nb-card-header>Create New Lesson for {{lecture.name}}</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="alert.status=='Error'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="alert.status=='warning'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="alert.status=='success'">
+                    {{ alert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <br>
             <form class="form-horizontal" [formGroup]="editLessonForm">
@@ -171,6 +197,19 @@
 <ng-template #materialFormModal let-data let-refM="dialogRef">
     <nb-card id="addNewForm">
         <nb-card-header>Add Lecture Materials</nb-card-header>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="alert.status=='Error'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="alert.status=='warning'">
+                    {{ alert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="alert.status=='success'">
+                    {{ alert.message }}
+                </div>
+            </div>
+        </nb-card-header>
         <nb-card-body>
             <br>
             <form class="form-horizontal" (ngSubmit)="createMaterial(refM)" [formGroup]="materialForm">

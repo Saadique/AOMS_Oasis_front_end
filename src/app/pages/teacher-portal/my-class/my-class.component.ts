@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { NbDialogService } from '@nebular/theme';
 import { LectureService } from '../../../services/lecture.service';
 import { saveAs } from 'file-saver';
+import { Alert } from '../../course/create-course/create-course.component';
 
 @Component({
   selector: 'ngx-my-class',
@@ -21,6 +22,7 @@ export class MyClassComponent implements OnInit {
   selectedFileMaterial: File = null;
   newFile: File = null;
   lessonMaterials: [] = [];
+  alert = new Alert();
 
   createForm: FormGroup;
   materialForm: FormGroup;
@@ -89,23 +91,27 @@ export class MyClassComponent implements OnInit {
 
 
   createLesson(ref) {
-    let data = {
-      "lecture_id": this.lecture.id,
-      "name": this.createForm.value.name,
-      "description": this.createForm.value.description
-    }
-
-    this.lectureService.createLesson(data).subscribe({
-      next: (response) => {
-        console.log(response)
-        this.createForm.reset();
-        this.getLessonsByLecture();
-        ref.close();
-      },
-      error: (err) => {
-        console.log(err);
+    if (this.createForm.valid) {
+      let data = {
+        "lecture_id": this.lecture.id,
+        "name": this.createForm.value.name,
+        "description": this.createForm.value.description
       }
-    })
+
+      this.lectureService.createLesson(data).subscribe({
+        next: (response) => {
+          console.log(response)
+          this.createForm.reset();
+          this.getLessonsByLecture();
+          ref.close();
+        },
+        error: (err) => {
+          console.log(err);
+        }
+      })
+    } else {
+      this.setAlert("warning", "Please Fill All Required Fields!");
+    }
   }
 
   getLessonsByLecture() {
@@ -135,6 +141,12 @@ export class MyClassComponent implements OnInit {
     console.log(this.newFile);
   }
 
+  setAlert(alertStatus, alertMessage): void {
+    this.alert.status = alertStatus;
+    this.alert.message = alertMessage;
+    setTimeout(() => { this.alert = { "status": null, "message": null } }, 4500); // fade alert
+  }
+
 
   createMaterial(refM) {
     console.log(this.selectedFileMaterial);
@@ -156,7 +168,8 @@ export class MyClassComponent implements OnInit {
           console.log(err);
         }
       })
-
+    } else {
+      this.setAlert("warning", "Please Fill All Required Fields!");
     }
   }
 

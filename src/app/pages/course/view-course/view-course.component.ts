@@ -6,6 +6,7 @@ import { LectureService } from '../../../services/lecture.service';
 import { pluck } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Alert } from '../create-course/create-course.component';
+import { LocalStorageService } from '../../../authentication/services/local-storage/local-storage.service';
 
 @Component({
   selector: 'ngx-view-course',
@@ -19,7 +20,8 @@ export class ViewCourseComponent implements OnInit {
   constructor(private route: ActivatedRoute,
     private courseService: CourseService,
     private subjectService: SubjectService,
-    private lectureService: LectureService) { }
+    private lectureService: LectureService,
+    private localStorageService: LocalStorageService) { }
 
   courseMediumId;
   course;
@@ -31,11 +33,19 @@ export class ViewCourseComponent implements OnInit {
 
   subjectEditAlert = new Alert();
 
+  loggedInUser;
+  role;
+  getUserRoleId() {
+    this.loggedInUser = this.localStorageService.getData();
+    this.role = this.loggedInUser.userRole;
+  }
+
   ngOnInit(): void {
     this.courseMediumId = this.route.snapshot.paramMap.get('id');
     this.loadAllSubjectsByCourse();
     this.loadAllLecturesByCourse();
     this.loadCourse();
+    this.getUserRoleId();
   }
 
   initSubjectEditForm(subject) {
@@ -47,7 +57,7 @@ export class ViewCourseComponent implements OnInit {
   }
 
   loadAllSubjectsByCourse() {
-    this.subjectService.getAllSubjectsByCourseMeidum(this.courseMediumId)
+    this.subjectService.getAllSubjectsByCourseMediumALL(this.courseMediumId)
       .pipe(
         pluck('data')
       ).subscribe((response) => {
@@ -109,6 +119,29 @@ export class ViewCourseComponent implements OnInit {
 
   cancelEditForm() {
     this.editFormDisplay = false;
+  }
+
+
+  deleteClick(subject) {
+    this.subjectService.changeDeleteStatus(subject.id, "deleted").subscribe({
+      next: (response: any) => {
+        this.loadAllSubjectsByCourse();
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
+  }
+
+  activateClick(subject) {
+    this.subjectService.changeDeleteStatus(subject.id, "active").subscribe({
+      next: (response: any) => {
+        this.loadAllSubjectsByCourse();
+      },
+      error: (error) => {
+        console.log(error)
+      }
+    })
   }
 
 

@@ -44,7 +44,7 @@
                         <div class="form-control-group col-sm-6">
                             <label for="studentName" class="label form-control-label" style="font-size: 12.75px;">Enter
                                 Student Email</label>
-                            <input type="text" formControlName="email" nbInput fullWidth id="studentName"
+                            <input type="email" formControlName="email" nbInput fullWidth id="studentName"
                                 style="font-size: 12.75px;" placeholder="Email Address">
                         </div>
                         <br>
@@ -52,8 +52,9 @@
                         <div class="form-control-group col-sm-6">
                             <label for="mobileNo" class="label form-control-label" style="font-size: 12.75px;">Enter
                                 Student Mobile Number</label>
-                            <input type="number" formControlName="mobileNo" nbInput fullWidth id="mobileNo"
-                                style="font-size: 12.75px;" placeholder="Student Mobile Number">
+                            <input type="number" onkeypress="if(this.value.length==10) return false;"
+                                formControlName="mobileNo" nbInput fullWidth id="mobileNo" style="font-size: 12.75px;"
+                                placeholder="Student Mobile Number">
                         </div>
                         <br>
                     </div>

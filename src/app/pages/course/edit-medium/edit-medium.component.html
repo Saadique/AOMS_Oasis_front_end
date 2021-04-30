@@ -21,8 +21,8 @@
                     <th>Medium Short Name</th>
                     <th>Description</th>
                     <th>Status</th>
-                    <th>Edit</th>
-                    <th>Delete</th>
+                    <th *ngIf="role=='Admin'">Edit</th>
+                    <th *ngIf="role=='Admin'">Delete</th>
                 </tr>
             </thead>
             <tbody>
@@ -36,11 +36,12 @@
                     <td *ngIf="medium.status=='deleted'">
                         <span class="badge badge-warning">Deleted</span>
                     </td>
-                    <td><button nbButton status="info" (click)="editClick(medium, editMediumForm)">Edit</button>
+                    <td *ngIf="role=='Admin'"><button nbButton status="info"
+                            (click)="editClick(medium, editMediumForm)">Edit</button>
                     </td>
-                    <td *ngIf="medium.status=='active'"><button nbButton status="warning"
+                    <td *ngIf="medium.status=='active' && role=='Admin'"><button nbButton status="warning"
                             (click)="deleteClick(medium, deleteConfirmation)">Delete &nbsp;&nbsp;</button></td>
-                    <td *ngIf="medium.status=='deleted'"><button nbButton status="success"
+                    <td *ngIf="medium.status=='deleted' && role=='Admin'"><button nbButton status="success"
                             (click)="activateClick(medium)">Activate</button></td>
                 </tr>
             </tbody>
