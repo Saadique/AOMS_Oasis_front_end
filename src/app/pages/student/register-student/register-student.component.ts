@@ -155,7 +155,7 @@ export class RegisterStudentComponent implements OnInit {
   }
 
   subjectSelection(subjectId) {
-    // this.studentForm.controls['lecture'].setValue('');
+    this.studentForm.controls['lecture'].setValue('');
     this.lectureService.getAllLecturesBySubject(subjectId)
       .subscribe((response: any) => {
         this.lectures = response;

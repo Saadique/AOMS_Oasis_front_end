@@ -56,25 +56,33 @@ export class ResetPasswordComponent implements OnInit {
   }
 
   resetPassword() {
-    if (this.password != this.confirmPassword) {
-      this.setAlert('error', 'Password Mismatch');
-    } else {
-      let data = {
-        'username': this.enteredUsername,
-        'password': this.password
-      }
-      this.userService.submitPassword(data).subscribe({
-        next: (response) => {
-          this.setAlert('success', 'Password Successfully Changed');
-          this.router.navigateByUrl('/authentication/login');
-        },
-        error: (err) => {
-          console.log(err);
-          if (err.status == 400) {
-            this.setAlert('error', err.error.message);
+    if (this.password != '' && this.confirmPassword != '') {
+      if (this.password.length >= 4) {
+        if (this.password != this.confirmPassword) {
+          this.setAlert('error', 'Password Mismatch');
+        } else {
+          let data = {
+            'username': this.enteredUsername,
+            'password': this.password
           }
+          this.userService.submitPassword(data).subscribe({
+            next: (response) => {
+              this.setAlert('success', 'Password Successfully Changed');
+              this.router.navigateByUrl('/authentication/login');
+            },
+            error: (err) => {
+              console.log(err);
+              if (err.status == 400) {
+                this.setAlert('error', err.error.message);
+              }
+            }
+          })
         }
-      })
+      } else {
+        this.setAlert('warning', 'Password Should have a MINIMUM lenght of 4 characters');
+      }
+    } else {
+      this.setAlert('warning', 'Please Fill Both Fields!');
     }
   }
 

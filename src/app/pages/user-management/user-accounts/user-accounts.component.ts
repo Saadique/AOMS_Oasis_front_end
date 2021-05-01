@@ -122,50 +122,53 @@ export class UserAccountsComponent implements OnInit {
 
   createUser(modal) {
     if (this.createAdminForm.valid) {
-      if (this.createAdminForm.value.password == this.createAdminForm.value.confirm_password) {
+      if (this.createAdminForm.value.password.length >= 4) {
+        if (this.createAdminForm.value.password == this.createAdminForm.value.confirm_password) {
+          let data = {
+            "first_name": this.createAdminForm.value.first_name,
+            "last_name": this.createAdminForm.value.last_name,
+            "user_name": this.createAdminForm.value.user_name,
+            "password": this.createAdminForm.value.password,
+            "contact_number": this.createAdminForm.value.contact_number,
+            "email": this.createAdminForm.value.email,
+          };
 
-        let data = {
-          "first_name": this.createAdminForm.value.first_name,
-          "last_name": this.createAdminForm.value.last_name,
-          "user_name": this.createAdminForm.value.user_name,
-          "password": this.createAdminForm.value.password,
-          "contact_number": this.createAdminForm.value.contact_number,
-          "email": this.createAdminForm.value.email,
-        };
+          if (this.selectedRole == 'admin') {
+            console.log(this.selectedRole);
+            this.userService.createAdmin(data).subscribe({
+              next: (response) => {
+                console.log(response);
+                modal.close();
+                this.roleSelection(this.selectedRole);
+                this.setAlert('success', 'Admin User Created Succesfully');
+              },
+              error: (err) => {
+                console.log(err)
+              }
+            });
+          }
 
-        if (this.selectedRole == 'admin') {
-          console.log(this.selectedRole);
-          this.userService.createAdmin(data).subscribe({
-            next: (response) => {
-              console.log(response);
-              modal.close();
-              this.roleSelection(this.selectedRole);
-              this.setAlert('success', 'Admin User Created Succesfully');
-            },
-            error: (err) => {
-              console.log(err)
-            }
-          });
+          if (this.selectedRole == 'admin_staff') {
+            console.log(this.selectedRole);
+            this.userService.createAdministrativeStaff(data).subscribe({
+              next: (response) => {
+                console.log(response);
+                modal.close();
+                this.roleSelection(this.selectedRole);
+                this.setAlert('success', 'Admin Staff User Created Succesfully');
+              },
+              error: (err) => {
+                console.log(err)
+              }
+            });
+
+          }
+
+        } else {
+          this.setAlert('Error', 'Password and Confirm Password dosent match');
         }
-
-        if (this.selectedRole == 'admin_staff') {
-          console.log(this.selectedRole);
-          this.userService.createAdministrativeStaff(data).subscribe({
-            next: (response) => {
-              console.log(response);
-              modal.close();
-              this.roleSelection(this.selectedRole);
-              this.setAlert('success', 'Admin Staff User Created Succesfully');
-            },
-            error: (err) => {
-              console.log(err)
-            }
-          });
-
-        }
-
       } else {
-        this.setAlert('Error', 'Password and Confirm Password dosent match');
+        this.setAlert('Error', 'Password Should Contain MINIMUM Of 4 characters');
       }
     } else {
       this.setAlert('warning', 'Please fill all required fields');

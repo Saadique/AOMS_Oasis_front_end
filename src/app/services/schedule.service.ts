@@ -24,7 +24,7 @@ export class ScheduleService {
 
   createSchedule($schedule) {
     this.initHttpOptions();
-    return this.http.post<any>(`${this.rootUrl}`, $schedule);
+    return this.http.post<any>(`${this.rootUrl}`, $schedule, this.httpOptions);
   }
 
   getAllMatchingSchedules($matchedSchedule) {

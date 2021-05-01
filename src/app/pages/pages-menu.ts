@@ -798,11 +798,6 @@ export const STUDENT_MENU_ITEMS: NbMenuItem[] = [
     title: 'My Classes',
   },
   {
-    icon: 'calendar',
-    title: 'My schedules',
-    link: '/pages/student-portal/my_schedules',
-  },
-  {
     icon: 'credit-card',
     title: 'My Payments',
     link: '/pages/student-portal/my_payments',

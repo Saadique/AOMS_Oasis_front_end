@@ -341,6 +341,7 @@ export class ViewStudentComponent implements OnInit {
       }
       this.studentPaymentsService.payFee(data.monthlyPaymentId, data).subscribe((response) => {
         ref.close();
+        this.getPaidMonthlyPayments();
         console.log(response);
       })
     }
@@ -404,22 +405,26 @@ export class ViewStudentComponent implements OnInit {
   }
 
   markAttendance(schedule) {
-    let data = {
-      student_id: this.studentId,
-      daily_schedule_id: schedule.id,
-      attendance_status: schedule.attendance
-    }
-    this.attendanceService.markAttendance(data).subscribe(
-      {
-        next: (response) => {
-          console.log(response);
-          this.setAlert('success', 'Attendance was marked!')
-        },
-        error: (error) => {
-          console.log(error);
-        }
+    if (schedule.attendance != null) {
+      let data = {
+        student_id: this.studentId,
+        daily_schedule_id: schedule.id,
+        attendance_status: schedule.attendance
       }
-    )
+      this.attendanceService.markAttendance(data).subscribe(
+        {
+          next: (response) => {
+            console.log(response);
+            this.setAlert('success', 'Attendance was marked!')
+          },
+          error: (error) => {
+            console.log(error);
+          }
+        }
+      )
+    } else {
+      this.setAlert("warning", "Please Select An Attendance Status")
+    }
   }
 
 

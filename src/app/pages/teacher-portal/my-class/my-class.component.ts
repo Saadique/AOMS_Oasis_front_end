@@ -166,6 +166,9 @@ export class MyClassComponent implements OnInit {
         },
         error: (err) => {
           console.log(err);
+          if (err.status == 400) {
+            this.setAlert("warning", err.error.message);
+          }
         }
       })
     } else {

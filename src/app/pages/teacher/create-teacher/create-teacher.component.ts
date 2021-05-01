@@ -20,10 +20,9 @@ export class CreateTeacherComponent implements OnInit {
   subjects: [];
 
   teacher = null;
-
+  createTeacherAlert = new Alert();
 
   constructor(
-    public createTeacherAlert: Alert,
     private fb: FormBuilder,
     private teacherService: TeacherService) { }
 

@@ -249,7 +249,7 @@
                                     </div>
                                     <div class="col-sm-8">
                                         <input type="date" class="form-control"
-                                            (change)="selectDate($event.target.value)" min="2020-09-10">
+                                            (change)="selectDate($event.target.value)">
                                     </div>
                                 </div>
                             </div>
@@ -516,8 +516,8 @@
         <nb-card-footer>
             <button nbButton (click)="ref.close()">Back</button>
             <button nbButton type="submit" id="addLecBtn" (click)="payMonthlyFee(ref)">Pay Fee</button>&nbsp;
-            <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
-                Payment</button>&nbsp;&nbsp;
+            <!-- <button nbButton id="skipBtn" (click)="skipMonthPayment()">Skip This Month
+                Payment</button>&nbsp;&nbsp; -->
         </nb-card-footer>
     </nb-card>
 </ng-template>

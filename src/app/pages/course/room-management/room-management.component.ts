@@ -67,6 +67,7 @@ export class RoomManagementComponent implements OnInit {
             console.log(response);
             this.setAlert('success', 'Room Created Succesfully');
             this.roomCreationForm.reset();
+            this.getAllRooms();
           },
           error: (err) => {
             console.log(err)

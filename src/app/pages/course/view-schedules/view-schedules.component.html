@@ -69,7 +69,7 @@
 </div>
 
 <nb-card status="basic" size="flexible">
-    <nb-card-header align="center">View All Schedules On Date - 22nd Of October Wednesday</nb-card-header>
+    <nb-card-header align="center">View All Schedules On Date - {{dateSelectionForm.value.date}}</nb-card-header>
     <nb-card-body>
         <div class="row">
             <div class="col-sm-4" *ngFor="let room of rooms">
@@ -111,23 +111,19 @@
         <nb-card-header>
             <div *ngIf="isEditForm">Edit Schedule of {{schedule.lecture.name}}</div>
         </nb-card-header>
-        <nb-card-footer>
-            <div class="row">
-                <div>
-                    <div class="animated fadeIn">
-                        <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                        <div class="alert alert-warning" role="alert" *ngIf="viewScheduleAlert.status=='warning'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                        <div class="alert alert-success" role="alert" *ngIf="viewScheduleAlert.status=='success'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                    </div>
+        <nb-card-header>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
+                    {{ viewScheduleAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="viewScheduleAlert.status=='warning'">
+                    {{ viewScheduleAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="viewScheduleAlert.status=='success'">
+                    {{ viewScheduleAlert.message }}
                 </div>
             </div>
-        </nb-card-footer>
+        </nb-card-header>
         <nb-card-body>
             <form class="form-horizontal" [formGroup]="scheduleForm">
                 <div class="form-group row">
@@ -199,19 +195,15 @@
             <div *ngIf="isCreateForm"> Create Schedule</div>
         </nb-card-header>
         <nb-card-header>
-            <div class="row">
-                <div class="col-md-9 offset-md-2">
-                    <div class="animated fadeIn">
-                        <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                        <div class="alert alert-warning" role="alert" *ngIf="viewScheduleAlert.status=='warning'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                        <div class="alert alert-success" role="alert" *ngIf="viewScheduleAlert.status=='success'">
-                            {{ viewScheduleAlert.message }}
-                        </div>
-                    </div>
+            <div class="animated fadeIn">
+                <div class="alert alert-danger" role="alert" *ngIf="viewScheduleAlert.status=='Error'">
+                    {{ viewScheduleAlert.message }}
+                </div>
+                <div class="alert alert-warning" role="alert" *ngIf="viewScheduleAlert.status=='warning'">
+                    {{ viewScheduleAlert.message }}
+                </div>
+                <div class="alert alert-success" role="alert" *ngIf="viewScheduleAlert.status=='success'">
+                    {{ viewScheduleAlert.message }}
                 </div>
             </div>
         </nb-card-header>
@@ -229,8 +221,7 @@
                                         <select id="course" class="form-control" formControlName="course_id"
                                             placeholder="Select Super Course"
                                             (change)="courseSelection($event.target.value)">
-                                            <option *ngFor="let course of courses" [selected]="course.id"
-                                                value={{course.id}}>
+                                            <option *ngFor="let course of courses" value={{course.id}}>
                                                 {{course.name}}
                                             </option>
                                         </select>
@@ -243,8 +234,7 @@
                                     <div class="col-sm-6">
                                         <select id="lectureName" class="form-control" formControlName="lecture_id"
                                             placeholder="Select Lecture">
-                                            <option *ngFor="let lecture of lectures" [selected]="lecture.id"
-                                                value={{lecture.id}}>
+                                            <option *ngFor="let lecture of lectures" value={{lecture.id}}>
                                                 {{lecture.name}}
                                             </option>
                                         </select>

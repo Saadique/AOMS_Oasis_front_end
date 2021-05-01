@@ -71,7 +71,6 @@
                                     <tr>
                                         <th>Lecture Material Name</th>
                                         <th>File Type</th>
-                                        <th>Created Date</th>
                                         <th>Edit Name</th>
                                         <th>Edit</th>
                                         <th>Delete</th>
@@ -81,7 +80,6 @@
                                     <tr *ngFor="let material of lessonMaterials">
                                         <td>{{material.file_name}}</td>
                                         <td>{{material .file_extension}}</td>
-                                        <td></td>
                                         <td><button nbButton (click)="editInfoClick(material, materialsInfoEdit)">Edit
                                                 Info</button></td>
                                         <td><button nbButton status="success"

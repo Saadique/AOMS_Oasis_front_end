@@ -38,10 +38,6 @@ export class ViewStudentsComponent implements OnInit {
       school_name: {
         title: 'School Name',
         type: 'string',
-      },
-      NIC: {
-        title: 'NIC No.',
-        type: 'string',
       }
     }
   };

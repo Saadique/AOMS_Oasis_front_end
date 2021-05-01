@@ -146,7 +146,7 @@ export class FeeReportsComponent implements OnInit {
 
   getAllLectures() {
     this.lectureService.getAllLectures().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         this.lectures = response.data;
         console.log(this.lectures);
       },

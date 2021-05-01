@@ -114,13 +114,6 @@ export class LoginComponent implements OnInit {
               this.localStorageService.setData(response);
               return this.router.navigateByUrl('/pages/admin/dashboard_admin_staff');
           }
-          // this.studentPaymentService.changeDueStatus().subscribe(
-          //   (response) => {
-
-          //   },
-          //   (error) => {
-          //     console.log(error);
-          //   })
         },
         error: (err) => {
           if (err.status == 400) {
@@ -217,19 +210,6 @@ export class LoginComponent implements OnInit {
     }
     return tempTeacherViews;
   }
-
-  // getLecturesOfTeacher(teacherId) {
-  //   this.lectureService.getAllLecturesByTeacher(teacherId).subscribe({
-  //     next: (response) => {
-  //       this.lectures = response;
-  //     },
-  //     error: (err) => {
-  //       console.log(err);
-  //     }
-  //   })
-  // }
-
-
 }
 
 
