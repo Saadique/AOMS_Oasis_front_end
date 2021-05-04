@@ -111,7 +111,7 @@ export class TeacherRemunerationReportsComponent implements OnInit {
 
   loadInitialData() {
     this.reportService.getAllRemunerationsPaidForTeachers().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         console.log(response);
         this.initData(response.records);
         this.initTotalAmount(response.total_amount);

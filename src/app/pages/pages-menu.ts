@@ -724,7 +724,7 @@ export const ADMINISTRATION_STAFF_MENU_ITEMS: NbMenuItem[] = [
         link: '/pages/course/lecture/create'
       },
       {
-        title: 'Edit & Delete Lectures',
+        title: 'View & Edit Lectures',
         link: '/pages/course/lecture/edit'
       }
     ]

@@ -78,8 +78,8 @@ export class ReportService {
 
   //lecture
   getAllStudentFeeRecordByLecture(lectureId) {
-    // this.initHttpOptions();
-    return this.http.get<any>(`http://localhost:8000/api/reports/student_fee/lecture/${lectureId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/reports/student_fee/lecture/${lectureId}`, this.httpOptions);
   }
 
   getAllStudentFeeRecordForLectureByMonth(lectureId, year, month) {
@@ -99,7 +99,7 @@ export class ReportService {
 
   getAllRemunerationsPaidForTeachers() {
     this.initHttpOptions();
-    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/all`)
+    return this.http.get<any>(`http://localhost:8000/api/reports/teacher_remun/all`, this.httpOptions)
   }
 
   getAllRemunerationsPaidForTeachersByTeacher(teacherId) {
@@ -179,8 +179,8 @@ export class ReportService {
 
   //lecture
   getAllShareRecordsByLecture(lectureId) {
-    // this.initHttpOptions();
-    return this.http.get<any>(`http://localhost:8000/api/reports/share/lecture/${lectureId}`);
+    this.initHttpOptions();
+    return this.http.get<any>(`http://localhost:8000/api/reports/share/lecture/${lectureId}`, this.httpOptions);
   }
 
   getAllShareRecordsForLectureByMonth(lectureId, year, month) {

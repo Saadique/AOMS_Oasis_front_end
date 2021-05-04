@@ -74,7 +74,7 @@
         <div class="row">
             <div class="col-sm-4" *ngFor="let room of rooms">
                 <nb-card>
-                    <nb-card-header>{{room.name}}</nb-card-header>
+                    <nb-card-header>{{room.name}} - Room Capacity - {{room.no_of_seats}}</nb-card-header>
                     <nb-card-body>
                         <ng-container *ngFor="let schedule of schedules">
                             <ng-container *ngIf="room.id == schedule.room_id">

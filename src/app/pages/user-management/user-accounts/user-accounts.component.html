@@ -54,11 +54,9 @@
                     <th>Email</th>
                     <th>Contact Number</th>
                     <th>NIC</th>
-
                     <th>User Account Status</th>
                     <th>Edit User</th>
                     <th>Suspend/Activate Account</th>
-                    <th>Delete User</th>
                 </tr>
             </thead>
             <tbody>
@@ -82,7 +80,6 @@
                             (click)="suspendAccount(admin.user)">Suspend &nbsp;&nbsp;</button></td>
                     <td *ngIf="admin.user.status=='suspended'"><button nbButton status="success"
                             (click)="activateAccount(admin.user)">Activate</button></td>
-                    <td><button nbButton status="danger" (click)="deleteUserAdmin()">Delete &nbsp;&nbsp;</button></td>
                 </tr>
             </tbody>
         </table>
@@ -100,7 +97,6 @@
                     <th>User Account Status</th>
                     <th>Edit User</th>
                     <th>Suspend/Activate Account</th>
-                    <th>Delete User</th>
                 </tr>
             </thead>
             <tbody>
@@ -125,8 +121,6 @@
                             (click)="suspendAccount(admin_staff.user)">Suspend &nbsp;&nbsp;</button></td>
                     <td *ngIf="admin_staff.user.status=='suspended'"><button nbButton status="success"
                             (click)="activateAccount(admin_staff.user)">Activate</button></td>
-                    <td><button nbButton status="danger" (click)="deleteUserAdminStaff()">Delete &nbsp;&nbsp;</button>
-                    </td>
                 </tr>
             </tbody>
         </table>
